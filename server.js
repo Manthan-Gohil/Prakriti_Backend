@@ -25,6 +25,9 @@ const n8nRoutes = require('./src/routes/n8n.routes');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Trust proxy (required for Render, Railway, etc. behind reverse proxies)
+app.set('trust proxy', 1);
+
 // ──────────────────────────────────────────────
 // MIDDLEWARE
 // ──────────────────────────────────────────────
