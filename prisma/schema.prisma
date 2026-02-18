@@ -156,6 +156,62 @@ model HealthProfile {
   hairType          HairType?
   skinConditions    String[]   @default([])
 
+  // ── Prakriti Physical Traits (Ayurvedic observation) ──
+  // Body
+  bodySize                String?
+  bodyWeightTendency      String?
+  height                  String?
+  boneStructure           String?
+  bodyFrameTrait          String?
+
+  // Skin
+  complexion              String?
+  skinTypeTrait           String?
+  skinTexture             String?
+
+  // Hair
+  hairColor               String?
+  hairDensity             String?
+  hairTexture             String?
+  hairAppearance          String?
+  hairGraying             String?
+
+  // Face
+  faceShape               String?
+  cheeks                  String?
+  jawStructure            String?
+
+  // Eyes
+  eyes                    String?
+  eyeLuster               String?
+  eyelashes               String?
+  blinkingPattern         String?
+
+  // Nose
+  noseShape               String?
+  noseTip                 String?
+
+  // Teeth & Lips
+  teethStructure          String?
+  teethGums               String?
+  lips                    String?
+
+  // Nails
+  nails                   String?
+
+  // Digestion & Appetite (trait-based)
+  appetiteTrait           String?
+  digestionSpeed          String?
+  hungerFrequency         String?
+  thirstLevel             String?
+  sweating                String?
+  bowelHabit              String?
+
+  // Taste & Preferences
+  tastePreference         String?
+  foodTemperaturePreference String?
+  weatherPreference       String?
+
   // Menstrual (optional)
   menstrualCycleRegular Boolean?
   menstrualCycleDays    Int?

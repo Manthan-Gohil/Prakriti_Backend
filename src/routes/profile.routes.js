@@ -35,4 +35,9 @@ router.post(
 
 router.get('/summary', profileController.getSummary);
 
+router.post(
+    '/prakriti-traits',
+    profileController.savePrakritiTraits
+);
+
 module.exports = router;

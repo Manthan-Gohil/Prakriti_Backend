@@ -36,6 +36,13 @@ class ProfileController {
             return successResponse(res, 'Profile summary fetched.', summary);
         } catch (error) { next(error); }
     }
+
+    async savePrakritiTraits(req, res, next) {
+        try {
+            const profile = await profileService.savePrakritiTraits(req.user.id, req.body);
+            return successResponse(res, 'Prakriti traits saved.', { profile }, null, 201);
+        } catch (error) { next(error); }
+    }
 }
 
 module.exports = new ProfileController();
