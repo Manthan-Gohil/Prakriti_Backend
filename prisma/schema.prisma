@@ -1,0 +1,1503 @@
+// Prakriti AI - Ayurvedic Diet Planning & Food Recognition App
+// Comprehensive Database Schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ──────────────────────────────────────────────
+// AUTH & USER MANAGEMENT
+// ──────────────────────────────────────────────
+
+model User {
+  id              String    @id @default(uuid())
+  username        String    @unique
+  email           String    @unique
+  passwordHash    String
+  isEmailVerified Boolean   @default(false)
+  isProfileComplete Boolean @default(false)
+  avatarUrl       String?
+  lastLoginAt     DateTime?
+  loginCount      Int       @default(0)
+  isActive        Boolean   @default(true)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  // Relations
+  otpCodes              OtpCode[]
+  healthProfile         HealthProfile?
+  prakritiAssessments    PrakritiAssessment[]
+  doshaProfile          DoshaProfile?
+  mealPlans             MealPlan[]
+  foodRecognitionLogs   FoodRecognitionLog[]
+  dailyNutrientLogs     DailyNutrientLog[]
+  healthTrackingLogs    HealthTrackingLog[]
+  wellnessProgress      WellnessProgress[]
+  recommendations       Recommendation[]
+  userFoodDiary         UserFoodDiary[]
+  waterIntakeLogs       WaterIntakeLog[]
+  sleepLogs             SleepLog[]
+  exerciseLogs          ExerciseLog[]
+  moodLogs              MoodLog[]
+  stressLogs            StressLog[]
+  yogaSessions          YogaSession[]
+  dinacharyaLogs        DinacharyaLog[]
+  seasonalRoutines      SeasonalRoutine[]
+  notifications         Notification[]
+  userPreferences       UserPreference?
+  bookmarkedArticles    BookmarkedArticle[]
+  n8nWebhookLogs        N8nWebhookLog[]
+
+  @@map("users")
+}
+
+model OtpCode {
+  id        String   @id @default(uuid())
+  userId    String
+  code      String
+  type      OtpType  @default(EMAIL_VERIFICATION)
+  expiresAt DateTime
+  isUsed    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([code])
+  @@map("otp_codes")
+}
+
+enum OtpType {
+  EMAIL_VERIFICATION
+  PASSWORD_RESET
+  LOGIN_VERIFICATION
+}
+
+// ──────────────────────────────────────────────
+// DETAILED USER HEALTH PROFILE
+// ──────────────────────────────────────────────
+
+model HealthProfile {
+  id     String @id @default(uuid())
+  userId String @unique
+
+  // Personal Info
+  firstName     String
+  lastName      String
+  dateOfBirth   DateTime
+  gender        Gender
+  phoneNumber   String?
+  address       String?
+  city          String?
+  state         String?
+  country       String?
+  pincode       String?
+
+  // Physical Measurements
+  heightCm      Float
+  weightKg      Float
+  bmi           Float?
+  bodyFrame     BodyFrame?
+  waistCm       Float?
+  hipCm         Float?
+  chestCm       Float?
+  neckCm        Float?
+  wristCm       Float?
+  bodyFatPct    Float?
+
+  // Vital Signs
+  bloodPressureSystolic  Int?
+  bloodPressureDiastolic Int?
+  restingHeartRate       Int?
+  bodyTemperature        Float?
+  oxygenSaturation       Float?
+
+  // Medical Info
+  bloodGroup    BloodGroup?
+  allergies     String[]      @default([])
+  medications   String[]      @default([])
+  supplements   String[]      @default([])
+  chronicConditions String[]  @default([])
+  pastSurgeries String[]      @default([])
+  familyHistory String[]      @default([])
+
+  // Lifestyle
+  occupation        String?
+  activityLevel     ActivityLevel?
+  smokingStatus     SmokingStatus?
+  alcoholConsumption AlcoholConsumption?
+  dietType          DietType?
+  cuisinePreferences String[]  @default([])
+  foodAllergies     String[]   @default([])
+  foodIntolerances  String[]   @default([])
+  dailyWaterIntakeMl Int?
+  caffeineIntake    CaffeineIntake?
+
+  // Sleep & Stress
+  averageSleepHours Float?
+  sleepQuality      SleepQuality?
+  usualBedtime      String?
+  usualWakeTime     String?
+  stressLevel       StressLevel?
+
+  // Digestive Health
+  digestiveHealth   DigestiveHealth?
+  bowelRegularity   BowelRegularity?
+  appetiteLevel     AppetiteLevel?
+
+  // Skin & Hair
+  skinType          SkinType?
+  hairType          HairType?
+  skinConditions    String[]   @default([])
+
+  // Menstrual (optional)
+  menstrualCycleRegular Boolean?
+  menstrualCycleDays    Int?
+  pregnancyStatus       PregnancyStatus?
+
+  // Goals
+  healthGoals       String[]   @default([])
+  targetWeightKg    Float?
+  targetTimelineWeeks Int?
+
+  // Profile Image for Ayurvedic assessment
+  profileImageUrl   String?
+  bodyImageUrl      String?
+  tongueImageUrl    String?
+  nailImageUrl      String?
+  eyeImageUrl       String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("health_profiles")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  NON_BINARY
+  PREFER_NOT_TO_SAY
+}
+
+enum BodyFrame {
+  SMALL
+  MEDIUM
+  LARGE
+}
+
+enum BloodGroup {
+  A_POSITIVE
+  A_NEGATIVE
+  B_POSITIVE
+  B_NEGATIVE
+  AB_POSITIVE
+  AB_NEGATIVE
+  O_POSITIVE
+  O_NEGATIVE
+}
+
+enum ActivityLevel {
+  SEDENTARY
+  LIGHTLY_ACTIVE
+  MODERATELY_ACTIVE
+  VERY_ACTIVE
+  EXTREMELY_ACTIVE
+}
+
+enum SmokingStatus {
+  NEVER
+  FORMER
+  CURRENT
+  OCCASIONAL
+}
+
+enum AlcoholConsumption {
+  NONE
+  OCCASIONAL
+  MODERATE
+  HEAVY
+}
+
+enum DietType {
+  VEGETARIAN
+  VEGAN
+  EGGETARIAN
+  NON_VEGETARIAN
+  PESCATARIAN
+  SATTVIC
+  LACTO_VEGETARIAN
+  RAW_FOOD
+  AYURVEDIC
+}
+
+enum CaffeineIntake {
+  NONE
+  LOW
+  MODERATE
+  HIGH
+}
+
+enum SleepQuality {
+  EXCELLENT
+  GOOD
+  FAIR
+  POOR
+  VERY_POOR
+}
+
+enum StressLevel {
+  VERY_LOW
+  LOW
+  MODERATE
+  HIGH
+  VERY_HIGH
+}
+
+enum DigestiveHealth {
+  EXCELLENT
+  GOOD
+  FAIR
+  POOR
+}
+
+enum BowelRegularity {
+  REGULAR
+  MOSTLY_REGULAR
+  IRREGULAR
+  CONSTIPATED
+  LOOSE
+}
+
+enum AppetiteLevel {
+  VERY_LOW
+  LOW
+  MODERATE
+  HIGH
+  VERY_HIGH
+  VARIABLE
+}
+
+enum SkinType {
+  DRY
+  OILY
+  COMBINATION
+  NORMAL
+  SENSITIVE
+}
+
+enum HairType {
+  DRY
+  OILY
+  NORMAL
+  THIN
+  THICK
+  CURLY
+  STRAIGHT
+  WAVY
+}
+
+enum PregnancyStatus {
+  NOT_APPLICABLE
+  NOT_PREGNANT
+  PREGNANT
+  POSTPARTUM
+  TRYING_TO_CONCEIVE
+}
+
+// ──────────────────────────────────────────────
+// PRAKRITI ASSESSMENT & DOSHA
+// ──────────────────────────────────────────────
+
+model PrakritiAssessment {
+  id     String @id @default(uuid())
+  userId String
+
+  // Assessment metadata
+  assessmentType   AssessmentType
+  assessmentMethod AssessmentMethod @default(QUESTIONNAIRE)
+  status           AssessmentStatus @default(IN_PROGRESS)
+  startedAt        DateTime         @default(now())
+  completedAt      DateTime?
+  timeTakenSeconds Int?
+
+  // Image-based assessment
+  imageUrls         String[]   @default([])
+  imageAnalysisData Json?
+
+  // Scores (0-100 scale)
+  vataScore   Float?
+  pittaScore  Float?
+  kaphaScore  Float?
+
+  // Derived dosha type
+  primaryDosha       DoshaType?
+  secondaryDosha     DoshaType?
+  prakritiType       String?       // e.g. "Vata-Pitta", "Kapha"
+
+  // Detailed sub-scores
+  physicalVata       Float?
+  physicalPitta      Float?
+  physicalKapha      Float?
+  mentalVata         Float?
+  mentalPitta        Float?
+  mentalKapha        Float?
+  emotionalVata      Float?
+  emotionalPitta     Float?
+  emotionalKapha     Float?
+  digestiveVata      Float?
+  digestivePitta     Float?
+  digestiveKapha     Float?
+
+  // AI/N8N analysis result
+  aiAnalysis    Json?
+  confidence    Float?
+  rawData       Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User                       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  responses PrakritiQuestionResponse[]
+
+  @@index([userId])
+  @@map("prakriti_assessments")
+}
+
+model PrakritiQuestion {
+  id           String           @id @default(uuid())
+  category     QuestionCategory
+  subcategory  String?
+  questionText String
+  questionHindi String?
+  description  String?
+  sortOrder    Int
+  isActive     Boolean          @default(true)
+
+  options   PrakritiQuestionOption[]
+  responses PrakritiQuestionResponse[]
+
+  createdAt DateTime @default(now())
+
+  @@map("prakriti_questions")
+}
+
+model PrakritiQuestionOption {
+  id         String    @id @default(uuid())
+  questionId String
+  optionText String
+  optionHindi String?
+  doshaType  DoshaType
+  weightage  Float     @default(1.0)
+  sortOrder  Int
+
+  question  PrakritiQuestion           @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  responses PrakritiQuestionResponse[]
+
+  @@index([questionId])
+  @@map("prakriti_question_options")
+}
+
+model PrakritiQuestionResponse {
+  id           String @id @default(uuid())
+  assessmentId String
+  questionId   String
+  optionId     String
+
+  assessment PrakritiAssessment     @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  question   PrakritiQuestion       @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  option     PrakritiQuestionOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([assessmentId, questionId])
+  @@index([assessmentId])
+  @@map("prakriti_question_responses")
+}
+
+enum AssessmentType {
+  INITIAL
+  PERIODIC
+  SEASONAL
+  FOLLOW_UP
+}
+
+enum AssessmentMethod {
+  QUESTIONNAIRE
+  IMAGE_BASED
+  COMBINED
+  AI_ASSISTED
+}
+
+enum AssessmentStatus {
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  EXPIRED
+}
+
+enum QuestionCategory {
+  BODY_STRUCTURE
+  SKIN_HAIR_NAILS
+  METABOLISM_DIGESTION
+  APPETITE_TASTE
+  SLEEP_PATTERNS
+  MENTAL_EMOTIONAL
+  STRESS_RESPONSE
+  TEMPERATURE_CLIMATE
+  ENERGY_STAMINA
+  SPEECH_COMMUNICATION
+  MOVEMENT_ACTIVITY
+  ELIMINATION
+}
+
+enum DoshaType {
+  VATA
+  PITTA
+  KAPHA
+}
+
+model DoshaProfile {
+  id     String @id @default(uuid())
+  userId String @unique
+
+  // Current Prakriti (birth constitution)
+  prakritiVata   Float   @default(0)
+  prakritiPitta  Float   @default(0)
+  prakritiKapha  Float   @default(0)
+  prakritiType   String?
+
+  // Current Vikriti (current imbalance)
+  vikritiVata    Float   @default(0)
+  vikritiPitta   Float   @default(0)
+  vikritiKapha   Float   @default(0)
+  vikritiType    String?
+
+  // Agni (digestive fire) type
+  agniType       AgniType?
+
+  // Dominant qualities
+  dominantGunas  String[]  @default([])
+
+  // Imbalance indicators
+  isImbalanced        Boolean  @default(false)
+  imbalanceDetails    Json?
+  balancingActions     Json?
+
+  lastAssessmentId    String?
+  lastAssessedAt      DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("dosha_profiles")
+}
+
+enum AgniType {
+  SAMA       // Balanced
+  VISHAMA    // Irregular (Vata)
+  TIKSHNA    // Sharp (Pitta)
+  MANDA      // Slow (Kapha)
+}
+
+// ──────────────────────────────────────────────
+// AYURVEDIC FOOD & NUTRITION DATABASE
+// ──────────────────────────────────────────────
+
+model FoodItem {
+  id              String @id @default(uuid())
+  name            String
+  nameHindi       String?
+  nameSanskrit    String?
+  description     String?
+  category        FoodCategory
+  subcategory     String?
+  imageUrl        String?
+
+  // Nutritional info per 100g
+  caloriesKcal    Float?
+  proteinG        Float?
+  carbsG          Float?
+  fatG            Float?
+  fiberG          Float?
+  sugarG          Float?
+  sodiumMg        Float?
+  potassiumMg     Float?
+  calciumMg       Float?
+  ironMg          Float?
+  vitaminAMcg     Float?
+  vitaminCMg      Float?
+  vitaminDMcg     Float?
+  vitaminEMg      Float?
+  vitaminKMcg     Float?
+  vitaminB12Mcg   Float?
+  folateMcg       Float?
+  magnesiumMg     Float?
+  zincMg          Float?
+  omega3G         Float?
+  omega6G         Float?
+  cholesterolMg   Float?
+  transFatG       Float?
+  saturatedFatG   Float?
+  glycemicIndex   Int?
+
+  // Ayurvedic properties
+  rpiRasa         Rasa[]          @default([])  // Taste
+  guna            String[]        @default([])  // Qualities (heavy, light, etc.)
+  virya           Virya?                        // Potency (heating/cooling)
+  vipaka          Vipaka?                       // Post-digestive effect
+  doshaEffect     Json?                         // Effect on each dosha
+
+  // Dosha suitability (-1 aggravates, 0 neutral, 1 balances)
+  vataEffect      Int?
+  pittaEffect     Int?
+  kaphaEffect     Int?
+
+  // Ayurvedic classification
+  isRajasic       Boolean  @default(false)
+  isTamasic       Boolean  @default(false)
+  isSattvic       Boolean  @default(false)
+
+  // Seasonal suitability
+  bestSeasons     Season[] @default([])
+
+  // Metadata
+  servingSizeG    Float?
+  servingUnit     String?
+  isCommon        Boolean  @default(true)
+  isActive        Boolean  @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  mealFoodItems    MealFoodItem[]
+  recognitionLogs  FoodRecognitionLog[]
+  diaryEntries     UserFoodDiary[]
+
+  @@index([name])
+  @@index([category])
+  @@map("food_items")
+}
+
+enum FoodCategory {
+  GRAINS_CEREALS
+  VEGETABLES
+  FRUITS
+  LEGUMES_PULSES
+  DAIRY
+  NUTS_SEEDS
+  OILS_FATS
+  SPICES_HERBS
+  BEVERAGES
+  SWEETENERS
+  MEAT_POULTRY
+  SEAFOOD
+  EGGS
+  CONDIMENTS
+  FERMENTED
+  SUPERFOODS
+  AYURVEDIC_HERBS
+  PREPARED_DISHES
+}
+
+enum Rasa {
+  MADHURA   // Sweet
+  AMLA      // Sour
+  LAVANA    // Salty
+  KATU      // Pungent
+  TIKTA     // Bitter
+  KASHAYA   // Astringent
+}
+
+enum Virya {
+  USHNA    // Heating
+  SHEETA   // Cooling
+}
+
+enum Vipaka {
+  MADHURA_VIPAKA   // Sweet post-digestive
+  AMLA_VIPAKA      // Sour post-digestive
+  KATU_VIPAKA      // Pungent post-digestive
+}
+
+enum Season {
+  SPRING     // Vasanta
+  SUMMER     // Grishma
+  MONSOON    // Varsha
+  AUTUMN     // Sharad
+  EARLY_WINTER // Hemanta
+  LATE_WINTER  // Shishira
+}
+
+// ──────────────────────────────────────────────
+// MEAL PLANNING
+// ──────────────────────────────────────────────
+
+model MealPlan {
+  id     String @id @default(uuid())
+  userId String
+
+  name           String
+  description    String?
+  planType       MealPlanType   @default(DAILY)
+  startDate      DateTime
+  endDate        DateTime
+  targetCalories Int?
+  targetProteinG Float?
+  targetCarbsG   Float?
+  targetFatG     Float?
+
+  // Dosha-specific
+  targetDosha    DoshaType?
+  season         Season?
+  isAyurvedic    Boolean  @default(true)
+
+  // AI/N8N generated
+  isAiGenerated  Boolean  @default(false)
+  aiPrompt       String?
+  aiResponse     Json?
+
+  status         MealPlanStatus @default(ACTIVE)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  meals Meal[]
+
+  @@index([userId])
+  @@index([startDate, endDate])
+  @@map("meal_plans")
+}
+
+model Meal {
+  id         String   @id @default(uuid())
+  mealPlanId String
+  date       DateTime
+  mealType   MealType
+  name       String?
+  notes      String?
+
+  // Timing
+  scheduledTime  String?
+  actualTime     String?
+  isConsumed     Boolean @default(false)
+  consumedAt     DateTime?
+
+  // Totals (computed from food items)
+  totalCalories  Float?
+  totalProteinG  Float?
+  totalCarbsG    Float?
+  totalFatG      Float?
+  totalFiberG    Float?
+
+  // Ayurvedic
+  dominantRasa   Rasa?
+  doshaEffect    Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  mealPlan  MealPlan       @relation(fields: [mealPlanId], references: [id], onDelete: Cascade)
+  foodItems MealFoodItem[]
+
+  @@index([mealPlanId])
+  @@index([date])
+  @@map("meals")
+}
+
+model MealFoodItem {
+  id         String @id @default(uuid())
+  mealId     String
+  foodItemId String
+  quantityG  Float
+  servings   Float  @default(1)
+  notes      String?
+
+  // Computed nutrition for this serving
+  calories   Float?
+  proteinG   Float?
+  carbsG     Float?
+  fatG       Float?
+
+  meal     Meal     @relation(fields: [mealId], references: [id], onDelete: Cascade)
+  foodItem FoodItem @relation(fields: [foodItemId], references: [id], onDelete: Cascade)
+
+  @@index([mealId])
+  @@map("meal_food_items")
+}
+
+enum MealPlanType {
+  DAILY
+  WEEKLY
+  MONTHLY
+  CUSTOM
+}
+
+enum MealPlanStatus {
+  DRAFT
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum MealType {
+  EARLY_MORNING
+  BREAKFAST
+  MID_MORNING_SNACK
+  LUNCH
+  AFTERNOON_SNACK
+  EVENING_SNACK
+  DINNER
+  BEDTIME
+}
+
+// ──────────────────────────────────────────────
+// FOOD RECOGNITION (IMAGE UPLOAD)
+// ──────────────────────────────────────────────
+
+model FoodRecognitionLog {
+  id     String @id @default(uuid())
+  userId String
+
+  // Image data
+  imageUrl        String
+  imagePath       String?
+  imageSize       Int?
+  mimeType        String?
+  thumbnailUrl    String?
+
+  // Recognition results
+  recognizedFood  String?
+  foodItemId      String?
+  confidence      Float?
+  alternativeMatches Json?  // [{name, confidence, foodItemId}]
+
+  // AI analysis
+  aiModel         String?
+  aiResponse      Json?
+  processingTimeMs Int?
+
+  // Nutrition estimate
+  estimatedCalories Float?
+  estimatedPortionG Float?
+  nutritionBreakdown Json?
+
+  // Ayurvedic analysis
+  estimatedDoshaEffect Json?
+  ayurvedicSuggestion  String?
+
+  // Status
+  status          RecognitionStatus @default(PENDING)
+  userVerified    Boolean           @default(false)
+  userCorrectedFood String?
+
+  // Linked to diary
+  diaryEntryId    String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  foodItem FoodItem? @relation(fields: [foodItemId], references: [id])
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("food_recognition_logs")
+}
+
+enum RecognitionStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  MANUAL_ENTRY
+}
+
+// ──────────────────────────────────────────────
+// DAILY FOOD DIARY & NUTRIENT TRACKING
+// ──────────────────────────────────────────────
+
+model UserFoodDiary {
+  id         String   @id @default(uuid())
+  userId     String
+  date       DateTime
+  mealType   MealType
+  foodItemId String?
+
+  // Manual entry
+  foodName   String
+  quantityG  Float?
+  servings   Float?     @default(1)
+  notes      String?
+
+  // Nutrition
+  calories   Float?
+  proteinG   Float?
+  carbsG     Float?
+  fatG       Float?
+  fiberG     Float?
+
+  // Ayurvedic
+  rpiRasa        Rasa[]    @default([])
+  doshaEffect    Json?
+  isSattvic      Boolean?
+  isAyurvedicApproved Boolean?
+
+  // Source
+  source     DiarySource @default(MANUAL)
+  imageUrl   String?
+  recognitionLogId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  foodItem FoodItem? @relation(fields: [foodItemId], references: [id])
+
+  @@index([userId, date])
+  @@map("user_food_diary")
+}
+
+enum DiarySource {
+  MANUAL
+  IMAGE_RECOGNITION
+  MEAL_PLAN
+  BARCODE_SCAN
+}
+
+model DailyNutrientLog {
+  id     String   @id @default(uuid())
+  userId String
+  date   DateTime @db.Date
+
+  // Macros
+  totalCalories  Float @default(0)
+  totalProteinG  Float @default(0)
+  totalCarbsG    Float @default(0)
+  totalFatG      Float @default(0)
+  totalFiberG    Float @default(0)
+  totalSugarG    Float @default(0)
+
+  // Micros
+  sodiumMg       Float @default(0)
+  potassiumMg    Float @default(0)
+  calciumMg      Float @default(0)
+  ironMg         Float @default(0)
+  vitaminCMg     Float @default(0)
+
+  // Targets
+  calorieTarget  Int?
+  proteinTarget  Float?
+  carbsTarget    Float?
+  fatTarget      Float?
+
+  // Goal compliance
+  calorieCompliance  Float?   // percentage
+  proteinCompliance  Float?
+  carbsCompliance    Float?
+  fatCompliance      Float?
+
+  // Ayurvedic metrics
+  sattvicMealCount   Int @default(0)
+  rajasicMealCount   Int @default(0)
+  tamasicMealCount   Int @default(0)
+  doshaBalanceScore  Float?
+
+  // Rasa balance
+  sweetCount     Int @default(0)
+  sourCount      Int @default(0)
+  saltyCount     Int @default(0)
+  pungentCount   Int @default(0)
+  bitterCount    Int @default(0)
+  astringentCount Int @default(0)
+  rasaBalanceScore Float?
+
+  // Meal adherence
+  mealsPlanned   Int @default(0)
+  mealsConsumed  Int @default(0)
+  adherenceScore Float?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([userId, date])
+  @@map("daily_nutrient_logs")
+}
+
+// ──────────────────────────────────────────────
+// HEALTH & WELLNESS TRACKING
+// ──────────────────────────────────────────────
+
+model HealthTrackingLog {
+  id     String   @id @default(uuid())
+  userId String
+  date   DateTime @db.Date
+
+  // Vitals
+  weightKg              Float?
+  bmi                   Float?
+  bodyFatPct            Float?
+  bloodPressureSystolic Int?
+  bloodPressureDiastolic Int?
+  restingHeartRate      Int?
+  bodyTemperature       Float?
+  oxygenSaturation      Float?
+
+  // Measurements
+  waistCm               Float?
+  hipCm                 Float?
+  chestCm               Float?
+
+  // Digestion
+  digestiveComfort      Int?     // 1-10 scale
+  bowelMovements        Int?
+  bloating              Int?     // 1-10
+  acidity               Int?     // 1-10
+  gasLevel              Int?     // 1-10
+
+  // Energy & wellness
+  energyLevel           Int?     // 1-10
+  mentalClarity         Int?     // 1-10
+  overallWellbeing      Int?     // 1-10
+  painLevel             Int?     // 1-10
+  inflammationLevel     Int?     // 1-10
+
+  // Skin & appearance
+  skinClarity           Int?     // 1-10
+  eyeBrightness         Int?     // 1-10
+
+  // Notes
+  symptoms              String[] @default([])
+  notes                 String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([userId, date])
+  @@map("health_tracking_logs")
+}
+
+model WellnessProgress {
+  id     String @id @default(uuid())
+  userId String
+
+  // Period
+  periodStart DateTime
+  periodEnd   DateTime
+  periodType  PeriodType
+
+  // Scores (0-100)
+  overallScore       Float?
+  nutritionScore     Float?
+  activityScore      Float?
+  sleepScore         Float?
+  stressScore        Float?
+  digestiveScore     Float?
+  doshaBalanceScore  Float?
+  mentalWellnessScore Float?
+
+  // Changes
+  weightChangeKg     Float?
+  bmiChange          Float?
+  bodyFatChange      Float?
+
+  // Stats
+  avgCalorieIntake   Float?
+  avgProteinIntake   Float?
+  avgWaterIntakeMl   Float?
+  avgSleepHours      Float?
+  avgStressLevel     Float?
+  avgEnergyLevel     Float?
+  totalExerciseMinutes Int?
+  totalYogaMinutes   Int?
+
+  // Diet compliance
+  mealPlanAdherence  Float?
+  sattvicFoodPct     Float?
+
+  // Goals progress
+  goalsSet           Int    @default(0)
+  goalsAchieved      Int    @default(0)
+
+  // AI insights
+  insights           Json?
+  suggestions        String[]  @default([])
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([periodStart, periodEnd])
+  @@map("wellness_progress")
+}
+
+enum PeriodType {
+  DAILY
+  WEEKLY
+  MONTHLY
+  QUARTERLY
+  YEARLY
+}
+
+// ──────────────────────────────────────────────
+// WATER, SLEEP, EXERCISE, MOOD, STRESS TRACKING
+// ──────────────────────────────────────────────
+
+model WaterIntakeLog {
+  id        String   @id @default(uuid())
+  userId    String
+  date      DateTime @db.Date
+  amountMl  Int
+  time      String?
+  waterType String?  // warm, cold, herbal, lemon, etc.
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
+  @@map("water_intake_logs")
+}
+
+model SleepLog {
+  id        String   @id @default(uuid())
+  userId    String
+  date      DateTime @db.Date
+  bedtime   String
+  wakeTime  String
+  durationHours Float
+  quality       Int      // 1-10
+  deepSleepHours Float?
+  remSleepHours  Float?
+  awakenings     Int?
+  dreams         Boolean?
+  notes          String?
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([userId, date])
+  @@map("sleep_logs")
+}
+
+model ExerciseLog {
+  id       String   @id @default(uuid())
+  userId   String
+  date     DateTime @db.Date
+
+  exerciseType    String
+  durationMinutes Int
+  intensity       Intensity?
+  caloriesBurned  Float?
+  heartRateAvg    Int?
+  notes           String?
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
+  @@map("exercise_logs")
+}
+
+model YogaSession {
+  id       String   @id @default(uuid())
+  userId   String
+  date     DateTime @db.Date
+
+  yogaType        String    // Hatha, Vinyasa, Pranayama, etc.
+  asanas          String[]  @default([])
+  pranayama       String[]  @default([])
+  meditation      Boolean   @default(false)
+  meditationMinutes Int?
+  durationMinutes Int
+  notes           String?
+
+  // Dosha-specific yoga
+  targetDosha     DoshaType?
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
+  @@map("yoga_sessions")
+}
+
+model MoodLog {
+  id       String   @id @default(uuid())
+  userId   String
+  date     DateTime
+  mood     MoodLevel
+  emotions String[]  @default([])
+  triggers String[]  @default([])
+  notes    String?
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
+  @@map("mood_logs")
+}
+
+model StressLog {
+  id       String   @id @default(uuid())
+  userId   String
+  date     DateTime
+  level    Int       // 1-10
+  source   String?
+  copingMethod String?
+  physicalSymptoms String[] @default([])
+  notes    String?
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
+  @@map("stress_logs")
+}
+
+enum Intensity {
+  LOW
+  MODERATE
+  HIGH
+  VERY_HIGH
+}
+
+enum MoodLevel {
+  VERY_HAPPY
+  HAPPY
+  NEUTRAL
+  SAD
+  VERY_SAD
+  ANXIOUS
+  ANGRY
+  CALM
+  ENERGETIC
+  TIRED
+}
+
+// ──────────────────────────────────────────────
+// DINACHARYA (DAILY ROUTINE) & SEASONAL
+// ──────────────────────────────────────────────
+
+model DinacharyaLog {
+  id       String   @id @default(uuid())
+  userId   String
+  date     DateTime @db.Date
+
+  // Morning routine
+  wakeUpTime           String?
+  tongueScraping       Boolean @default(false)
+  oilPulling           Boolean @default(false)
+  nasya                Boolean @default(false)
+  abhyanga             Boolean @default(false)
+  morningExercise      Boolean @default(false)
+  morningMeditation    Boolean @default(false)
+  morningPrayer        Boolean @default(false)
+
+  // Meal timings
+  breakfastTime        String?
+  lunchTime            String?
+  dinnerTime           String?
+
+  // Evening routine
+  eveningWalk          Boolean @default(false)
+  eveningMeditation    Boolean @default(false)
+  selfReflection       Boolean @default(false)
+  bedtimeRoutine       Boolean @default(false)
+  bedtime              String?
+
+  // Score
+  adherenceScore       Float?
+  completedItems       Int     @default(0)
+  totalItems           Int     @default(0)
+
+  notes                String?
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([userId, date])
+  @@map("dinacharya_logs")
+}
+
+model SeasonalRoutine {
+  id       String @id @default(uuid())
+  userId   String
+  season   Season
+
+  // Seasonal dosha state
+  seasonalDosha        DoshaType?
+  seasonalImbalanceRisk String[]  @default([])
+
+  // Recommendations followed
+  dietFollowed         Boolean @default(false)
+  exerciseFollowed     Boolean @default(false)
+  lifestyleFollowed    Boolean @default(false)
+
+  // Custom adjustments
+  dietAdjustments      Json?
+  exerciseAdjustments  Json?
+  lifestyleAdjustments Json?
+
+  notes                String?
+  year                 Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, season, year])
+  @@map("seasonal_routines")
+}
+
+// ──────────────────────────────────────────────
+// RECOMMENDATIONS & NOTIFICATIONS
+// ──────────────────────────────────────────────
+
+model Recommendation {
+  id       String @id @default(uuid())
+  userId   String
+
+  type         RecommendationType
+  category     String
+  title        String
+  description  String
+  details      Json?
+  priority     Priority    @default(MEDIUM)
+  doshaTarget  DoshaType?
+  season       Season?
+
+  // Source
+  source       String?   // "AI", "Rule-based", "N8N", etc.
+  sourceRef    String?
+
+  // Status
+  isRead       Boolean   @default(false)
+  isFollowed   Boolean?
+  userFeedback String?
+  rating       Int?
+
+  expiresAt    DateTime?
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([type])
+  @@map("recommendations")
+}
+
+enum RecommendationType {
+  DIET
+  EXERCISE
+  YOGA
+  MEDITATION
+  LIFESTYLE
+  SLEEP
+  STRESS_MANAGEMENT
+  SEASONAL
+  HERBAL_REMEDY
+  DETOX
+  GENERAL_WELLNESS
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+model Notification {
+  id       String @id @default(uuid())
+  userId   String
+
+  type      NotificationType
+  title     String
+  message   String
+  data      Json?
+  isRead    Boolean  @default(false)
+  readAt    DateTime?
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+  @@map("notifications")
+}
+
+enum NotificationType {
+  MEAL_REMINDER
+  WATER_REMINDER
+  EXERCISE_REMINDER
+  ASSESSMENT_DUE
+  HEALTH_TIP
+  ACHIEVEMENT
+  REPORT_READY
+  SYSTEM
+}
+
+// ──────────────────────────────────────────────
+// USER PREFERENCES
+// ──────────────────────────────────────────────
+
+model UserPreference {
+  id       String @id @default(uuid())
+  userId   String @unique
+
+  // Notification preferences
+  emailNotifications    Boolean @default(true)
+  pushNotifications     Boolean @default(true)
+  mealReminders         Boolean @default(true)
+  waterReminders        Boolean @default(true)
+  exerciseReminders     Boolean @default(true)
+
+  // Reminder times
+  breakfastReminder     String?
+  lunchReminder         String?
+  dinnerReminder        String?
+  waterReminderInterval Int?     // in minutes
+
+  // App preferences
+  language              String   @default("en")
+  measurementSystem     String   @default("metric")
+  theme                 String   @default("light")
+  timezone              String   @default("Asia/Kolkata")
+  weekStartDay          String   @default("monday")
+
+  // Dashboard preferences
+  dashboardWidgets      Json?    // Which widgets to show
+  favoriteCharts        String[] @default([])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_preferences")
+}
+
+// ──────────────────────────────────────────────
+// AYURVEDIC KNOWLEDGE HUB
+// ──────────────────────────────────────────────
+
+model AyurvedicArticle {
+  id          String @id @default(uuid())
+
+  title       String
+  slug        String   @unique
+  content     String
+  summary     String?
+  category    ArticleCategory
+  tags        String[]  @default([])
+  imageUrl    String?
+  author      String?
+  doshaRelevance DoshaType[]  @default([])
+  readTimeMinutes Int?
+  isPublished Boolean  @default(true)
+  viewCount   Int      @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  bookmarks BookmarkedArticle[]
+
+  @@index([category])
+  @@index([slug])
+  @@map("ayurvedic_articles")
+}
+
+model BookmarkedArticle {
+  id        String @id @default(uuid())
+  userId    String
+  articleId String
+
+  createdAt DateTime @default(now())
+
+  user    User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  article AyurvedicArticle  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, articleId])
+  @@map("bookmarked_articles")
+}
+
+enum ArticleCategory {
+  AYURVEDA_BASICS
+  DOSHA_GUIDE
+  SEASONAL_WELLNESS
+  RECIPES
+  YOGA_MEDITATION
+  HERBAL_REMEDIES
+  DETOX_CLEANSE
+  LIFESTYLE_TIPS
+  DINACHARYA
+  RITUCHARYA
+  MENTAL_HEALTH
+  WOMENS_HEALTH
+  MENS_HEALTH
+  CHILD_HEALTH
+}
+
+// ──────────────────────────────────────────────
+// N8N WORKFLOW INTEGRATION
+// ──────────────────────────────────────────────
+
+model N8nWebhookLog {
+  id        String @id @default(uuid())
+  userId    String?
+
+  workflowId    String
+  workflowName  String?
+  webhookUrl    String?
+  triggerType   String
+  requestPayload  Json?
+  responsePayload Json?
+  statusCode    Int?
+  status        WebhookStatus @default(PENDING)
+  errorMessage  String?
+  executionTimeMs Int?
+
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([workflowId])
+  @@map("n8n_webhook_logs")
+}
+
+enum WebhookStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  TIMEOUT
+}

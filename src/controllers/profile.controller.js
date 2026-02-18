@@ -1,0 +1,41 @@
+const profileService = require('../services/profile.service');
+const { successResponse } = require('../utils/helpers');
+
+class ProfileController {
+    async createOrUpdate(req, res, next) {
+        try {
+            const result = await profileService.createOrUpdate(req.user.id, req.body);
+            return successResponse(res, result.message, { profile: result.profile }, null, result.created ? 201 : 200);
+        } catch (error) { next(error); }
+    }
+
+    async getProfile(req, res, next) {
+        try {
+            const profile = await profileService.getProfile(req.user.id);
+            return successResponse(res, 'Profile fetched.', { profile });
+        } catch (error) { next(error); }
+    }
+
+    async updateProfile(req, res, next) {
+        try {
+            const profile = await profileService.updateProfile(req.user.id, req.body);
+            return successResponse(res, 'Profile updated.', { profile });
+        } catch (error) { next(error); }
+    }
+
+    async uploadImage(req, res, next) {
+        try {
+            const profile = await profileService.uploadImage(req.user.id, req.file, req.body.type);
+            return successResponse(res, 'Image uploaded.', { profile });
+        } catch (error) { next(error); }
+    }
+
+    async getSummary(req, res, next) {
+        try {
+            const summary = await profileService.getSummary(req.user.id);
+            return successResponse(res, 'Profile summary fetched.', summary);
+        } catch (error) { next(error); }
+    }
+}
+
+module.exports = new ProfileController();

@@ -1,0 +1,2559 @@
+{
+    "info": {
+        "_postman_id": "prakriti-ai-collection",
+        "name": "Prakriti AI - Complete API",
+        "description": "Complete API collection for Prakriti AI - Ayurvedic Health & Wellness Platform.\n\nTest User:\n- Email: test@prakriti.ai\n- Password: Test@123\n\nSteps:\n1. Run 'Login' request first to get token\n2. Token is auto-saved to collection variable\n3. All authenticated requests use {{token}} automatically",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "auth": {
+        "type": "bearer",
+        "bearer": [
+            {
+                "key": "token",
+                "value": "{{token}}",
+                "type": "string"
+            }
+        ]
+    },
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:3000/api"
+        },
+        {
+            "key": "token",
+            "value": ""
+        },
+        {
+            "key": "assessment_id",
+            "value": ""
+        },
+        {
+            "key": "meal_plan_id",
+            "value": ""
+        },
+        {
+            "key": "meal_id",
+            "value": ""
+        },
+        {
+            "key": "food_item_id",
+            "value": ""
+        },
+        {
+            "key": "meal_food_item_id",
+            "value": ""
+        },
+        {
+            "key": "recognition_id",
+            "value": ""
+        },
+        {
+            "key": "diary_entry_id",
+            "value": ""
+        },
+        {
+            "key": "recommendation_id",
+            "value": ""
+        },
+        {
+            "key": "notification_id",
+            "value": ""
+        },
+        {
+            "key": "article_id",
+            "value": ""
+        },
+        {
+            "key": "question_id",
+            "value": ""
+        },
+        {
+            "key": "option_id",
+            "value": ""
+        }
+    ],
+    "item": [
+        {
+            "name": "Health Check",
+            "item": [
+                {
+                    "name": "Health Check",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/health",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "health"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Auth",
+            "item": [
+                {
+                    "name": "Signup",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"username\": \"newuser\",\n  \"email\": \"newuser@example.com\",\n  \"password\": \"Pass@123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/signup",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "signup"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Verify OTP",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"newuser@example.com\",\n  \"otp\": \"123456\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/verify-otp",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "verify-otp"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "var res = pm.response.json();",
+                                    "if (res.data && res.data.token) {",
+                                    "    pm.collectionVariables.set('token', res.data.token);",
+                                    "    console.log('Token saved!');",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"test@prakriti.ai\",\n  \"password\": \"Test@123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/login",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "login"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Resend OTP",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"newuser@example.com\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/resend-otp",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "resend-otp"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Forgot Password",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"test@prakriti.ai\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/forgot-password",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "forgot-password"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Reset Password",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"test@prakriti.ai\",\n  \"otp\": \"123456\",\n  \"newPassword\": \"NewPass@123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/reset-password",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "reset-password"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Me",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/auth/me",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "me"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Change Password",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"currentPassword\": \"Test@123\",\n  \"newPassword\": \"NewTest@123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/change-password",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "change-password"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Profile",
+            "item": [
+                {
+                    "name": "Create/Update Profile",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"firstName\": \"Arjun\",\n  \"lastName\": \"Sharma\",\n  \"dateOfBirth\": \"1995-06-15\",\n  \"gender\": \"MALE\",\n  \"heightCm\": 175,\n  \"weightKg\": 72,\n  \"bloodGroup\": \"B_POSITIVE\",\n  \"bodyFrame\": \"MEDIUM\",\n  \"activityLevel\": \"MODERATE\",\n  \"dietType\": \"VEGETARIAN\",\n  \"occupation\": \"Software Engineer\",\n  \"city\": \"Bangalore\",\n  \"state\": \"Karnataka\",\n  \"country\": \"India\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/profile",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "profile"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Profile",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/profile",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "profile"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Profile (Partial)",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"weightKg\": 71.5,\n  \"activityLevel\": \"ACTIVE\",\n  \"sleepQuality\": \"EXCELLENT\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/profile",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "profile"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Upload Profile Image",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "image",
+                                    "type": "file",
+                                    "src": ""
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/profile/image",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "profile",
+                                "image"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Profile Summary",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/profile/summary",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "profile",
+                                "summary"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Assessment",
+            "item": [
+                {
+                    "name": "Get Questions",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "var res = pm.response.json();",
+                                    "if (res.data && res.data.length > 0) {",
+                                    "    var firstCat = res.data[0];",
+                                    "    if (firstCat.questions && firstCat.questions.length > 0) {",
+                                    "        var q = firstCat.questions[0];",
+                                    "        pm.collectionVariables.set('question_id', q.id);",
+                                    "        if (q.options && q.options.length > 0) {",
+                                    "            pm.collectionVariables.set('option_id', q.options[0].id);",
+                                    "        }",
+                                    "    }",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/assessment/questions",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "assessment",
+                                "questions"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Start Assessment",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "var res = pm.response.json();",
+                                    "if (res.data && res.data.id) {",
+                                    "    pm.collectionVariables.set('assessment_id', res.data.id);",
+                                    "    console.log('Assessment ID saved:', res.data.id);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"assessmentType\": \"INITIAL\",\n  \"assessmentMethod\": \"QUESTIONNAIRE\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/assessment/start",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "assessment",
+                                "start"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Submit Single Response",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"questionId\": \"{{question_id}}\",\n  \"optionId\": \"{{option_id}}\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/assessment/{{assessment_id}}/response",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "assessment",
+                                "{{assessment_id}}",
+                                "response"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Submit Bulk Responses",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"responses\": [\n    { \"questionId\": \"{{question_id}}\", \"optionId\": \"{{option_id}}\" }\n  ]\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/assessment/{{assessment_id}}/responses",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "assessment",
+                                "{{assessment_id}}",
+                                "responses"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Upload Assessment Images",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "images",
+                                    "type": "file",
+                                    "src": ""
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/assessment/{{assessment_id}}/images",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "assessment",
+                                "{{assessment_id}}",
+                                "images"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Complete Assessment",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/assessment/{{assessment_id}}/complete",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "assessment",
+                                "{{assessment_id}}",
+                                "complete"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Assessment by ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/assessment/{{assessment_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "assessment",
+                                "{{assessment_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "List Assessments",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/assessment",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "assessment"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Dosha Profile",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/assessment/dosha/profile",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "assessment",
+                                "dosha",
+                                "profile"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Meal Plans",
+            "item": [
+                {
+                    "name": "Create Meal Plan",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "var res = pm.response.json();",
+                                    "if (res.data && res.data.id) {",
+                                    "    pm.collectionVariables.set('meal_plan_id', res.data.id);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Test Weekly Plan\",\n  \"description\": \"A balanced meal plan for testing\",\n  \"planType\": \"WEEKLY\",\n  \"startDate\": \"2025-01-20\",\n  \"endDate\": \"2025-01-27\",\n  \"targetCalories\": 2000,\n  \"targetDosha\": \"VATA\",\n  \"season\": \"WINTER\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/meal-plans",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "meal-plans"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "List Meal Plans",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/meal-plans",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "meal-plans"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Meal Plan by ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/meal-plans/{{meal_plan_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "meal-plans",
+                                "{{meal_plan_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Meal Plan",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Updated Weekly Plan\",\n  \"targetCalories\": 2200\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/meal-plans/{{meal_plan_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "meal-plans",
+                                "{{meal_plan_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Meal Plan",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/meal-plans/{{meal_plan_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "meal-plans",
+                                "{{meal_plan_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Add Meal to Plan",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "var res = pm.response.json();",
+                                    "if (res.data && res.data.id) {",
+                                    "    pm.collectionVariables.set('meal_id', res.data.id);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"mealType\": \"LUNCH\",\n  \"date\": \"2025-01-20\",\n  \"name\": \"Sattvic Lunch\",\n  \"description\": \"Balanced Ayurvedic lunch\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/meal-plans/{{meal_plan_id}}/meals",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "meal-plans",
+                                "{{meal_plan_id}}",
+                                "meals"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Add Food to Meal",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "var res = pm.response.json();",
+                                    "if (res.data && res.data.id) {",
+                                    "    pm.collectionVariables.set('meal_food_item_id', res.data.id);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"foodItemId\": \"{{food_item_id}}\",\n  \"quantityG\": 200,\n  \"portionDescription\": \"1 bowl\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/meal-plans/meals/{{meal_id}}/foods",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "meal-plans",
+                                "meals",
+                                "{{meal_id}}",
+                                "foods"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Mark Food Consumed",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/meal-plans/meals/foods/{{meal_food_item_id}}/consumed",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "meal-plans",
+                                "meals",
+                                "foods",
+                                "{{meal_food_item_id}}",
+                                "consumed"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Remove Food from Meal",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/meal-plans/meals/foods/{{meal_food_item_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "meal-plans",
+                                "meals",
+                                "foods",
+                                "{{meal_food_item_id}}"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Foods",
+            "item": [
+                {
+                    "name": "List Foods",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "var res = pm.response.json();",
+                                    "if (res.data && res.data.length > 0) {",
+                                    "    pm.collectionVariables.set('food_item_id', res.data[0].id);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/foods?page=1&limit=10",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "foods"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "10"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Search Foods",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/foods/search?q=khichdi",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "foods",
+                                "search"
+                            ],
+                            "query": [
+                                {
+                                    "key": "q",
+                                    "value": "khichdi"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Foods by Category",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/foods/category/GRAINS",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "foods",
+                                "category",
+                                "GRAINS"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Foods by Dosha",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/foods/dosha/VATA",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "foods",
+                                "dosha",
+                                "VATA"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Food by ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/foods/{{food_item_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "foods",
+                                "{{food_item_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Food Item",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Tulsi Tea\",\n  \"nameHindi\": \"तुलसी चाय\",\n  \"category\": \"BEVERAGES\",\n  \"caloriesKcal\": 5,\n  \"proteinG\": 0,\n  \"carbsG\": 1,\n  \"fatG\": 0,\n  \"fiberG\": 0,\n  \"isSattvic\": true,\n  \"isVegan\": true,\n  \"isGlutenFree\": true,\n  \"rpiRasa\": [\"KATU\", \"TIKTA\"],\n  \"rpiVirya\": \"USHNA\",\n  \"rpiVipaka\": \"KATU\",\n  \"balancesDosha\": [\"VATA\", \"KAPHA\"],\n  \"description\": \"Sacred basil tea with adaptogenic properties\",\n  \"servingSizeG\": 150\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/foods",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "foods"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Food Item",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"caloriesKcal\": 8,\n  \"description\": \"Updated description\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/foods/{{food_item_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "foods",
+                                "{{food_item_id}}"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Food Recognition",
+            "item": [
+                {
+                    "name": "Upload Food Image",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "var res = pm.response.json();",
+                                    "if (res.data && res.data.id) {",
+                                    "    pm.collectionVariables.set('recognition_id', res.data.id);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "image",
+                                    "type": "file",
+                                    "src": ""
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/food-recognition/upload",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "food-recognition",
+                                "upload"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Recognition Result",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"recognizedFood\": \"Khichdi\",\n  \"confidence\": 0.92,\n  \"nutritionData\": {\n    \"calories\": 150,\n    \"protein\": 5,\n    \"carbs\": 25,\n    \"fat\": 3\n  },\n  \"ayurvedicProperties\": {\n    \"rasa\": \"Madhura\",\n    \"virya\": \"Ushna\",\n    \"doshaEffect\": \"Tridoshic\"\n  }\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/food-recognition/{{recognition_id}}/result",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "food-recognition",
+                                "{{recognition_id}}",
+                                "result"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Verify Recognition",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"isCorrect\": true,\n  \"correctedFood\": null\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/food-recognition/{{recognition_id}}/verify",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "food-recognition",
+                                "{{recognition_id}}",
+                                "verify"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "List Recognitions",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/food-recognition?page=1&limit=10",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "food-recognition"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "10"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Recognition by ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/food-recognition/{{recognition_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "food-recognition",
+                                "{{recognition_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Add Recognized Food to Diary",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"mealType\": \"LUNCH\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/food-recognition/{{recognition_id}}/add-to-diary",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "food-recognition",
+                                "{{recognition_id}}",
+                                "add-to-diary"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Tracking",
+            "item": [
+                {
+                    "name": "Food Diary",
+                    "item": [
+                        {
+                            "name": "Add Diary Entry",
+                            "event": [
+                                {
+                                    "listen": "test",
+                                    "script": {
+                                        "exec": [
+                                            "var res = pm.response.json();",
+                                            "if (res.data && res.data.id) {",
+                                            "    pm.collectionVariables.set('diary_entry_id', res.data.id);",
+                                            "}"
+                                        ],
+                                        "type": "text/javascript"
+                                    }
+                                }
+                            ],
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"foodName\": \"Dal Tadka with Rice\",\n  \"mealType\": \"LUNCH\",\n  \"calories\": 380,\n  \"proteinG\": 14,\n  \"carbsG\": 55,\n  \"fatG\": 10,\n  \"fiberG\": 6,\n  \"isSattvic\": true,\n  \"source\": \"MANUAL\",\n  \"notes\": \"Homemade with ghee\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{base_url}}/tracking/diary",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "tracking",
+                                        "diary"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Food Diary",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/tracking/diary?days=7",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "tracking",
+                                        "diary"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "days",
+                                            "value": "7"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Delete Diary Entry",
+                            "request": {
+                                "method": "DELETE",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/tracking/diary/{{diary_entry_id}}",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "tracking",
+                                        "diary",
+                                        "{{diary_entry_id}}"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Daily Nutrients",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/tracking/nutrients/daily?days=7",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "tracking",
+                                        "nutrients",
+                                        "daily"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "days",
+                                            "value": "7"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Water",
+                    "item": [
+                        {
+                            "name": "Log Water Intake",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"amountMl\": 300,\n  \"waterType\": \"warm\",\n  \"time\": \"08:00\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{base_url}}/tracking/water",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "tracking",
+                                        "water"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Water Logs",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/tracking/water?days=7",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "tracking",
+                                        "water"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "days",
+                                            "value": "7"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Sleep",
+                    "item": [
+                        {
+                            "name": "Log Sleep",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"bedtime\": \"22:30\",\n  \"wakeTime\": \"06:00\",\n  \"durationHours\": 7.5,\n  \"quality\": 8,\n  \"notes\": \"Slept well after meditation\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{base_url}}/tracking/sleep",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "tracking",
+                                        "sleep"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Sleep Logs",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/tracking/sleep?days=7",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "tracking",
+                                        "sleep"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "days",
+                                            "value": "7"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Exercise",
+                    "item": [
+                        {
+                            "name": "Log Exercise",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"exerciseType\": \"Brisk Walking\",\n  \"durationMinutes\": 30,\n  \"caloriesBurned\": 150,\n  \"intensity\": \"MODERATE\",\n  \"notes\": \"Morning walk in park\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{base_url}}/tracking/exercise",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "tracking",
+                                        "exercise"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Exercise Logs",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/tracking/exercise?days=7",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "tracking",
+                                        "exercise"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "days",
+                                            "value": "7"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Yoga",
+                    "item": [
+                        {
+                            "name": "Log Yoga Session",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"yogaType\": \"Surya Namaskar\",\n  \"durationMinutes\": 20,\n  \"meditationMinutes\": 10,\n  \"notes\": \"12 rounds with pranayama\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{base_url}}/tracking/yoga",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "tracking",
+                                        "yoga"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Yoga Logs",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/tracking/yoga?days=7",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "tracking",
+                                        "yoga"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "days",
+                                            "value": "7"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Mood",
+                    "item": [
+                        {
+                            "name": "Log Mood",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"mood\": \"HAPPY\",\n  \"emotions\": [\"grateful\", \"peaceful\", \"content\"],\n  \"notes\": \"Good day after morning yoga\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{base_url}}/tracking/mood",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "tracking",
+                                        "mood"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Mood Logs",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/tracking/mood?days=7",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "tracking",
+                                        "mood"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "days",
+                                            "value": "7"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Stress",
+                    "item": [
+                        {
+                            "name": "Log Stress",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"level\": 4,\n  \"source\": \"Work deadlines\",\n  \"copingMethods\": [\"meditation\", \"deep breathing\"]\n}"
+                                },
+                                "url": {
+                                    "raw": "{{base_url}}/tracking/stress",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "tracking",
+                                        "stress"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Stress Logs",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/tracking/stress?days=7",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "tracking",
+                                        "stress"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "days",
+                                            "value": "7"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Health Vitals",
+                    "item": [
+                        {
+                            "name": "Log Health Vitals",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"weightKg\": 72,\n  \"bloodPressureSystolic\": 120,\n  \"bloodPressureDiastolic\": 80,\n  \"restingHeartRate\": 68,\n  \"bodyTemperature\": 36.6,\n  \"energyLevel\": 8,\n  \"mentalClarity\": 7,\n  \"overallWellbeing\": 8,\n  \"digestiveComfort\": 8,\n  \"skinClarity\": 7,\n  \"symptoms\": []\n}"
+                                },
+                                "url": {
+                                    "raw": "{{base_url}}/tracking/health",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "tracking",
+                                        "health"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Health Vitals",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/tracking/health?days=30",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "tracking",
+                                        "health"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "days",
+                                            "value": "30"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Dinacharya",
+                    "item": [
+                        {
+                            "name": "Log Dinacharya",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"tongueScraping\": true,\n  \"oilPulling\": true,\n  \"nasya\": false,\n  \"abhyanga\": true,\n  \"morningExercise\": true,\n  \"morningMeditation\": true,\n  \"morningPrayer\": true,\n  \"eveningWalk\": true,\n  \"eveningMeditation\": false,\n  \"selfReflection\": true,\n  \"bedtimeRoutine\": true\n}"
+                                },
+                                "url": {
+                                    "raw": "{{base_url}}/tracking/dinacharya",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "tracking",
+                                        "dinacharya"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Dinacharya Logs",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/tracking/dinacharya?days=7",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "tracking",
+                                        "dinacharya"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "days",
+                                            "value": "7"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Dashboard",
+            "item": [
+                {
+                    "name": "Overview",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/dashboard/overview",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "dashboard",
+                                "overview"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Nutrition Analytics",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/dashboard/nutrition-analytics?days=7",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "dashboard",
+                                "nutrition-analytics"
+                            ],
+                            "query": [
+                                {
+                                    "key": "days",
+                                    "value": "7"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Health Analytics",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/dashboard/health-analytics?days=30",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "dashboard",
+                                "health-analytics"
+                            ],
+                            "query": [
+                                {
+                                    "key": "days",
+                                    "value": "30"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Sleep Analytics",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/dashboard/sleep-analytics?days=7",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "dashboard",
+                                "sleep-analytics"
+                            ],
+                            "query": [
+                                {
+                                    "key": "days",
+                                    "value": "7"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Activity Analytics",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/dashboard/activity-analytics?days=7",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "dashboard",
+                                "activity-analytics"
+                            ],
+                            "query": [
+                                {
+                                    "key": "days",
+                                    "value": "7"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Mood Analytics",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/dashboard/mood-analytics?days=7",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "dashboard",
+                                "mood-analytics"
+                            ],
+                            "query": [
+                                {
+                                    "key": "days",
+                                    "value": "7"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Dosha Analytics",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/dashboard/dosha-analytics",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "dashboard",
+                                "dosha-analytics"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Dinacharya Analytics",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/dashboard/dinacharya-analytics?days=7",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "dashboard",
+                                "dinacharya-analytics"
+                            ],
+                            "query": [
+                                {
+                                    "key": "days",
+                                    "value": "7"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Wellness Progress",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/dashboard/wellness-progress?days=30",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "dashboard",
+                                "wellness-progress"
+                            ],
+                            "query": [
+                                {
+                                    "key": "days",
+                                    "value": "30"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Recognition Stats",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/dashboard/recognition-stats",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "dashboard",
+                                "recognition-stats"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Stats Summary",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/dashboard/stats-summary",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "dashboard",
+                                "stats-summary"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Wellness",
+            "item": [
+                {
+                    "name": "Recommendations",
+                    "item": [
+                        {
+                            "name": "Get Recommendations",
+                            "event": [
+                                {
+                                    "listen": "test",
+                                    "script": {
+                                        "exec": [
+                                            "var res = pm.response.json();",
+                                            "if (res.data && res.data.length > 0) {",
+                                            "    pm.collectionVariables.set('recommendation_id', res.data[0].id);",
+                                            "}"
+                                        ],
+                                        "type": "text/javascript"
+                                    }
+                                }
+                            ],
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/wellness/recommendations",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "wellness",
+                                        "recommendations"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Update Recommendation",
+                            "request": {
+                                "method": "PATCH",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"status\": \"IN_PROGRESS\",\n  \"userNotes\": \"Started following this recommendation\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{base_url}}/wellness/recommendations/{{recommendation_id}}",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "wellness",
+                                        "recommendations",
+                                        "{{recommendation_id}}"
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Notifications",
+                    "item": [
+                        {
+                            "name": "Get Notifications",
+                            "event": [
+                                {
+                                    "listen": "test",
+                                    "script": {
+                                        "exec": [
+                                            "var res = pm.response.json();",
+                                            "if (res.data && res.data.length > 0) {",
+                                            "    pm.collectionVariables.set('notification_id', res.data[0].id);",
+                                            "}"
+                                        ],
+                                        "type": "text/javascript"
+                                    }
+                                }
+                            ],
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/wellness/notifications",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "wellness",
+                                        "notifications"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Mark Notification Read",
+                            "request": {
+                                "method": "PATCH",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/wellness/notifications/{{notification_id}}/read",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "wellness",
+                                        "notifications",
+                                        "{{notification_id}}",
+                                        "read"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Mark All Notifications Read",
+                            "request": {
+                                "method": "PATCH",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/wellness/notifications/read-all",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "wellness",
+                                        "notifications",
+                                        "read-all"
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Preferences",
+                    "item": [
+                        {
+                            "name": "Get Preferences",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/wellness/preferences",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "wellness",
+                                        "preferences"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Update Preferences",
+                            "request": {
+                                "method": "PUT",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"language\": \"en\",\n  \"theme\": \"dark\",\n  \"mealReminders\": true,\n  \"waterReminders\": true,\n  \"waterReminderInterval\": 45,\n  \"exerciseReminders\": true,\n  \"meditationReminders\": true,\n  \"weeklyReportEnabled\": true\n}"
+                                },
+                                "url": {
+                                    "raw": "{{base_url}}/wellness/preferences",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "wellness",
+                                        "preferences"
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Seasonal Routine",
+                    "item": [
+                        {
+                            "name": "Save Seasonal Routine",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"season\": \"SUMMER\",\n  \"year\": 2025,\n  \"dietGuidelines\": {\n    \"foods\": [\"cooling fruits\", \"coconut water\", \"mint\", \"cucumber\"],\n    \"avoid\": [\"spicy food\", \"fried items\", \"excessive salt\"],\n    \"spices\": [\"coriander\", \"fennel\", \"cardamom\"]\n  },\n  \"lifestyleGuidelines\": {\n    \"exercise\": \"Light exercise in early morning\",\n    \"sleep\": \"Can stay up slightly later, nap if needed\",\n    \"selfCare\": \"Coconut oil massage, moonlight walks\"\n  },\n  \"yogaRecommendations\": {\n    \"asanas\": [\"Shitali Pranayama\", \"Chandrasana\", \"Shavasana\"],\n    \"pranayama\": [\"Shitali\", \"Sitkari\"],\n    \"meditation\": \"Cooling visualization meditation\"\n  }\n}"
+                                },
+                                "url": {
+                                    "raw": "{{base_url}}/wellness/seasonal-routine",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "wellness",
+                                        "seasonal-routine"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Seasonal Routines",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/wellness/seasonal-routine",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "wellness",
+                                        "seasonal-routine"
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Articles & Bookmarks",
+                    "item": [
+                        {
+                            "name": "List Articles",
+                            "event": [
+                                {
+                                    "listen": "test",
+                                    "script": {
+                                        "exec": [
+                                            "var res = pm.response.json();",
+                                            "if (res.data && res.data.length > 0) {",
+                                            "    pm.collectionVariables.set('article_id', res.data[0].id);",
+                                            "}"
+                                        ],
+                                        "type": "text/javascript"
+                                    }
+                                }
+                            ],
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/wellness/articles",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "wellness",
+                                        "articles"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Article by Slug",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/wellness/articles/understanding-prakriti-guide",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "wellness",
+                                        "articles",
+                                        "understanding-prakriti-guide"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Bookmark Article",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/wellness/articles/{{article_id}}/bookmark",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "wellness",
+                                        "articles",
+                                        "{{article_id}}",
+                                        "bookmark"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Remove Bookmark",
+                            "request": {
+                                "method": "DELETE",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/wellness/articles/{{article_id}}/bookmark",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "wellness",
+                                        "articles",
+                                        "{{article_id}}",
+                                        "bookmark"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Bookmarks",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/wellness/bookmarks",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "wellness",
+                                        "bookmarks"
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "N8N Webhooks",
+            "item": [
+                {
+                    "name": "Prakriti Analysis Webhook",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"assessmentId\": \"{{assessment_id}}\",\n  \"userId\": \"user-uuid-here\",\n  \"results\": {\n    \"vata\": 45.5,\n    \"pitta\": 35.2,\n    \"kapha\": 19.3,\n    \"prakritiType\": \"VATA_PITTA\",\n    \"agniType\": \"VISHAMA\"\n  }\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/n8n/prakriti-analysis",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "n8n",
+                                "prakriti-analysis"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Food Recognition Webhook",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"recognitionId\": \"{{recognition_id}}\",\n  \"recognizedFood\": \"Khichdi\",\n  \"confidence\": 0.95,\n  \"nutritionData\": {\n    \"calories\": 150,\n    \"protein\": 5,\n    \"carbs\": 25,\n    \"fat\": 3\n  },\n  \"ayurvedicProperties\": {\n    \"rasa\": \"Madhura\",\n    \"virya\": \"Ushna\",\n    \"vipaka\": \"Madhura\",\n    \"doshaEffect\": \"Tridoshic\"\n  }\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/n8n/food-recognition",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "n8n",
+                                "food-recognition"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Meal Plan Webhook",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"userId\": \"user-uuid-here\",\n  \"mealPlanId\": \"{{meal_plan_id}}\",\n  \"generatedPlan\": {\n    \"name\": \"AI Generated Weekly Plan\",\n    \"meals\": [\n      { \"day\": 1, \"mealType\": \"BREAKFAST\", \"foods\": [\"Oatmeal\", \"Fruits\"] },\n      { \"day\": 1, \"mealType\": \"LUNCH\", \"foods\": [\"Khichdi\", \"Ghee\"] }\n    ]\n  }\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/n8n/meal-plan",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "n8n",
+                                "meal-plan"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Recommendations Webhook",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"userId\": \"user-uuid-here\",\n  \"recommendations\": [\n    {\n      \"type\": \"DIET\",\n      \"title\": \"Include more warm soups\",\n      \"description\": \"AI recommendation based on your Vata profile\",\n      \"priority\": \"HIGH\"\n    }\n  ]\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/n8n/recommendations",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "n8n",
+                                "recommendations"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Wellness Progress Webhook",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"userId\": \"user-uuid-here\",\n  \"progressData\": {\n    \"period\": \"WEEKLY\",\n    \"overallScore\": 78,\n    \"dietScore\": 82,\n    \"exerciseScore\": 70,\n    \"sleepScore\": 85,\n    \"meditationScore\": 75\n  }\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/n8n/wellness-progress",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "n8n",
+                                "wellness-progress"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get N8N Logs",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/n8n/logs?page=1&limit=20",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "n8n",
+                                "logs"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "20"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
