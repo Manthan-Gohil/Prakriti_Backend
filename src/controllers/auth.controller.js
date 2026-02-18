@@ -5,14 +5,7 @@ class AuthController {
     async signup(req, res, next) {
         try {
             const result = await authService.signup(req.body);
-            return successResponse(res, result.message, { userId: result.userId }, null, 201);
-        } catch (error) { next(error); }
-    }
-
-    async verifyOtp(req, res, next) {
-        try {
-            const result = await authService.verifyOtp(req.body);
-            return successResponse(res, 'Email verified successfully.', result);
+            return successResponse(res, 'Account created successfully.', result, null, 201);
         } catch (error) { next(error); }
     }
 
@@ -20,27 +13,6 @@ class AuthController {
         try {
             const result = await authService.login(req.body);
             return successResponse(res, 'Login successful.', result);
-        } catch (error) { next(error); }
-    }
-
-    async resendOtp(req, res, next) {
-        try {
-            const result = await authService.resendOtp(req.body.email);
-            return successResponse(res, result.message);
-        } catch (error) { next(error); }
-    }
-
-    async forgotPassword(req, res, next) {
-        try {
-            const result = await authService.forgotPassword(req.body.email);
-            return successResponse(res, result.message);
-        } catch (error) { next(error); }
-    }
-
-    async resetPassword(req, res, next) {
-        try {
-            await authService.resetPassword(req.body);
-            return successResponse(res, 'Password reset successful.');
         } catch (error) { next(error); }
     }
 

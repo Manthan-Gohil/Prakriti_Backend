@@ -72,12 +72,9 @@ const optionalAuth = async (req, res, next) => {
 };
 
 /**
- * Require email verified
+ * Require email verified (no-op — all users are auto-verified on signup)
  */
-const requireVerified = (req, res, next) => {
-    if (!req.user.isEmailVerified) {
-        return errorResponse(res, 'Please verify your email first.', 403);
-    }
+const requireVerified = (_req, _res, next) => {
     next();
 };
 

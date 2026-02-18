@@ -18,16 +18,6 @@ router.post(
 );
 
 router.post(
-    '/verify-otp',
-    [
-        body('email').isEmail().normalizeEmail().withMessage('Valid email is required.'),
-        body('otp').isLength({ min: 6, max: 6 }).withMessage('OTP must be 6 digits.'),
-    ],
-    validate,
-    authController.verifyOtp
-);
-
-router.post(
     '/login',
     [
         body('email').isEmail().normalizeEmail().withMessage('Valid email is required.'),
@@ -35,31 +25,6 @@ router.post(
     ],
     validate,
     authController.login
-);
-
-router.post(
-    '/resend-otp',
-    [body('email').isEmail().normalizeEmail().withMessage('Valid email is required.')],
-    validate,
-    authController.resendOtp
-);
-
-router.post(
-    '/forgot-password',
-    [body('email').isEmail().normalizeEmail().withMessage('Valid email is required.')],
-    validate,
-    authController.forgotPassword
-);
-
-router.post(
-    '/reset-password',
-    [
-        body('email').isEmail().normalizeEmail().withMessage('Valid email is required.'),
-        body('otp').isLength({ min: 6, max: 6 }).withMessage('OTP must be 6 digits.'),
-        body('newPassword').isLength({ min: 6 }).withMessage('Password must be at least 6 characters.'),
-    ],
-    validate,
-    authController.resetPassword
 );
 
 router.get('/me', authenticate, authController.getMe);
