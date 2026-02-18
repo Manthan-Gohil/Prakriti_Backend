@@ -40,4 +40,14 @@ router.post(
     profileController.savePrakritiTraits
 );
 
+router.post(
+    '/dosha-traits',
+    profileController.saveDoshaTraits
+);
+
+router.get(
+    '/dosha-traits',
+    profileController.getDoshaTraits
+);
+
 module.exports = router;

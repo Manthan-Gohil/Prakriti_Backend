@@ -111,6 +111,75 @@ class ProfileService {
         return profile;
     }
 
+    async saveDoshaTraits(userId, data) {
+        const fieldMap = {
+            current_symptoms: 'currentSymptoms',
+            symptom_duration: 'symptomDuration',
+            symptom_severity: 'symptomSeverity',
+            medical_history: 'medicalHistory',
+            current_medications: 'currentMedications',
+            appetite_level: 'appetiteLevel',
+            digestion_quality: 'digestionQuality',
+            bowel_pattern: 'bowelPattern',
+            gas_bloating: 'gasBloating',
+            acidity_burning: 'acidityBurning',
+            sleep_quality: 'sleepQuality',
+            sleep_duration: 'sleepDuration',
+            daytime_energy: 'daytimeEnergy',
+            mental_state: 'mentalState',
+            stress_level: 'stressLevel',
+            physical_activity_level: 'physicalActivityLevel',
+            daily_routine_consistency: 'dailyRoutineConsistency',
+            work_type: 'workType',
+            travel_frequency: 'travelFrequency',
+            diet_type: 'dietType',
+            food_quality: 'foodQuality',
+            taste_dominance: 'tasteDominance',
+            meal_timing_regular: 'mealTimingRegular',
+            hydration_level: 'hydrationLevel',
+            caffeine_intake: 'caffeineIntakeTrait',
+            climate_exposure: 'climateExposure',
+            season: 'season',
+            pollution_exposure: 'pollutionExposure',
+            screen_exposure: 'screenExposure',
+            age_group: 'ageGroup',
+            gender: 'genderTrait',
+            occupation: 'occupation',
+            cultural_diet_preference: 'culturalDietPreference',
+        };
+
+        const mapped = {};
+        for (const [key, dbField] of Object.entries(fieldMap)) {
+            if (data[key] !== undefined && data[key] !== null && data[key] !== '') {
+                mapped[dbField] = data[key];
+            }
+        }
+
+        if (Object.keys(mapped).length === 0) {
+            const err = new Error('At least one dosha trait field is required.');
+            err.status = 400;
+            throw err;
+        }
+
+        const doshaTraits = await prisma.doshaTraits.upsert({
+            where: { userId },
+            create: { userId, ...mapped },
+            update: mapped,
+        });
+
+        return doshaTraits;
+    }
+
+    async getDoshaTraits(userId) {
+        const traits = await prisma.doshaTraits.findUnique({ where: { userId } });
+        if (!traits) {
+            const err = new Error('Dosha traits not found. Please complete the form.');
+            err.status = 404;
+            throw err;
+        }
+        return traits;
+    }
+
     async getProfile(userId) {
         const profile = await prisma.healthProfile.findUnique({
             where: { userId },

@@ -43,6 +43,20 @@ class ProfileController {
             return successResponse(res, 'Prakriti traits saved.', { profile }, null, 201);
         } catch (error) { next(error); }
     }
+
+    async saveDoshaTraits(req, res, next) {
+        try {
+            const doshaTraits = await profileService.saveDoshaTraits(req.user.id, req.body);
+            return successResponse(res, 'Dosha traits saved.', { doshaTraits }, null, 201);
+        } catch (error) { next(error); }
+    }
+
+    async getDoshaTraits(req, res, next) {
+        try {
+            const doshaTraits = await profileService.getDoshaTraits(req.user.id);
+            return successResponse(res, 'Dosha traits fetched.', { doshaTraits });
+        } catch (error) { next(error); }
+    }
 }
 
 module.exports = new ProfileController();
