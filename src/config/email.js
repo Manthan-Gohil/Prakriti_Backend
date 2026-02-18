@@ -1,45 +1,47 @@
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: parseInt(process.env.SMTP_PORT, 10),
-    secure: process.env.SMTP_SECURE === 'true',
-    auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-    },
+  host: process.env.SMTP_HOST,
+  port: parseInt(process.env.SMTP_PORT, 10),
+  secure: process.env.SMTP_SECURE === 'true',
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+  // Force IPv4 — Render does not support outbound IPv6
+  family: 4,
 });
 
 transporter.verify()
-    .then(() => console.log('✅ Email transporter ready'))
-    .catch((err) => console.warn('⚠️ Email transporter error:', err.message));
+  .then(() => console.log('✅ Email transporter ready'))
+  .catch((err) => console.warn('⚠️ Email transporter error:', err.message));
 
 /**
  * Send an email
  */
 const sendEmail = async ({ to, subject, html, text }) => {
-    const mailOptions = {
-        from: `"Prakriti AI" <${process.env.SMTP_USER}>`,
-        to,
-        subject,
-        html,
-        text,
-    };
+  const mailOptions = {
+    from: `"Prakriti AI" <${process.env.SMTP_USER}>`,
+    to,
+    subject,
+    html,
+    text,
+  };
 
-    return transporter.sendMail(mailOptions);
+  return transporter.sendMail(mailOptions);
 };
 
 /**
  * Send OTP verification email
  */
 const sendOtpEmail = async (email, otp, type = 'verification') => {
-    const subjects = {
-        verification: 'Verify your Prakriti AI account',
-        reset: 'Reset your Prakriti AI password',
-        login: 'Prakriti AI Login Verification',
-    };
+  const subjects = {
+    verification: 'Verify your Prakriti AI account',
+    reset: 'Reset your Prakriti AI password',
+    login: 'Prakriti AI Login Verification',
+  };
 
-    const html = `
+  const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
       <div style="text-align: center; margin-bottom: 30px;">
         <h1 style="color: #2d6a4f;">🌿 Prakriti AI</h1>
@@ -66,12 +68,12 @@ const sendOtpEmail = async (email, otp, type = 'verification') => {
     </div>
   `;
 
-    return sendEmail({
-        to: email,
-        subject: subjects[type] || subjects.verification,
-        html,
-        text: `Your Prakriti AI verification code is: ${otp}. It expires in 10 minutes.`,
-    });
+  return sendEmail({
+    to: email,
+    subject: subjects[type] || subjects.verification,
+    html,
+    text: `Your Prakriti AI verification code is: ${otp}. It expires in 10 minutes.`,
+  });
 };
 
 module.exports = { sendEmail, sendOtpEmail };
