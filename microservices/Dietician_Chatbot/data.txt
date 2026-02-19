@@ -1,0 +1,1448 @@
+Fruits
+Vata
+Avoid
+Generally most dried fruit
+Apples (raw)
+Cranberries
+Dates (dry)
+Figs (dry)
+Pears
+Persimmons
+Pomegranates
+Raisins (dry)
+Prunes (dry)
+Watermelon
+Favor
+Generally most sweet fruit
+Apples (cooked)
+Applesauce
+Apricots
+Avocado
+Bananas
+Berries
+Cherries
+Coconut
+Dates (fresh)
+Figs (fresh)
+Grapefruit
+Grapes
+Kiwi
+Lemons
+Limes
+Mangoes
+Melons
+Oranges
+Papaya
+Peaches
+Pineapple
+Plums
+Prunes (soaked)
+Raisins (soaked)
+Rhubarb
+Strawberries
+Tamarind
+Pitta
+Avoid
+Generally most sour fruit
+Apples (sour)
+Apricots (sour)
+Bananas
+Berries (sour)
+Cherries (sour)
+Cranberries
+Grapefruit
+Grapes (green)
+Kiwi**
+Lemons
+Mangoes (green)
+Oranges (sour)
+Peaches
+Persimmons
+Pineapple (sour)
+Plums (sour)
+Rhubarb
+Tamarind
+Favor
+Generally most sweet fruit
+Apples (sweet)
+Applesauce
+Apricots (sweet)
+Avocado
+Berries (sweet)
+Cherries (sweet)
+Coconut
+Dates
+Figs
+Grapes (red & purple)
+Limes*
+Mangoes (ripe)
+Melons
+Oranges (sweet)*
+Papaya*
+Pears
+Pineapple (sweet)*
+Plums (sweet)
+Pomegranates
+Prunes
+Raisins
+Strawberries*
+Watermelon
+Kapha
+Avoid
+Generally most sweet & sour fruit
+Avocado
+Bananas
+Coconut
+Dates
+Figs (fresh)
+Grapefruit
+Kiwi
+Mangos**
+Melons
+Oranges
+Papaya
+Pineapple
+Plums
+Rhubarb
+Tamarind
+Watermelon
+Favor
+Generally most astringent fruit
+Apples
+Applesauce
+Apricots
+Berries
+Cherries
+Cranberries
+Figs (dry)*
+Grapes*
+Lemons*
+Limes*
+Peaches*
+Pears
+Persimmons
+Pomegranates
+Prunes
+Raisins
+Strawberries*
+* okay in moderation
+** okay rarely
+
+Vegetables
+Vata
+Avoid
+Generally frozen, raw or dried vegetables
+Artichoke
+Beet greens**
+Bitter melon
+Broccoli
+Brussels sprouts
+Burdock root
+Cabbage (raw)
+Cauliflower (raw)
+Celery
+Corn (fresh)**
+Dandelion greens
+Eggplant
+Horseradish**
+Kale
+Kohlrabi
+Mushrooms
+Olives, green
+Onions (raw)
+Peas (raw)
+Peppers, sweet & hot
+Potatoes, white
+Prickly pear (fruit & leaves)
+Radish (raw)
+Squash, winter
+Tomatoes (cooked)**
+Tomatoes (raw) Turnips
+Wheat grass, sprouts
+Favor
+In general, vegetables should be cooked
+Asparagus
+Beets
+Cabbage* (cooked)
+Carrots
+Cauliflower*
+Cilantro
+Cucumber
+Daikon radish*
+Fennel (Anise)
+Garlic
+Green beans
+Green chilies
+Jerusalem
+artichoke*
+Leafy greens*
+Leeks
+Lettuce*
+Mustard greens*
+Okra
+Olives, black
+Onions (cooked)* Parsley*
+Parsnip
+Peas (cooked)
+Potatoes, sweet
+Pumpkin
+Radishes (cooked)*
+Rutabaga
+Spaghetti squash*
+Spinach (cooked)*
+Spinach (raw)*
+Sprouts*
+Squash, summer
+Taro root
+Turnip greens*
+Watercress
+Zucchini
+Pitta
+Avoid
+In general, pungent vegetables
+Beet greens
+Beets (raw)
+Burdock root
+Corn (fresh)**
+Daikon radish
+Eggplant**
+Garlic
+Green chilies
+Horseradish
+Kohlrabi **
+Leeks (raw)
+Mustard greens
+Olives, green
+Onions (raw)
+Peppers (hot)
+Prickly pear (fruit)
+Radishes (raw)
+Spinach (cooked)**
+Spinach (raw)
+Tomatoes
+Turnip greens
+Turnips
+Favor
+In general, sweet & bitter vegetables
+Artichoke
+Asparagus
+Beets (cooked)
+Bitter melon
+Broccoli
+Brussels sprouts
+Cabbage
+Carrots (cooked)
+Carrots (raw)*
+Cauliflower
+Celery
+Cilantro
+Cucumber
+Dandelion greens
+Fennel (Anise)
+Green beans
+Jerusalem artichoke
+Kale
+Leafy greens
+Leeks (cooked)
+Lettuce
+Mushrooms
+Okra
+Olives, black Onions (cooked)
+Parsley
+Parsnips
+Peas
+Peppers, sweet
+Potatoes, sweet & white
+Prickly pear (leaves)
+Pumpkin
+Radishes (cooked)
+Rutabaga
+Spaghetti squash
+Sprouts (not spicy)
+Squash, winter and summer
+Taro root
+Watercress*
+Wheat grass, sprouts
+Zucchini
+Kapha
+Avoid
+In general, sweet & juicy vegetables
+Cucumber
+Olives, black or green
+Parsnips**
+Potatoes, sweet
+Pumpkin
+Squash, summer
+Taro root
+Tomatoes (raw)
+Zucchini
+Favor
+In general, most pungent & bitter vegetables
+Artichoke
+Asparagus
+Beet greens
+Beets
+Bitter melon
+Broccoli
+Brussels sprouts
+Burdock root
+Cabbage
+Carrots
+Cauliflower
+Celery
+Cilantro
+Corn
+Daikon radish
+Dandelion greens
+Eggplant
+Fennel (Anise)
+Garlic
+Green beans
+Green chilies
+Horseradish
+Jerusalem artichoke
+Kale
+Kohlrabi
+Leafy greens
+Leeks
+Lettuce Mushrooms
+Mustard greens
+Okra
+Onions
+Parsley
+Peas
+Peppers, sweet & hot
+Potatoes, white
+Prickly pear (fruit & leaves)
+Radishes
+Rutabaga
+Spaghetti squash*
+Spinach
+Sprouts
+Squash, winter
+Tomatoes (cooked)
+Turnip greens
+Turnips
+Watercress
+Wheat grass, sprouts
+* okay in moderation
+** okay rarely
+
+Grains
+Vata
+Avoid
+Barley
+Bread (with yeast)
+Buckwheat
+Cereals (cold, dry or puffed)
+Corn
+Couscous
+Crackers
+Granola
+Millet
+Muesli
+Oat bran
+Oats (dry)
+Pasta**
+Polenta**
+Rice cakes**
+Rye
+Sago
+Spelt
+Tapioca
+Wheat bran
+Favor
+Amaranth*
+Durham flour
+Oats (cooked)
+Pancakes
+Quinoa
+Rice (all kinds)
+Seitan (wheat meat)
+Sprouted wheat bread (Essene)
+Wheat
+Pitta
+Avoid
+Bread (with yeast)
+Buckwheat
+Corn
+Millet
+Muesli**
+Oats (dry)
+Polenta**
+Rice (brown)**
+Rye
+Favor
+Amaranth
+Barley
+Cereal, dry
+Couscous
+Crackers
+Durham flour
+Granola
+Oat bran
+Oats (cooked)
+Pancakes
+Pasta
+Quinoa
+Rice (basmati, white, wild)
+Rice cakes
+Seitan (wheat meat)
+Spelt
+Sprouted wheat bread (Essene)
+Tapioca
+Wheat
+Wheat bran
+Kapha
+Avoid
+Bread (with yeast)
+Oats (cooked)
+Pancakes
+Pasta**
+Rice (brown, white)
+Rice cakes**
+Wheat
+Favor
+Amaranth*
+Barley
+Buckwheat
+Cereal (cold, dry or puffed)
+Corn
+Couscous
+Crackers
+Durham flour*
+Granola
+Millet
+Muesli
+Oat bran
+Oats (dry)
+Polenta
+Quinoa*
+Rice (basmati, wild)*
+Rye
+Seitan (wheat meat)
+Spelt*
+Sprouted wheat bread (Essene)
+Tapioca
+Wheat bran
+* okay in moderation
+** okay rarely
+
+Legumes
+Vata
+Avoid
+Aduki beans
+Black beans
+Black-eyed peas
+Chick peas (garbanzo beans)
+Kidney beans
+Lentils (brown)
+Lima beans
+Miso**
+Navy beans
+Peas (dried)
+Pinto beans
+Soy beans
+Soy flour
+Soy powder
+Split peas
+Tempeh
+White beans
+Favor
+Lentils (red)*
+Mung beans
+Mung dal
+Soy cheese*
+Soy milk*
+Soy sauce*
+Soy sausages*
+Tofu*
+Tur dal
+Urad dal
+Pitta
+Avoid
+Miso
+Soy sauce
+Soy sausages
+Tur dal
+Urad dal
+Favor
+Aduki beans
+Black beans
+Black-eyed peas
+Chick peas (garbanzo beans)
+Kidney beans
+Lentils, brown & red
+Lima beans
+Mung beans
+Mung dal
+Navy beans
+Peas (dried)
+Pinto beans
+Soy beans
+Soy cheese
+Soy flour*
+Soy milk
+Soy powder*
+Split peas
+Tempeh
+Tofu
+White beans
+Kapha
+Avoid
+Kidney beans
+Soy beans
+Soy cheese
+Soy flour
+Soy powder
+Soy sauce
+Tofu (cold)
+Urad dal
+Miso
+Favor
+Aduki beans
+Black beans
+Black-eyed peas
+Chick peas (garbanzo beans)
+Lentils (red & brown)
+Lima beans
+Mung beans*
+Mung dal*
+Navy beans
+Peas (dried)
+Pinto beans
+Soy milk
+Soy sausages
+Split peas
+Tempeh
+Tofu (hot)*
+Tur dal
+White beans
+* okay in moderation
+** okay rarely
+
+Dairy
+Vata
+Avoid
+Cow's milk (powdered)
+Goat's milk (powdered)
+Yogurt (plain, frozen or w/ fruit)
+Favor
+Most dairy is good!
+Butter
+Buttermilk
+Butter
+Cheese (hard)*
+Cheese (soft)
+Cottage cheese
+Cow's milk
+Ghee
+Goat's cheese
+Goat's milk
+Ice cream*
+Sour cream*
+Yogurt (diluted & spiced)*
+Pitta
+Avoid
+Butter (salted)
+Buttermilk
+Cheese (hard)
+Sour cream
+Yogurt (plain, frozen or w/fruit)
+Favor
+Butter (unsalted)
+Cheese (soft, not aged, unsalted)
+Cottage cheese
+Cow's milk
+Ghee
+Goat's milk
+Goat's cheese (soft, unsalted)
+Ice cream
+Yogurt (freshly made & diluted)*
+Kapha
+Avoid
+Butter (salted)
+Butter (unsalted)**
+Cheese (soft & hard)
+Cow's milk
+Ice cream
+Sour cream
+Yogurt (plain, frozen or w/fruit)
+Favor
+Buttermilk*
+Cottage cheese (from skimmed goat's milk)
+Ghee*
+Goat's cheese (unsalted & not aged)*
+Goat's milk, skim
+Yogurt (diluted)
+* okay in moderation
+** okay rarely
+
+Animal Foods
+Vata
+Avoid
+Lamb
+Pork
+Rabbit
+Venison
+Turkey (white)
+Favor
+Beef
+Buffalo
+Chicken (dark)
+Chicken (white)*
+Duck
+Eggs
+Fish (freshwater or sea)
+Salmon
+Sardines
+Seafood
+Shrimp
+Tuna fish
+Turkey (dark)
+Pitta
+Avoid
+Beef
+Chicken (dark)
+Duck
+Eggs (yolk)
+Fish (sea)
+Lamb
+Pork
+Salmon
+Sardines
+Seafood
+Tuna fish
+Turkey (dark)
+Favor
+Buffalo
+Chicken (white)
+Eggs (albumen or white only)
+Fish (freshwater)
+Rabbit
+Shrimp*
+Turkey (white)
+Venison
+Kapha
+Avoid
+Beef
+Buffalo
+Chicken (dark)
+Duck
+Fish (sea)
+Lamb
+Pork
+Salmon
+Sardines
+Seafood
+Tuna fish
+Turkey (dark)
+Favor
+Chicken (white)
+Eggs
+Fish (freshwater)
+Rabbit
+Shrimp
+Turkey (white)
+Venison
+* okay in moderation
+** okay rarely
+
+Condiments
+Vata
+Avoid
+Chocolate
+Horseradish
+Favor
+Black pepper*
+Chutney, mango (sweet or spicy)
+Chili peppers*
+Coriander leaves*
+Dulse
+Gomasio
+Hijiki
+Kelp
+Ketchup
+Kombu
+Lemon
+Lime
+Lime pickle
+Mango pickle
+Mayonnaise
+Mustard
+Pickles
+Salt
+Scallions
+Seaweed
+Soy sauce
+Sprouts*
+Tamari
+Vinegar
+Pitta
+Avoid
+Chili pepper
+Chocolate
+Chutney, mango (spicy)
+Gomasio
+Horseradish
+Kelp
+Ketchup
+Mustard
+Lemon
+Lime pickle
+Mango pickle
+Mayonnaise
+Pickles
+Salt (in excess)
+Scallions
+Soy sauce
+Vinegar
+Favor
+Black pepper*
+Chutney, mango (sweet)
+Coriander leaves
+Dulse*
+Hijiki*
+Kombu*
+Lime*
+Sprouts
+Salt*
+Seaweed*
+Tamari*
+Kapha
+Avoid
+Chocolate
+Chutney, mango (sweet)
+Gomasio
+Kelp
+Ketchup**
+Lime
+Lime pickle
+Mango pickle
+Mayonnaise
+Pickles
+Salt
+Soy sauce
+Tamari
+Vinegar
+Favor
+Black pepper
+Chili Peppers
+Chutney, mango (spicy)
+Coriander leaves
+Dulse*
+Hijiki*
+Horseradish
+Lemon*
+Mustard (without vinegar)
+Scallions
+Seaweed*
+Sprouts
+* okay in moderation
+** okay rarely
+
+Nuts
+Vata
+Avoid
+None
+Favor
+In moderation:
+Almonds Black walnuts
+Brazil nuts
+Cashews
+Charole
+Coconut
+Filberts
+Hazelnuts
+Macadamia nuts
+Peanuts
+Pecans
+Pine nuts
+Pistachios
+Walnuts
+Pitta
+Avoid
+Almonds (with skin)
+Black walnuts
+Brazil nuts
+Cashews
+Filberts
+Hazelnuts
+Macadamia nuts
+Peanuts
+Pecans
+Pine nuts
+Pistachios
+Walnuts
+Favor
+Almonds (soaked and peeled)
+Charole
+Coconut
+Kapha
+Avoid
+Almonds (soaked and peeled)**
+Black walnuts
+Brazil nuts
+Cashews
+Coconut
+Filberts
+Hazelnuts
+Macadamia nuts
+Peanuts
+Pecans
+Pine nuts
+Pistachios
+Walnuts
+Favor
+Charole
+* okay in moderation
+** okay rarely
+
+Seeds
+Vata
+Avoid
+Popcorn
+Psyllium**
+Favor
+Chia
+Flax
+Halva
+Pumpkin
+Sesame
+Sunflower
+Tahini
+Pitta
+Avoid
+Chia
+Sesame
+Tahini
+Favor
+Flax
+Halva
+Popcorn (no salt, buttered)
+Psyllium
+Pumpkin*
+Sunflower
+Kapha
+Avoid
+Halva
+Psyllium**
+Sesame
+Tahini
+Favor
+Chia
+Flax*
+Popcorn (no salt, no butter)
+Pumpkin*
+Sunflower*
+* okay in moderation
+** okay rarely
+
+Oils
+Vata
+Avoid
+Flax seed
+Favor
+For internal & external use: (most suitable at top of list)
+Sesame
+Ghee
+Olive
+Most other oils
+
+External use only:
+Coconut
+Avocado
+Pitta
+Avoid
+Almond
+Apricot
+Corn
+Safflower
+Sesame
+Favor
+For internal & external use: (most suitable at top of list)
+Sunflower
+Ghee
+Canola
+Olive
+Soy
+Flax seed
+Primrose
+Walnut
+
+External use only:
+Avocado
+Coconut
+Kapha
+Avoid
+Avocado
+Apricot
+Coconut
+Flax seed**
+Olive
+Primrose
+Safflower
+Sesame (internal)
+Soy
+Walnut
+Favor
+For internal & external use in small amounts: (Most suitable at top of list)
+Corn
+Canola
+Sesame (external)
+Sunflower
+Ghee
+Almond
+* okay in moderation
+** okay rarely
+
+Beverages
+Vata
+Avoid
+Alcohol (hard; red wine)
+Apple juice
+Black tea
+Caffeinated beverages
+Carbonated drinks
+Chocolate milk
+Coffee
+Cold dairy drinks
+Cranberry juice
+Iced tea
+Icy cold drinks
+Pear juice
+Pomegranate juice
+Prune juice**
+Soy milk (cold)
+Tomato juice**
+V-8 Juice
+Favor
+Alcohol (beer; white wine)*
+Almond milk
+Aloe vera juice
+Apple cider
+Apricot juice
+Berry juice (except for cranberry)
+Carob*
+Carrot juice
+Chai (hot spiced milk)
+Cherry juice
+Grain "coffee"
+Grape juice
+Grapefruit juice
+Lemonade
+Mango juice
+Miso broth
+Orange juice
+Papaya juice
+Peach nectar
+Pineapple juice
+Rice milk
+Sour juices
+Soy milk (hot & well-spiced)*
+Vegetable bouillon
+Pitta
+Avoid
+Alcohol (hard; red & sweet wine)
+Apple cider
+Berry juice (sour)
+Caffeinated beverages
+Carbonated drinks
+Carrot juice
+Cherry juice (sour)
+Chocolate milk
+Coffee
+Cranberry juice
+Grapefruit juice
+Iced tea
+Icy cold drinks
+Lemonade
+Papaya juice
+Pineapple juice
+Tomato juice
+V-8 juice
+Sour juices
+Favor
+Alcohol (beer; dry white wine)*
+Almond milk
+Aloe vera juice
+Apple juice
+Apricot juice
+Berry juice (sweet)
+Black tea*
+Carob
+Chai (hot, spiced milk)*
+Cherry juice (sweet)
+Cool dairy drinks
+Grain "coffee"
+Grape juice
+Mango juice
+Miso broth*
+Mixed veg. juice
+Orange juice*
+Peach nectar
+Pear juice
+Pomegranate juice
+Prune juice
+Rice milk
+Soy milk
+Vegetable bouillon
+Kapha
+Avoid
+Alcohol (hard; beer; sweet wine)
+Almond milk
+Caffeinated
+beverages**
+Carbonated drinks
+Cherry juice (sour)
+Chocolate milk
+Coffee
+Cold dairy drinks
+Grapefruit juice
+Iced tea
+Icy cold drinks
+Lemonade
+Miso broth
+Orange Juice
+Papaya juice
+Rice milk
+Sour juices
+Soy milk (cold)
+Tomato juice
+V-8 Juice
+Favor
+Alcohol (dry wine, red or white)*
+Aloe vera juice
+Apple cider
+Apple juice*
+Apricot juice
+Berry juice
+Black tea (spiced)
+Carob
+Carrot juice
+Chai (hot, spiced milk)*
+Cherry juice (sweet)
+Cranberry juice
+Grain "coffee"
+Grape juice
+Mango juice
+Peach nectar
+Pear juice
+Pineapple juice*
+Pomegranate juice
+Prune juice
+Soy milk (hot & well-spiced)
+* okay in moderation
+** okay rarely
+
+Herbal Teas
+Vata
+Avoid
+Alfalfa**
+Barley**
+Basil**
+Blackberry
+Borage**
+Burdock
+Cinnamon**
+Cornsilk
+Dandelion
+Ginseng
+Hibiscus
+Hops**
+Jasmine**
+Lemon balm**
+Mormon tea
+Nettle**
+Passion flower**
+Red clover**
+Red Zinger**
+Violet**
+Yarrow
+Yerba Mate**
+Favor
+Ajwan
+Bancha
+Catnip*
+Chamomile
+Chicory*
+Chrysanthemum*
+Clove
+Comfrey
+Elder Flower
+Eucalyptus
+Fennel
+Fenugreek
+Ginger (fresh)
+Hawthorne
+Juniper berry
+Kukicha*
+Lavender
+Lemon grass
+Licorice
+Marshmallow
+Oat straw
+Orange peel
+Pennyroyal
+Peppermint
+Raspberry*
+Rosehips
+Saffron
+Sage
+Sarsaparilla
+Sassafras
+Spearmint
+Strawberry*
+Wintergreen*
+Pitta
+Avoid
+Ajwan
+Basil**
+Clove
+Eucalyptus
+Fenugreek
+Ginger (dry)
+Ginseng
+Hawthorne
+Juniper berry
+Mormon tea
+Pennyroyal
+Red Zinger
+Rosehip**
+Sage
+Sassafras
+Yerba Mate
+Favor
+Alfalfa
+Bancha
+Barley
+Blackberry
+Borage
+Burdock
+Catnip
+Chamomile
+Chicory
+Comfrey
+Dandelion
+Fennel
+Ginger (fresh)
+Hibiscus
+Hops
+Jasmine
+Kukicha
+Lavender
+Lemon balm
+Lemon grass
+Licorice
+Marshmallow
+Nettle
+Oat Straw
+Passion flower
+Peppermint
+Raspberry
+Red clover
+Sarsaparilla
+Spearmint
+Strawberry
+Violet
+Wintergreen
+Yarrow
+Kapha
+Avoid
+Licorice**
+Marshmallow
+Red Zinger
+Rosehip
+Favor
+Alfalfa
+Bancha
+Barley
+Blackberry
+Burdock
+Chamomile
+Chicory
+Cinnamon
+Clove
+Comfrey*
+Dandelion
+Fennel*
+Fenugreek
+Ginger
+Ginseng*
+Hibiscus
+Jasmine
+Juniper berry
+Kukicha
+Lavender
+Lemon balm
+Lemon grass
+Mormon tea
+Nettle
+Passion flower
+Peppermint
+Raspberry
+Red clover
+Sarsaparilla*
+Sassafras
+Spearmint
+Strawberry
+Wintergreen
+Yarrow
+Yerba Mate
+* okay in moderation
+** okay rarely
+
+Spices
+Vata
+Avoid
+None
+Favor
+All spices are good!
+Ajwan
+Allspice
+Almond extract
+Anise
+Asafoetida (hing)
+Basil
+Bay leaf
+Black pepper
+Caraway
+Cardamom
+Cayenne*
+Cinnamon
+Cloves
+Coriander
+Cumin
+Dill
+Fennel
+Fenugreek*
+Garlic
+Ginger
+Marjoram
+Mint
+Mustard seeds
+Nutmeg
+Orange peel
+Oregano
+Paprika
+Parsley
+Peppermint
+Pippali
+Poppy seeds
+Rosemary
+Saffron
+Salt
+Savory
+Spearmint
+Star anise
+Tarragon
+Thyme
+Turmeric
+Vanilla
+Wintergreen
+Pitta
+Avoid
+Ajwan
+Allspice
+Almond extract
+Anise
+Asafoetida (hing)
+Basil (dry)
+Bay leaf
+Cayenne
+Cloves
+Fenugreek
+Garlic
+Ginger (dry)
+Mace
+Marjoram
+Mustard seeds
+Nutmeg
+Oregano
+Paprika
+Pippali
+Poppy seeds
+Rosemary
+Sage
+Salt
+Savory
+Star anise
+Thyme
+Favor
+Basil (fresh)
+Black pepper*
+Caraway*
+Cardamom*
+Cinnamon
+Coriander
+Cumin
+Dill
+Fennel
+Ginger (fresh)
+Mint
+Neem leaves*
+Orange peel*
+Parsley*
+Peppermint
+Saffron
+Spearmint
+Tarragon*
+Turmeric
+Vanilla*
+Wintergreen
+Kapha
+Avoid
+Salt
+Favor
+All spices are good
+Ajwan
+Allspice
+Almond extract
+Anise
+Asafoetida (hing)
+Basil
+Bay leaf
+Black pepper
+Caraway
+Cardamom
+Cayenne
+Cinnamon
+Cloves
+Coriander
+Cumin
+Dill
+Fennel*
+Fenugreek
+Garlic
+Ginger
+Marjoram
+Mint
+Mustard seeds
+Neem leaves
+Nutmeg
+Orange peel
+Oregano
+Paprika
+Parsley
+Peppermint
+Pippali
+Poppy seeds
+Rosemary
+Saffron
+Savory
+Spearmint
+Star Anise
+Tarragon
+Thyme
+Turmeric
+Vanilla*
+Wintergreen
+* okay in moderation
+** okay rarely
+
+Sweeteners
+Vata
+Avoid
+Maple syrup**
+White sugar
+Favor
+Barley malt
+Fructose
+Fruit juice concentrates
+Honey
+Jaggary
+Molasses
+Rice syrup
+Dried or fresh sugar cane juice
+Turbinado
+Pitta
+Avoid
+White sugar**
+Honey**
+Jaggary
+Molasses
+Favor
+Barley malt
+Fructose
+Fruit juice concentrates
+Maple syrup
+Rice syrup
+Dried or fresh sugar cane juice
+Turbinado
+Kapha
+Avoid
+Barley Malt
+Fructose
+Jaggary
+Maple syrup
+Molasses
+Rice syrup
+Dried or fresh sugar cane juice
+Turbinado
+White sugar
+Favor
+Fruit juice concentrates
+Honey (raw & not processed)
+* okay in moderation
+** okay rarely
+
+Food Supplements
+Vata
+Avoid
+Barley green
+Brewer's yeast
+
+Vitamins: K
+Favor
+Aloe vera juice*
+Bee pollen
+Amino acids
+
+Minerals: calcium, copper, iron, magnesium, zinc
+
+Royal jelly
+Spirolina
+Blue-green algae
+
+Vitamins: A, B1, B2, B6, B12, C, D,
+E, P (bioflavonoids) and Folic Acid
+Pitta
+Avoid
+Amino acids
+Bee pollen**
+Royal jelly**
+
+Minerals: copper, iron
+
+Vitamins: B2, B6, C, E, P (bioflavonoids), and Folic Acid
+Favor
+Aloe vera juice
+Barley green
+Brewer's yeast
+
+Minerals: calcium, magnesium, zinc
+
+Spirolina
+Blue-green algae
+
+Vitamins: A, B1, B12, D and K
+Kapha
+Avoid
+Minerals:
+potassium
+
+Vitamins: A, B1, B2, B12, D, and E
+Favor
+Aloe vera juice
+Amino acids
+Barley green
+Bee pollen
+Brewer's yeast
+
+Minerals: copper, calcium, iron, magnesium, zinc
+
+Royal jelly
+Spirolina
+Blue-green algae
+
+Vitamins: B6, C, P (bioflavonoids), and Folic Acid

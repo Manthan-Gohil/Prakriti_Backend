@@ -1,0 +1,3 @@
+Sending POST request to http://127.0.0.1:8000/chat...
+Request failed: HTTPConnectionPool(host='127.0.0.1', port=8000): Read timed out. (read timeout=30)
+Done in 30.02s

@@ -57,6 +57,7 @@ model User {
   prakritiPredictions    PrakritiPrediction[]
   doshaPredictions       DoshaPrediction[]
   bookings              Booking[]
+  chatMessages          ChatMessage[]
 
   @@map("users")
 }
@@ -1847,4 +1848,23 @@ enum WebhookStatus {
   SUCCESS
   FAILED
   TIMEOUT
+}
+
+// ──────────────────────────────────────────────
+// DIETICIAN CHATBOT
+// ──────────────────────────────────────────────
+
+model ChatMessage {
+  id        String   @id @default(uuid())
+  userId    String
+  role      String   // "user" or "assistant"
+  message   String   @db.Text
+  dosha     String?  // dosha used for this conversation
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([userId, createdAt])
+  @@map("chat_messages")
 }
