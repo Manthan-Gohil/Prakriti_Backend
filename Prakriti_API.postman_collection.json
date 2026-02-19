@@ -2,7 +2,7 @@
     "info": {
         "_postman_id": "prakriti-ai-collection",
         "name": "Prakriti AI - Complete API",
-        "description": "Complete API collection for Prakriti AI - Ayurvedic Health & Wellness Platform.\n\nTest User:\n- Email: test@prakriti.ai\n- Password: Test@123\n\nSteps:\n1. Run 'Login' request first to get token\n2. Token is auto-saved to collection variable\n3. All authenticated requests use {{token}} automatically",
+        "description": "Complete API collection for Prakriti AI - Ayurvedic Health & Wellness Platform.\n\nDeployed URLs:\n- Backend: https://prakriti-api.onrender.com/api\n- Chatbot: https://dietician-chatbot.onrender.com\n\nTest User:\n- Email: test@prakriti.ai\n- Password: Test@123\n\nSteps:\n1. Run 'Login' request first to get token\n2. Token is auto-saved to collection variable\n3. All authenticated requests use {{token}} automatically",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
     },
     "auth": {
@@ -18,7 +18,11 @@
     "variable": [
         {
             "key": "base_url",
-            "value": "http://localhost:3000/api"
+            "value": "https://prakriti-api.onrender.com/api"
+        },
+        {
+            "key": "chatbot_url",
+            "value": "https://dietician-chatbot.onrender.com"
         },
         {
             "key": "token",
@@ -90,7 +94,7 @@
             "name": "Health Check",
             "item": [
                 {
-                    "name": "Health Check",
+                    "name": "API Health Check",
                     "request": {
                         "method": "GET",
                         "header": [],
@@ -100,6 +104,42 @@
                                 "{{base_url}}"
                             ],
                             "path": [
+                                "health"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Chatbot Health Check (Direct)",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "url": {
+                            "raw": "{{chatbot_url}}/health",
+                            "host": [
+                                "{{chatbot_url}}"
+                            ],
+                            "path": [
+                                "health"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Chatbot Health (via Proxy)",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/chatbot/health",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "chatbot",
                                 "health"
                             ]
                         }
@@ -120,9 +160,12 @@
                                 "value": "application/json"
                             }
                         ],
+                        "auth": {
+                            "type": "noauth"
+                        },
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"username\": \"newuser\",\n  \"email\": \"newuser@example.com\",\n  \"password\": \"Pass@123\"\n}"
+                            "raw": "{\n  \"username\": \"testuser\",\n  \"email\": \"test@prakriti.ai\",\n  \"password\": \"Test@123\"\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/auth/signup",
@@ -132,32 +175,6 @@
                             "path": [
                                 "auth",
                                 "signup"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "name": "Verify OTP",
-                    "request": {
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n  \"email\": \"newuser@example.com\",\n  \"otp\": \"123456\"\n}"
-                        },
-                        "url": {
-                            "raw": "{{base_url}}/auth/verify-otp",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "auth",
-                                "verify-otp"
                             ]
                         }
                     }
@@ -187,6 +204,9 @@
                                 "value": "application/json"
                             }
                         ],
+                        "auth": {
+                            "type": "noauth"
+                        },
                         "body": {
                             "mode": "raw",
                             "raw": "{\n  \"email\": \"test@prakriti.ai\",\n  \"password\": \"Test@123\"\n}"
@@ -204,85 +224,7 @@
                     }
                 },
                 {
-                    "name": "Resend OTP",
-                    "request": {
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n  \"email\": \"newuser@example.com\"\n}"
-                        },
-                        "url": {
-                            "raw": "{{base_url}}/auth/resend-otp",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "auth",
-                                "resend-otp"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "name": "Forgot Password",
-                    "request": {
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n  \"email\": \"test@prakriti.ai\"\n}"
-                        },
-                        "url": {
-                            "raw": "{{base_url}}/auth/forgot-password",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "auth",
-                                "forgot-password"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "name": "Reset Password",
-                    "request": {
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n  \"email\": \"test@prakriti.ai\",\n  \"otp\": \"123456\",\n  \"newPassword\": \"NewPass@123\"\n}"
-                        },
-                        "url": {
-                            "raw": "{{base_url}}/auth/reset-password",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "auth",
-                                "reset-password"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "name": "Get Me",
+                    "name": "Get Current User (Me)",
                     "request": {
                         "method": "GET",
                         "header": [],
@@ -310,7 +252,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"currentPassword\": \"Test@123\",\n  \"newPassword\": \"NewTest@123\"\n}"
+                            "raw": "{\n  \"currentPassword\": \"Test@123\",\n  \"newPassword\": \"NewTest@456\"\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/auth/change-password",
@@ -330,7 +272,7 @@
             "name": "Profile",
             "item": [
                 {
-                    "name": "Create/Update Profile",
+                    "name": "Create Profile",
                     "request": {
                         "method": "POST",
                         "header": [
@@ -341,7 +283,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"firstName\": \"Arjun\",\n  \"lastName\": \"Sharma\",\n  \"dateOfBirth\": \"1995-06-15\",\n  \"gender\": \"MALE\",\n  \"heightCm\": 175,\n  \"weightKg\": 72,\n  \"bloodGroup\": \"B_POSITIVE\",\n  \"bodyFrame\": \"MEDIUM\",\n  \"activityLevel\": \"MODERATE\",\n  \"dietType\": \"VEGETARIAN\",\n  \"occupation\": \"Software Engineer\",\n  \"city\": \"Bangalore\",\n  \"state\": \"Karnataka\",\n  \"country\": \"India\"\n}"
+                            "raw": "{\n  \"firstName\": \"Test\",\n  \"lastName\": \"User\",\n  \"dateOfBirth\": \"1995-06-15\",\n  \"gender\": \"MALE\",\n  \"heightCm\": 175,\n  \"weightKg\": 70\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/profile",
@@ -371,7 +313,7 @@
                     }
                 },
                 {
-                    "name": "Update Profile (Partial)",
+                    "name": "Update Profile",
                     "request": {
                         "method": "PATCH",
                         "header": [
@@ -382,7 +324,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"weightKg\": 71.5,\n  \"activityLevel\": \"ACTIVE\",\n  \"sleepQuality\": \"EXCELLENT\"\n}"
+                            "raw": "{\n  \"firstName\": \"Updated\",\n  \"weightKg\": 72\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/profile",
@@ -407,6 +349,11 @@
                                     "key": "image",
                                     "type": "file",
                                     "src": ""
+                                },
+                                {
+                                    "key": "type",
+                                    "value": "profile",
+                                    "type": "text"
                                 }
                             ]
                         },
@@ -451,7 +398,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"body_size\": \"Medium\",\n  \"body_weight_tendency\": \"Moderate - no difficulties in gaining or losing weight\",\n  \"height\": \"Average\",\n  \"bone_structure\": \"Medium bone structure\",\n  \"complexion\": \"Fair-skin sunburns easily\",\n  \"skin_type\": \"Smooth and warm, oily T-zone\",\n  \"skin_texture\": \"Freckles, many moles, redness and rashes\",\n  \"hair_color\": \"Red, light brown, yellow\",\n  \"hair_appearance\": \"Straight, oily\",\n  \"face_shape\": \"Heart-shaped, pointed chin\",\n  \"eyes\": \"Medium-sized, penetrating, light-sensitive eyes\",\n  \"eyelashes\": \"Moderate eyelashes\",\n  \"blinking_pattern\": \"Moderate Blinking\",\n  \"cheeks\": \"Smooth, Flat\",\n  \"nose_shape\": \"Pointed, Average\",\n  \"teeth_structure\": \"Medium-sized teeth, Reddish gums\",\n  \"lips\": \"Lips are soft, medium-sized\",\n  \"nails\": \"Sharp, Flexible, Pink, Lustrous\",\n  \"appetite\": \"Strong, Unbearable\",\n  \"taste_preference\": \"Pungent / Bitter / Astringent\"\n}"
+                            "raw": "{\n  \"bodyFrame\": \"MEDIUM\",\n  \"skinType\": \"NORMAL\",\n  \"hairType\": \"THICK\",\n  \"appetite\": \"MODERATE\",\n  \"digestion\": \"REGULAR\",\n  \"sleepPattern\": \"SOUND\"\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/profile/prakriti-traits",
@@ -477,7 +424,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"current_symptoms\": \"Frequent headaches and digestive issues\",\n  \"medical_history\": \"No major surgeries\",\n  \"digestion_quality\": \"Irregular digestion with bloating\",\n  \"mental_state\": \"Anxious and restless at times\",\n  \"current_medications\": \"None\",\n  \"bowel_pattern\": \"Irregular bowel movements\",\n  \"gas_bloating\": \"Frequent gas after meals\",\n  \"sleep_quality\": \"Irregular Sleep\",\n  \"stress_level\": \"Moderate Stress\",\n  \"physical_activity_level\": \"Moderate\",\n  \"season\": \"Summer season\",\n  \"age_group\": \"20-40 years\",\n  \"gender\": \"Male\",\n  \"work_type\": \"Desk Job, High stress\",\n  \"cultural_diet_preference\": \"Avoids spicy foods\",\n  \"climate_exposure\": \"High-stress environments\"\n}"
+                            "raw": "{\n  \"bodyFrame\": \"MEDIUM\",\n  \"skinType\": \"OILY\",\n  \"hairType\": \"THICK\",\n  \"appetite\": \"STRONG\",\n  \"digestion\": \"FAST\",\n  \"sleepPattern\": \"MODERATE\"\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/profile/dosha-traits",
@@ -509,7 +456,7 @@
                     }
                 },
                 {
-                    "name": "Predict Prakriti",
+                    "name": "Predict Prakriti (ML)",
                     "request": {
                         "method": "POST",
                         "header": [
@@ -520,7 +467,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"body_size\": \"Medium\",\n  \"body_weight_tendency\": \"Moderate - no difficulties in gaining or losing weight\",\n  \"height\": \"Average\",\n  \"bone_structure\": \"Medium bone structure\",\n  \"complexion\": \"Fair-skin sunburns easily\",\n  \"skin_type\": \"Smooth and warm, oily T-zone\",\n  \"skin_texture\": \"Freckles, many moles, redness and rashes\",\n  \"hair_color\": \"Red, light brown, yellow\",\n  \"hair_appearance\": \"Straight, oily\",\n  \"face_shape\": \"Heart-shaped, pointed chin\",\n  \"eyes\": \"Medium-sized, penetrating, light-sensitive eyes\",\n  \"eyelashes\": \"Moderate eyelashes\",\n  \"blinking_pattern\": \"Moderate Blinking\",\n  \"cheeks\": \"Smooth, Flat\",\n  \"nose_shape\": \"Pointed, Average\",\n  \"teeth_structure\": \"Medium-sized teeth, Reddish gums\",\n  \"lips\": \"Lips are soft, medium-sized\",\n  \"nails\": \"Sharp, Flexible, Pink, Lustrous\",\n  \"appetite\": \"Strong, Unbearable\",\n  \"taste_preference\": \"Pungent / Bitter / Astringent\"\n}"
+                            "raw": "{\n  \"features\": {\n    \"bodyFrame\": \"MEDIUM\",\n    \"skinType\": \"NORMAL\",\n    \"hairType\": \"THICK\",\n    \"appetite\": \"MODERATE\"\n  }\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/profile/predict/prakriti",
@@ -536,7 +483,7 @@
                     }
                 },
                 {
-                    "name": "Predict Dosha Imbalance",
+                    "name": "Predict Dosha (ML)",
                     "request": {
                         "method": "POST",
                         "header": [
@@ -547,7 +494,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"current_symptoms\": \"Frequent headaches and digestive issues\",\n  \"medical_history\": \"No major surgeries\",\n  \"digestion_quality\": \"Irregular digestion with bloating\",\n  \"mental_state\": \"Anxious and restless at times\",\n  \"current_medications\": \"None\",\n  \"bowel_pattern\": \"Irregular bowel movements\",\n  \"gas_bloating\": \"Frequent gas after meals\",\n  \"sleep_quality\": \"Irregular Sleep\",\n  \"stress_level\": \"Moderate Stress\",\n  \"physical_activity_level\": \"Moderate\",\n  \"season\": \"Summer season\",\n  \"age_group\": \"20-40 years\",\n  \"gender\": \"Male\",\n  \"work_type\": \"Desk Job, High stress\",\n  \"cultural_diet_preference\": \"Avoids spicy foods\",\n  \"climate_exposure\": \"High-stress environments\"\n}"
+                            "raw": "{\n  \"features\": {\n    \"bodyFrame\": \"MEDIUM\",\n    \"skinType\": \"OILY\",\n    \"hairType\": \"THICK\",\n    \"appetite\": \"STRONG\"\n  }\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/profile/predict/dosha",
@@ -563,7 +510,7 @@
                     }
                 },
                 {
-                    "name": "Get All Predictions",
+                    "name": "Get Predictions",
                     "request": {
                         "method": "GET",
                         "header": [],
@@ -586,27 +533,6 @@
             "item": [
                 {
                     "name": "Get Questions",
-                    "event": [
-                        {
-                            "listen": "test",
-                            "script": {
-                                "exec": [
-                                    "var res = pm.response.json();",
-                                    "if (res.data && res.data.length > 0) {",
-                                    "    var firstCat = res.data[0];",
-                                    "    if (firstCat.questions && firstCat.questions.length > 0) {",
-                                    "        var q = firstCat.questions[0];",
-                                    "        pm.collectionVariables.set('question_id', q.id);",
-                                    "        if (q.options && q.options.length > 0) {",
-                                    "            pm.collectionVariables.set('option_id', q.options[0].id);",
-                                    "        }",
-                                    "    }",
-                                    "}"
-                                ],
-                                "type": "text/javascript"
-                            }
-                        }
-                    ],
                     "request": {
                         "method": "GET",
                         "header": [],
@@ -702,7 +628,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"responses\": [\n    { \"questionId\": \"{{question_id}}\", \"optionId\": \"{{option_id}}\" }\n  ]\n}"
+                            "raw": "{\n  \"responses\": [\n    { \"questionId\": \"q1\", \"optionId\": \"o1\" },\n    { \"questionId\": \"q2\", \"optionId\": \"o2\" }\n  ]\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/assessment/{{assessment_id}}/responses",
@@ -781,7 +707,7 @@
                     }
                 },
                 {
-                    "name": "List Assessments",
+                    "name": "List All Assessments",
                     "request": {
                         "method": "GET",
                         "header": [],
@@ -829,6 +755,7 @@
                                     "var res = pm.response.json();",
                                     "if (res.data && res.data.id) {",
                                     "    pm.collectionVariables.set('meal_plan_id', res.data.id);",
+                                    "    console.log('Meal Plan ID saved:', res.data.id);",
                                     "}"
                                 ],
                                 "type": "text/javascript"
@@ -845,7 +772,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"name\": \"Test Weekly Plan\",\n  \"description\": \"A balanced meal plan for testing\",\n  \"planType\": \"WEEKLY\",\n  \"startDate\": \"2025-01-20\",\n  \"endDate\": \"2025-01-27\",\n  \"targetCalories\": 2000,\n  \"targetDosha\": \"VATA\",\n  \"season\": \"WINTER\"\n}"
+                            "raw": "{\n  \"name\": \"Weekly Vata Plan\",\n  \"startDate\": \"2026-02-20\",\n  \"endDate\": \"2026-02-27\"\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/meal-plans",
@@ -903,7 +830,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"name\": \"Updated Weekly Plan\",\n  \"targetCalories\": 2200\n}"
+                            "raw": "{\n  \"name\": \"Updated Vata Plan\"\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/meal-plans/{{meal_plan_id}}",
@@ -944,6 +871,7 @@
                                     "var res = pm.response.json();",
                                     "if (res.data && res.data.id) {",
                                     "    pm.collectionVariables.set('meal_id', res.data.id);",
+                                    "    console.log('Meal ID saved:', res.data.id);",
                                     "}"
                                 ],
                                 "type": "text/javascript"
@@ -960,7 +888,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"mealType\": \"LUNCH\",\n  \"date\": \"2025-01-20\",\n  \"name\": \"Sattvic Lunch\",\n  \"description\": \"Balanced Ayurvedic lunch\"\n}"
+                            "raw": "{\n  \"mealType\": \"BREAKFAST\",\n  \"date\": \"2026-02-20\"\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/meal-plans/{{meal_plan_id}}/meals",
@@ -985,6 +913,7 @@
                                     "var res = pm.response.json();",
                                     "if (res.data && res.data.id) {",
                                     "    pm.collectionVariables.set('meal_food_item_id', res.data.id);",
+                                    "    console.log('Meal Food Item ID saved:', res.data.id);",
                                     "}"
                                 ],
                                 "type": "text/javascript"
@@ -1001,7 +930,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"foodItemId\": \"{{food_item_id}}\",\n  \"quantityG\": 200,\n  \"portionDescription\": \"1 bowl\"\n}"
+                            "raw": "{\n  \"foodItemId\": \"{{food_item_id}}\"\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/meal-plans/meals/{{meal_id}}/foods",
@@ -1018,10 +947,19 @@
                     }
                 },
                 {
-                    "name": "Mark Food Consumed",
+                    "name": "Mark Food as Consumed",
                     "request": {
                         "method": "PATCH",
-                        "header": [],
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"consumed\": true\n}"
+                        },
                         "url": {
                             "raw": "{{base_url}}/meal-plans/meals/foods/{{meal_food_item_id}}/consumed",
                             "host": [
@@ -1062,41 +1000,17 @@
             "name": "Foods",
             "item": [
                 {
-                    "name": "List Foods",
-                    "event": [
-                        {
-                            "listen": "test",
-                            "script": {
-                                "exec": [
-                                    "var res = pm.response.json();",
-                                    "if (res.data && res.data.length > 0) {",
-                                    "    pm.collectionVariables.set('food_item_id', res.data[0].id);",
-                                    "}"
-                                ],
-                                "type": "text/javascript"
-                            }
-                        }
-                    ],
+                    "name": "List All Foods",
                     "request": {
                         "method": "GET",
                         "header": [],
                         "url": {
-                            "raw": "{{base_url}}/foods?page=1&limit=10",
+                            "raw": "{{base_url}}/foods",
                             "host": [
                                 "{{base_url}}"
                             ],
                             "path": [
                                 "foods"
-                            ],
-                            "query": [
-                                {
-                                    "key": "page",
-                                    "value": "1"
-                                },
-                                {
-                                    "key": "limit",
-                                    "value": "10"
-                                }
                             ]
                         }
                     }
@@ -1107,7 +1021,7 @@
                         "method": "GET",
                         "header": [],
                         "url": {
-                            "raw": "{{base_url}}/foods/search?q=khichdi",
+                            "raw": "{{base_url}}/foods/search?q=rice",
                             "host": [
                                 "{{base_url}}"
                             ],
@@ -1118,7 +1032,7 @@
                             "query": [
                                 {
                                     "key": "q",
-                                    "value": "khichdi"
+                                    "value": "rice"
                                 }
                             ]
                         }
@@ -1130,14 +1044,14 @@
                         "method": "GET",
                         "header": [],
                         "url": {
-                            "raw": "{{base_url}}/foods/category/GRAINS",
+                            "raw": "{{base_url}}/foods/category/GRAIN",
                             "host": [
                                 "{{base_url}}"
                             ],
                             "path": [
                                 "foods",
                                 "category",
-                                "GRAINS"
+                                "GRAIN"
                             ]
                         }
                     }
@@ -1148,7 +1062,7 @@
                         "method": "GET",
                         "header": [],
                         "url": {
-                            "raw": "{{base_url}}/foods/dosha/VATA",
+                            "raw": "{{base_url}}/foods/dosha/VATA?effect=FAVOR",
                             "host": [
                                 "{{base_url}}"
                             ],
@@ -1156,6 +1070,12 @@
                                 "foods",
                                 "dosha",
                                 "VATA"
+                            ],
+                            "query": [
+                                {
+                                    "key": "effect",
+                                    "value": "FAVOR"
+                                }
                             ]
                         }
                     }
@@ -1179,6 +1099,21 @@
                 },
                 {
                     "name": "Create Food Item",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "var res = pm.response.json();",
+                                    "if (res.data && res.data.id) {",
+                                    "    pm.collectionVariables.set('food_item_id', res.data.id);",
+                                    "    console.log('Food Item ID saved:', res.data.id);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "POST",
                         "header": [
@@ -1189,7 +1124,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"name\": \"Tulsi Tea\",\n  \"nameHindi\": \"तुलसी चाय\",\n  \"category\": \"BEVERAGES\",\n  \"caloriesKcal\": 5,\n  \"proteinG\": 0,\n  \"carbsG\": 1,\n  \"fatG\": 0,\n  \"fiberG\": 0,\n  \"isSattvic\": true,\n  \"isVegan\": true,\n  \"isGlutenFree\": true,\n  \"rpiRasa\": [\"KATU\", \"TIKTA\"],\n  \"rpiVirya\": \"USHNA\",\n  \"rpiVipaka\": \"KATU\",\n  \"balancesDosha\": [\"VATA\", \"KAPHA\"],\n  \"description\": \"Sacred basil tea with adaptogenic properties\",\n  \"servingSizeG\": 150\n}"
+                            "raw": "{\n  \"name\": \"Khichdi\",\n  \"category\": \"GRAIN\",\n  \"calories\": 200,\n  \"protein\": 8,\n  \"carbs\": 35,\n  \"fat\": 4,\n  \"fiber\": 3\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/foods",
@@ -1214,7 +1149,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"caloriesKcal\": 8,\n  \"description\": \"Updated description\"\n}"
+                            "raw": "{\n  \"name\": \"Moong Dal Khichdi\",\n  \"calories\": 210\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/foods/{{food_item_id}}",
@@ -1243,6 +1178,7 @@
                                     "var res = pm.response.json();",
                                     "if (res.data && res.data.id) {",
                                     "    pm.collectionVariables.set('recognition_id', res.data.id);",
+                                    "    console.log('Recognition ID saved:', res.data.id);",
                                     "}"
                                 ],
                                 "type": "text/javascript"
@@ -1286,7 +1222,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"recognizedFood\": \"Khichdi\",\n  \"confidence\": 0.92,\n  \"nutritionData\": {\n    \"calories\": 150,\n    \"protein\": 5,\n    \"carbs\": 25,\n    \"fat\": 3\n  },\n  \"ayurvedicProperties\": {\n    \"rasa\": \"Madhura\",\n    \"virya\": \"Ushna\",\n    \"doshaEffect\": \"Tridoshic\"\n  }\n}"
+                            "raw": "{\n  \"recognizedFood\": \"Paneer Tikka\"\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/food-recognition/{{recognition_id}}/result",
@@ -1313,7 +1249,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"isCorrect\": true,\n  \"correctedFood\": null\n}"
+                            "raw": "{\n  \"isCorrect\": true\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/food-recognition/{{recognition_id}}/verify",
@@ -1329,27 +1265,17 @@
                     }
                 },
                 {
-                    "name": "List Recognitions",
+                    "name": "List Recognition History",
                     "request": {
                         "method": "GET",
                         "header": [],
                         "url": {
-                            "raw": "{{base_url}}/food-recognition?page=1&limit=10",
+                            "raw": "{{base_url}}/food-recognition",
                             "host": [
                                 "{{base_url}}"
                             ],
                             "path": [
                                 "food-recognition"
-                            ],
-                            "query": [
-                                {
-                                    "key": "page",
-                                    "value": "1"
-                                },
-                                {
-                                    "key": "limit",
-                                    "value": "10"
-                                }
                             ]
                         }
                     }
@@ -1372,7 +1298,7 @@
                     }
                 },
                 {
-                    "name": "Add Recognized Food to Diary",
+                    "name": "Add to Food Diary",
                     "request": {
                         "method": "POST",
                         "header": [
@@ -1416,6 +1342,7 @@
                                             "var res = pm.response.json();",
                                             "if (res.data && res.data.id) {",
                                             "    pm.collectionVariables.set('diary_entry_id', res.data.id);",
+                                            "    console.log('Diary Entry ID saved:', res.data.id);",
                                             "}"
                                         ],
                                         "type": "text/javascript"
@@ -1432,7 +1359,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"foodName\": \"Dal Tadka with Rice\",\n  \"mealType\": \"LUNCH\",\n  \"calories\": 380,\n  \"proteinG\": 14,\n  \"carbsG\": 55,\n  \"fatG\": 10,\n  \"fiberG\": 6,\n  \"isSattvic\": true,\n  \"source\": \"MANUAL\",\n  \"notes\": \"Homemade with ghee\"\n}"
+                                    "raw": "{\n  \"foodName\": \"Oatmeal with honey\",\n  \"mealType\": \"BREAKFAST\"\n}"
                                 },
                                 "url": {
                                     "raw": "{{base_url}}/tracking/diary",
@@ -1447,24 +1374,18 @@
                             }
                         },
                         {
-                            "name": "Get Food Diary",
+                            "name": "Get Diary Entries",
                             "request": {
                                 "method": "GET",
                                 "header": [],
                                 "url": {
-                                    "raw": "{{base_url}}/tracking/diary?days=7",
+                                    "raw": "{{base_url}}/tracking/diary",
                                     "host": [
                                         "{{base_url}}"
                                     ],
                                     "path": [
                                         "tracking",
                                         "diary"
-                                    ],
-                                    "query": [
-                                        {
-                                            "key": "days",
-                                            "value": "7"
-                                        }
                                     ]
                                 }
                             }
@@ -1493,7 +1414,7 @@
                                 "method": "GET",
                                 "header": [],
                                 "url": {
-                                    "raw": "{{base_url}}/tracking/nutrients/daily?days=7",
+                                    "raw": "{{base_url}}/tracking/nutrients/daily",
                                     "host": [
                                         "{{base_url}}"
                                     ],
@@ -1501,12 +1422,6 @@
                                         "tracking",
                                         "nutrients",
                                         "daily"
-                                    ],
-                                    "query": [
-                                        {
-                                            "key": "days",
-                                            "value": "7"
-                                        }
                                     ]
                                 }
                             }
@@ -1528,7 +1443,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"amountMl\": 300,\n  \"waterType\": \"warm\",\n  \"time\": \"08:00\"\n}"
+                                    "raw": "{\n  \"amountMl\": 500\n}"
                                 },
                                 "url": {
                                     "raw": "{{base_url}}/tracking/water",
@@ -1548,19 +1463,13 @@
                                 "method": "GET",
                                 "header": [],
                                 "url": {
-                                    "raw": "{{base_url}}/tracking/water?days=7",
+                                    "raw": "{{base_url}}/tracking/water",
                                     "host": [
                                         "{{base_url}}"
                                     ],
                                     "path": [
                                         "tracking",
                                         "water"
-                                    ],
-                                    "query": [
-                                        {
-                                            "key": "days",
-                                            "value": "7"
-                                        }
                                     ]
                                 }
                             }
@@ -1582,7 +1491,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"bedtime\": \"22:30\",\n  \"wakeTime\": \"06:00\",\n  \"durationHours\": 7.5,\n  \"quality\": 8,\n  \"notes\": \"Slept well after meditation\"\n}"
+                                    "raw": "{\n  \"bedtime\": \"2026-02-18T22:30:00Z\",\n  \"wakeTime\": \"2026-02-19T06:30:00Z\",\n  \"durationHours\": 8,\n  \"quality\": 8\n}"
                                 },
                                 "url": {
                                     "raw": "{{base_url}}/tracking/sleep",
@@ -1602,19 +1511,13 @@
                                 "method": "GET",
                                 "header": [],
                                 "url": {
-                                    "raw": "{{base_url}}/tracking/sleep?days=7",
+                                    "raw": "{{base_url}}/tracking/sleep",
                                     "host": [
                                         "{{base_url}}"
                                     ],
                                     "path": [
                                         "tracking",
                                         "sleep"
-                                    ],
-                                    "query": [
-                                        {
-                                            "key": "days",
-                                            "value": "7"
-                                        }
                                     ]
                                 }
                             }
@@ -1636,7 +1539,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"exerciseType\": \"Brisk Walking\",\n  \"durationMinutes\": 30,\n  \"caloriesBurned\": 150,\n  \"intensity\": \"MODERATE\",\n  \"notes\": \"Morning walk in park\"\n}"
+                                    "raw": "{\n  \"exerciseType\": \"Running\",\n  \"durationMinutes\": 30\n}"
                                 },
                                 "url": {
                                     "raw": "{{base_url}}/tracking/exercise",
@@ -1656,19 +1559,13 @@
                                 "method": "GET",
                                 "header": [],
                                 "url": {
-                                    "raw": "{{base_url}}/tracking/exercise?days=7",
+                                    "raw": "{{base_url}}/tracking/exercise",
                                     "host": [
                                         "{{base_url}}"
                                     ],
                                     "path": [
                                         "tracking",
                                         "exercise"
-                                    ],
-                                    "query": [
-                                        {
-                                            "key": "days",
-                                            "value": "7"
-                                        }
                                     ]
                                 }
                             }
@@ -1679,7 +1576,7 @@
                     "name": "Yoga",
                     "item": [
                         {
-                            "name": "Log Yoga Session",
+                            "name": "Log Yoga",
                             "request": {
                                 "method": "POST",
                                 "header": [
@@ -1690,7 +1587,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"yogaType\": \"Surya Namaskar\",\n  \"durationMinutes\": 20,\n  \"meditationMinutes\": 10,\n  \"notes\": \"12 rounds with pranayama\"\n}"
+                                    "raw": "{\n  \"yogaType\": \"Surya Namaskar\",\n  \"durationMinutes\": 20\n}"
                                 },
                                 "url": {
                                     "raw": "{{base_url}}/tracking/yoga",
@@ -1710,19 +1607,13 @@
                                 "method": "GET",
                                 "header": [],
                                 "url": {
-                                    "raw": "{{base_url}}/tracking/yoga?days=7",
+                                    "raw": "{{base_url}}/tracking/yoga",
                                     "host": [
                                         "{{base_url}}"
                                     ],
                                     "path": [
                                         "tracking",
                                         "yoga"
-                                    ],
-                                    "query": [
-                                        {
-                                            "key": "days",
-                                            "value": "7"
-                                        }
                                     ]
                                 }
                             }
@@ -1744,7 +1635,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"mood\": \"HAPPY\",\n  \"emotions\": [\"grateful\", \"peaceful\", \"content\"],\n  \"notes\": \"Good day after morning yoga\"\n}"
+                                    "raw": "{\n  \"mood\": \"HAPPY\"\n}"
                                 },
                                 "url": {
                                     "raw": "{{base_url}}/tracking/mood",
@@ -1764,19 +1655,13 @@
                                 "method": "GET",
                                 "header": [],
                                 "url": {
-                                    "raw": "{{base_url}}/tracking/mood?days=7",
+                                    "raw": "{{base_url}}/tracking/mood",
                                     "host": [
                                         "{{base_url}}"
                                     ],
                                     "path": [
                                         "tracking",
                                         "mood"
-                                    ],
-                                    "query": [
-                                        {
-                                            "key": "days",
-                                            "value": "7"
-                                        }
                                     ]
                                 }
                             }
@@ -1798,7 +1683,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"level\": 4,\n  \"source\": \"Work deadlines\",\n  \"copingMethods\": [\"meditation\", \"deep breathing\"]\n}"
+                                    "raw": "{\n  \"level\": 5\n}"
                                 },
                                 "url": {
                                     "raw": "{{base_url}}/tracking/stress",
@@ -1818,19 +1703,13 @@
                                 "method": "GET",
                                 "header": [],
                                 "url": {
-                                    "raw": "{{base_url}}/tracking/stress?days=7",
+                                    "raw": "{{base_url}}/tracking/stress",
                                     "host": [
                                         "{{base_url}}"
                                     ],
                                     "path": [
                                         "tracking",
                                         "stress"
-                                    ],
-                                    "query": [
-                                        {
-                                            "key": "days",
-                                            "value": "7"
-                                        }
                                     ]
                                 }
                             }
@@ -1852,7 +1731,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"weightKg\": 72,\n  \"bloodPressureSystolic\": 120,\n  \"bloodPressureDiastolic\": 80,\n  \"restingHeartRate\": 68,\n  \"bodyTemperature\": 36.6,\n  \"energyLevel\": 8,\n  \"mentalClarity\": 7,\n  \"overallWellbeing\": 8,\n  \"digestiveComfort\": 8,\n  \"skinClarity\": 7,\n  \"symptoms\": []\n}"
+                                    "raw": "{\n  \"bloodPressureSystolic\": 120,\n  \"bloodPressureDiastolic\": 80,\n  \"heartRate\": 72,\n  \"temperature\": 98.6\n}"
                                 },
                                 "url": {
                                     "raw": "{{base_url}}/tracking/health",
@@ -1872,19 +1751,13 @@
                                 "method": "GET",
                                 "header": [],
                                 "url": {
-                                    "raw": "{{base_url}}/tracking/health?days=30",
+                                    "raw": "{{base_url}}/tracking/health",
                                     "host": [
                                         "{{base_url}}"
                                     ],
                                     "path": [
                                         "tracking",
                                         "health"
-                                    ],
-                                    "query": [
-                                        {
-                                            "key": "days",
-                                            "value": "30"
-                                        }
                                     ]
                                 }
                             }
@@ -1906,7 +1779,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"tongueScraping\": true,\n  \"oilPulling\": true,\n  \"nasya\": false,\n  \"abhyanga\": true,\n  \"morningExercise\": true,\n  \"morningMeditation\": true,\n  \"morningPrayer\": true,\n  \"eveningWalk\": true,\n  \"eveningMeditation\": false,\n  \"selfReflection\": true,\n  \"bedtimeRoutine\": true\n}"
+                                    "raw": "{\n  \"oilPulling\": true,\n  \"tongueScraping\": true,\n  \"selfMassage\": false,\n  \"meditation\": true,\n  \"pranayama\": true\n}"
                                 },
                                 "url": {
                                     "raw": "{{base_url}}/tracking/dinacharya",
@@ -1926,19 +1799,13 @@
                                 "method": "GET",
                                 "header": [],
                                 "url": {
-                                    "raw": "{{base_url}}/tracking/dinacharya?days=7",
+                                    "raw": "{{base_url}}/tracking/dinacharya",
                                     "host": [
                                         "{{base_url}}"
                                     ],
                                     "path": [
                                         "tracking",
                                         "dinacharya"
-                                    ],
-                                    "query": [
-                                        {
-                                            "key": "days",
-                                            "value": "7"
-                                        }
                                     ]
                                 }
                             }
@@ -1956,13 +1823,19 @@
                         "method": "GET",
                         "header": [],
                         "url": {
-                            "raw": "{{base_url}}/dashboard/overview",
+                            "raw": "{{base_url}}/dashboard/overview?range=week",
                             "host": [
                                 "{{base_url}}"
                             ],
                             "path": [
                                 "dashboard",
                                 "overview"
+                            ],
+                            "query": [
+                                {
+                                    "key": "range",
+                                    "value": "week"
+                                }
                             ]
                         }
                     }
@@ -1973,7 +1846,7 @@
                         "method": "GET",
                         "header": [],
                         "url": {
-                            "raw": "{{base_url}}/dashboard/nutrition-analytics?days=7",
+                            "raw": "{{base_url}}/dashboard/nutrition-analytics?range=week",
                             "host": [
                                 "{{base_url}}"
                             ],
@@ -1983,8 +1856,8 @@
                             ],
                             "query": [
                                 {
-                                    "key": "days",
-                                    "value": "7"
+                                    "key": "range",
+                                    "value": "week"
                                 }
                             ]
                         }
@@ -1996,7 +1869,7 @@
                         "method": "GET",
                         "header": [],
                         "url": {
-                            "raw": "{{base_url}}/dashboard/health-analytics?days=30",
+                            "raw": "{{base_url}}/dashboard/health-analytics?range=week",
                             "host": [
                                 "{{base_url}}"
                             ],
@@ -2006,8 +1879,8 @@
                             ],
                             "query": [
                                 {
-                                    "key": "days",
-                                    "value": "30"
+                                    "key": "range",
+                                    "value": "week"
                                 }
                             ]
                         }
@@ -2019,7 +1892,7 @@
                         "method": "GET",
                         "header": [],
                         "url": {
-                            "raw": "{{base_url}}/dashboard/sleep-analytics?days=7",
+                            "raw": "{{base_url}}/dashboard/sleep-analytics?range=week",
                             "host": [
                                 "{{base_url}}"
                             ],
@@ -2029,8 +1902,8 @@
                             ],
                             "query": [
                                 {
-                                    "key": "days",
-                                    "value": "7"
+                                    "key": "range",
+                                    "value": "week"
                                 }
                             ]
                         }
@@ -2042,7 +1915,7 @@
                         "method": "GET",
                         "header": [],
                         "url": {
-                            "raw": "{{base_url}}/dashboard/activity-analytics?days=7",
+                            "raw": "{{base_url}}/dashboard/activity-analytics?range=week",
                             "host": [
                                 "{{base_url}}"
                             ],
@@ -2052,8 +1925,8 @@
                             ],
                             "query": [
                                 {
-                                    "key": "days",
-                                    "value": "7"
+                                    "key": "range",
+                                    "value": "week"
                                 }
                             ]
                         }
@@ -2065,7 +1938,7 @@
                         "method": "GET",
                         "header": [],
                         "url": {
-                            "raw": "{{base_url}}/dashboard/mood-analytics?days=7",
+                            "raw": "{{base_url}}/dashboard/mood-analytics?range=week",
                             "host": [
                                 "{{base_url}}"
                             ],
@@ -2075,8 +1948,8 @@
                             ],
                             "query": [
                                 {
-                                    "key": "days",
-                                    "value": "7"
+                                    "key": "range",
+                                    "value": "week"
                                 }
                             ]
                         }
@@ -2105,7 +1978,7 @@
                         "method": "GET",
                         "header": [],
                         "url": {
-                            "raw": "{{base_url}}/dashboard/dinacharya-analytics?days=7",
+                            "raw": "{{base_url}}/dashboard/dinacharya-analytics?range=week",
                             "host": [
                                 "{{base_url}}"
                             ],
@@ -2115,8 +1988,8 @@
                             ],
                             "query": [
                                 {
-                                    "key": "days",
-                                    "value": "7"
+                                    "key": "range",
+                                    "value": "week"
                                 }
                             ]
                         }
@@ -2128,19 +2001,13 @@
                         "method": "GET",
                         "header": [],
                         "url": {
-                            "raw": "{{base_url}}/dashboard/wellness-progress?days=30",
+                            "raw": "{{base_url}}/dashboard/wellness-progress",
                             "host": [
                                 "{{base_url}}"
                             ],
                             "path": [
                                 "dashboard",
                                 "wellness-progress"
-                            ],
-                            "query": [
-                                {
-                                    "key": "days",
-                                    "value": "30"
-                                }
                             ]
                         }
                     }
@@ -2151,13 +2018,19 @@
                         "method": "GET",
                         "header": [],
                         "url": {
-                            "raw": "{{base_url}}/dashboard/recognition-stats",
+                            "raw": "{{base_url}}/dashboard/recognition-stats?range=week",
                             "host": [
                                 "{{base_url}}"
                             ],
                             "path": [
                                 "dashboard",
                                 "recognition-stats"
+                            ],
+                            "query": [
+                                {
+                                    "key": "range",
+                                    "value": "week"
+                                }
                             ]
                         }
                     }
@@ -2197,6 +2070,7 @@
                                             "var res = pm.response.json();",
                                             "if (res.data && res.data.length > 0) {",
                                             "    pm.collectionVariables.set('recommendation_id', res.data[0].id);",
+                                            "    console.log('Recommendation ID saved:', res.data[0].id);",
                                             "}"
                                         ],
                                         "type": "text/javascript"
@@ -2230,7 +2104,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"status\": \"IN_PROGRESS\",\n  \"userNotes\": \"Started following this recommendation\"\n}"
+                                    "raw": "{\n  \"isCompleted\": true\n}"
                                 },
                                 "url": {
                                     "raw": "{{base_url}}/wellness/recommendations/{{recommendation_id}}",
@@ -2260,6 +2134,7 @@
                                             "var res = pm.response.json();",
                                             "if (res.data && res.data.length > 0) {",
                                             "    pm.collectionVariables.set('notification_id', res.data[0].id);",
+                                            "    console.log('Notification ID saved:', res.data[0].id);",
                                             "}"
                                         ],
                                         "type": "text/javascript"
@@ -2352,7 +2227,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"language\": \"en\",\n  \"theme\": \"dark\",\n  \"mealReminders\": true,\n  \"waterReminders\": true,\n  \"waterReminderInterval\": 45,\n  \"exerciseReminders\": true,\n  \"meditationReminders\": true,\n  \"weeklyReportEnabled\": true\n}"
+                                    "raw": "{\n  \"dietaryRestrictions\": [\"VEGETARIAN\"],\n  \"allergies\": [\"PEANUTS\"],\n  \"preferredCuisines\": [\"INDIAN\"]\n}"
                                 },
                                 "url": {
                                     "raw": "{{base_url}}/wellness/preferences",
@@ -2372,7 +2247,7 @@
                     "name": "Seasonal Routine",
                     "item": [
                         {
-                            "name": "Save Seasonal Routine",
+                            "name": "Create Seasonal Routine",
                             "request": {
                                 "method": "POST",
                                 "header": [
@@ -2383,7 +2258,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"season\": \"SUMMER\",\n  \"year\": 2025,\n  \"dietGuidelines\": {\n    \"foods\": [\"cooling fruits\", \"coconut water\", \"mint\", \"cucumber\"],\n    \"avoid\": [\"spicy food\", \"fried items\", \"excessive salt\"],\n    \"spices\": [\"coriander\", \"fennel\", \"cardamom\"]\n  },\n  \"lifestyleGuidelines\": {\n    \"exercise\": \"Light exercise in early morning\",\n    \"sleep\": \"Can stay up slightly later, nap if needed\",\n    \"selfCare\": \"Coconut oil massage, moonlight walks\"\n  },\n  \"yogaRecommendations\": {\n    \"asanas\": [\"Shitali Pranayama\", \"Chandrasana\", \"Shavasana\"],\n    \"pranayama\": [\"Shitali\", \"Sitkari\"],\n    \"meditation\": \"Cooling visualization meditation\"\n  }\n}"
+                                    "raw": "{\n  \"season\": \"WINTER\",\n  \"year\": 2026,\n  \"routine\": {\n    \"wakeTime\": \"06:00\",\n    \"sleepTime\": \"22:00\",\n    \"diet\": \"Warm, nourishing foods\"\n  }\n}"
                                 },
                                 "url": {
                                     "raw": "{{base_url}}/wellness/seasonal-routine",
@@ -2403,13 +2278,19 @@
                                 "method": "GET",
                                 "header": [],
                                 "url": {
-                                    "raw": "{{base_url}}/wellness/seasonal-routine",
+                                    "raw": "{{base_url}}/wellness/seasonal-routine?year=2026",
                                     "host": [
                                         "{{base_url}}"
                                     ],
                                     "path": [
                                         "wellness",
                                         "seasonal-routine"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "year",
+                                            "value": "2026"
+                                        }
                                     ]
                                 }
                             }
@@ -2417,7 +2298,7 @@
                     ]
                 },
                 {
-                    "name": "Articles & Bookmarks",
+                    "name": "Articles",
                     "item": [
                         {
                             "name": "List Articles",
@@ -2429,6 +2310,7 @@
                                             "var res = pm.response.json();",
                                             "if (res.data && res.data.length > 0) {",
                                             "    pm.collectionVariables.set('article_id', res.data[0].id);",
+                                            "    console.log('Article ID saved:', res.data[0].id);",
                                             "}"
                                         ],
                                         "type": "text/javascript"
@@ -2438,6 +2320,9 @@
                             "request": {
                                 "method": "GET",
                                 "header": [],
+                                "auth": {
+                                    "type": "noauth"
+                                },
                                 "url": {
                                     "raw": "{{base_url}}/wellness/articles",
                                     "host": [
@@ -2455,15 +2340,18 @@
                             "request": {
                                 "method": "GET",
                                 "header": [],
+                                "auth": {
+                                    "type": "noauth"
+                                },
                                 "url": {
-                                    "raw": "{{base_url}}/wellness/articles/understanding-prakriti-guide",
+                                    "raw": "{{base_url}}/wellness/articles/sample-article-slug",
                                     "host": [
                                         "{{base_url}}"
                                     ],
                                     "path": [
                                         "wellness",
                                         "articles",
-                                        "understanding-prakriti-guide"
+                                        "sample-article-slug"
                                     ]
                                 }
                             }
@@ -2533,9 +2421,6 @@
                 {
                     "name": "Prakriti Analysis Webhook",
                     "request": {
-                        "auth": {
-                            "type": "noauth"
-                        },
                         "method": "POST",
                         "header": [
                             {
@@ -2543,9 +2428,12 @@
                                 "value": "application/json"
                             }
                         ],
+                        "auth": {
+                            "type": "noauth"
+                        },
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"assessmentId\": \"{{assessment_id}}\",\n  \"userId\": \"user-uuid-here\",\n  \"results\": {\n    \"vata\": 45.5,\n    \"pitta\": 35.2,\n    \"kapha\": 19.3,\n    \"prakritiType\": \"VATA_PITTA\",\n    \"agniType\": \"VISHAMA\"\n  }\n}"
+                            "raw": "{\n  \"assessmentId\": \"{{assessment_id}}\",\n  \"result\": {\n    \"dominantDosha\": \"VATA\",\n    \"scores\": { \"vata\": 65, \"pitta\": 20, \"kapha\": 15 }\n  }\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/n8n/prakriti-analysis",
@@ -2562,9 +2450,6 @@
                 {
                     "name": "Food Recognition Webhook",
                     "request": {
-                        "auth": {
-                            "type": "noauth"
-                        },
                         "method": "POST",
                         "header": [
                             {
@@ -2572,9 +2457,12 @@
                                 "value": "application/json"
                             }
                         ],
+                        "auth": {
+                            "type": "noauth"
+                        },
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"recognitionId\": \"{{recognition_id}}\",\n  \"recognizedFood\": \"Khichdi\",\n  \"confidence\": 0.95,\n  \"nutritionData\": {\n    \"calories\": 150,\n    \"protein\": 5,\n    \"carbs\": 25,\n    \"fat\": 3\n  },\n  \"ayurvedicProperties\": {\n    \"rasa\": \"Madhura\",\n    \"virya\": \"Ushna\",\n    \"vipaka\": \"Madhura\",\n    \"doshaEffect\": \"Tridoshic\"\n  }\n}"
+                            "raw": "{\n  \"recognitionId\": \"{{recognition_id}}\",\n  \"result\": {\n    \"food\": \"Dal Makhani\",\n    \"confidence\": 0.92\n  }\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/n8n/food-recognition",
@@ -2591,9 +2479,6 @@
                 {
                     "name": "Meal Plan Webhook",
                     "request": {
-                        "auth": {
-                            "type": "noauth"
-                        },
                         "method": "POST",
                         "header": [
                             {
@@ -2601,9 +2486,12 @@
                                 "value": "application/json"
                             }
                         ],
+                        "auth": {
+                            "type": "noauth"
+                        },
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"userId\": \"user-uuid-here\",\n  \"mealPlanId\": \"{{meal_plan_id}}\",\n  \"generatedPlan\": {\n    \"name\": \"AI Generated Weekly Plan\",\n    \"meals\": [\n      { \"day\": 1, \"mealType\": \"BREAKFAST\", \"foods\": [\"Oatmeal\", \"Fruits\"] },\n      { \"day\": 1, \"mealType\": \"LUNCH\", \"foods\": [\"Khichdi\", \"Ghee\"] }\n    ]\n  }\n}"
+                            "raw": "{\n  \"userId\": \"user-uuid\",\n  \"mealPlan\": {\n    \"name\": \"Auto-generated Vata Plan\",\n    \"meals\": []\n  }\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/n8n/meal-plan",
@@ -2620,9 +2508,6 @@
                 {
                     "name": "Recommendations Webhook",
                     "request": {
-                        "auth": {
-                            "type": "noauth"
-                        },
                         "method": "POST",
                         "header": [
                             {
@@ -2630,9 +2515,12 @@
                                 "value": "application/json"
                             }
                         ],
+                        "auth": {
+                            "type": "noauth"
+                        },
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"userId\": \"user-uuid-here\",\n  \"recommendations\": [\n    {\n      \"type\": \"DIET\",\n      \"title\": \"Include more warm soups\",\n      \"description\": \"AI recommendation based on your Vata profile\",\n      \"priority\": \"HIGH\"\n    }\n  ]\n}"
+                            "raw": "{\n  \"userId\": \"user-uuid\",\n  \"recommendations\": [\n    { \"type\": \"DIET\", \"title\": \"Eat warm foods\" }\n  ]\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/n8n/recommendations",
@@ -2649,9 +2537,6 @@
                 {
                     "name": "Wellness Progress Webhook",
                     "request": {
-                        "auth": {
-                            "type": "noauth"
-                        },
                         "method": "POST",
                         "header": [
                             {
@@ -2659,9 +2544,12 @@
                                 "value": "application/json"
                             }
                         ],
+                        "auth": {
+                            "type": "noauth"
+                        },
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"userId\": \"user-uuid-here\",\n  \"progressData\": {\n    \"period\": \"WEEKLY\",\n    \"overallScore\": 78,\n    \"dietScore\": 82,\n    \"exerciseScore\": 70,\n    \"sleepScore\": 85,\n    \"meditationScore\": 75\n  }\n}"
+                            "raw": "{\n  \"userId\": \"user-uuid\",\n  \"progress\": {\n    \"score\": 85,\n    \"period\": \"weekly\"\n  }\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/n8n/wellness-progress",
@@ -2678,29 +2566,19 @@
                 {
                     "name": "Get N8N Logs",
                     "request": {
+                        "method": "GET",
+                        "header": [],
                         "auth": {
                             "type": "noauth"
                         },
-                        "method": "GET",
-                        "header": [],
                         "url": {
-                            "raw": "{{base_url}}/n8n/logs?page=1&limit=20",
+                            "raw": "{{base_url}}/n8n/logs",
                             "host": [
                                 "{{base_url}}"
                             ],
                             "path": [
                                 "n8n",
                                 "logs"
-                            ],
-                            "query": [
-                                {
-                                    "key": "page",
-                                    "value": "1"
-                                },
-                                {
-                                    "key": "limit",
-                                    "value": "20"
-                                }
                             ]
                         }
                     }
@@ -2711,31 +2589,28 @@
             "name": "Doctors",
             "item": [
                 {
-                    "name": "List All Doctors",
+                    "name": "List Doctors",
                     "event": [
                         {
                             "listen": "test",
                             "script": {
-                                "type": "text/javascript",
                                 "exec": [
-                                    "pm.test('Status 200', function () {",
-                                    "    pm.response.to.have.status(200);",
-                                    "});",
-                                    "pm.test('Returns doctors array', function () {",
-                                    "    const json = pm.response.json();",
-                                    "    pm.expect(json.success).to.be.true;",
-                                    "    pm.expect(json.data.doctors).to.be.an('array');",
-                                    "    if (json.data.doctors.length > 0) {",
-                                    "        pm.collectionVariables.set('doctor_id', json.data.doctors[0].id);",
-                                    "    }",
-                                    "});"
-                                ]
+                                    "var res = pm.response.json();",
+                                    "if (res.data && res.data.length > 0) {",
+                                    "    pm.collectionVariables.set('doctor_id', res.data[0].id);",
+                                    "    console.log('Doctor ID saved:', res.data[0].id);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
                             }
                         }
                     ],
                     "request": {
                         "method": "GET",
                         "header": [],
+                        "auth": {
+                            "type": "noauth"
+                        },
                         "url": {
                             "raw": "{{base_url}}/doctors?page=1&limit=10",
                             "host": [
@@ -2752,140 +2627,19 @@
                                 {
                                     "key": "limit",
                                     "value": "10"
-                                },
-                                {
-                                    "key": "search",
-                                    "value": "",
-                                    "disabled": true
-                                },
-                                {
-                                    "key": "specialty",
-                                    "value": "",
-                                    "disabled": true
-                                },
-                                {
-                                    "key": "minFee",
-                                    "value": "",
-                                    "disabled": true
-                                },
-                                {
-                                    "key": "maxFee",
-                                    "value": "",
-                                    "disabled": true
-                                },
-                                {
-                                    "key": "sortBy",
-                                    "value": "rating",
-                                    "disabled": true
-                                },
-                                {
-                                    "key": "sortOrder",
-                                    "value": "desc",
-                                    "disabled": true
                                 }
                             ]
-                        },
-                        "description": "List all doctors with search, filter, sort, and pagination.\n\n**Query Parameters:**\n- `search` — Search by name, specialty, location, qualification\n- `specialty` — Filter by exact specialty (e.g., Ayurvedic Medicine)\n- `minFee` / `maxFee` — Filter by consultation fee range\n- `sortBy` — Sort by: rating, consultationFee, experienceYears, name (default: rating)\n- `sortOrder` — asc or desc (default: desc)\n- `page` / `limit` — Pagination (default: page=1, limit=10)\n\n**No auth required** (public endpoint)"
-                    }
-                },
-                {
-                    "name": "Search Doctors",
-                    "request": {
-                        "method": "GET",
-                        "header": [],
-                        "url": {
-                            "raw": "{{base_url}}/doctors?search=yoga&sortBy=rating&sortOrder=desc",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "doctors"
-                            ],
-                            "query": [
-                                {
-                                    "key": "search",
-                                    "value": "yoga"
-                                },
-                                {
-                                    "key": "sortBy",
-                                    "value": "rating"
-                                },
-                                {
-                                    "key": "sortOrder",
-                                    "value": "desc"
-                                }
-                            ]
-                        },
-                        "description": "Search doctors by keyword (name, specialty, location, qualification). Try: yoga, panchakarma, mumbai, ayurvedic, herbal, diet"
-                    }
-                },
-                {
-                    "name": "Filter Doctors by Specialty & Fee",
-                    "request": {
-                        "method": "GET",
-                        "header": [],
-                        "url": {
-                            "raw": "{{base_url}}/doctors?specialty=Ayurvedic Medicine&minFee=400&maxFee=1000&sortBy=consultationFee&sortOrder=asc",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "doctors"
-                            ],
-                            "query": [
-                                {
-                                    "key": "specialty",
-                                    "value": "Ayurvedic Medicine"
-                                },
-                                {
-                                    "key": "minFee",
-                                    "value": "400"
-                                },
-                                {
-                                    "key": "maxFee",
-                                    "value": "1000"
-                                },
-                                {
-                                    "key": "sortBy",
-                                    "value": "consultationFee"
-                                },
-                                {
-                                    "key": "sortOrder",
-                                    "value": "asc"
-                                }
-                            ]
-                        },
-                        "description": "Filter doctors by specialization and consultation fee range.\n\n**Available Specializations:** Ayurvedic Medicine, Panchakarma Therapy, Diet & Nutrition, Yoga & Meditation, Herbal Medicine"
-                    }
-                },
-                {
-                    "name": "Get Doctor Details",
-                    "event": [
-                        {
-                            "listen": "test",
-                            "script": {
-                                "type": "text/javascript",
-                                "exec": [
-                                    "pm.test('Status 200', function () {",
-                                    "    pm.response.to.have.status(200);",
-                                    "});",
-                                    "pm.test('Returns doctor details', function () {",
-                                    "    const json = pm.response.json();",
-                                    "    pm.expect(json.success).to.be.true;",
-                                    "    pm.expect(json.data.doctor).to.have.property('name');",
-                                    "    pm.expect(json.data.doctor).to.have.property('slots');",
-                                    "    if (json.data.doctor.slots && json.data.doctor.slots.length > 0) {",
-                                    "        const available = json.data.doctor.slots.find(s => !s.isBooked);",
-                                    "        if (available) pm.collectionVariables.set('slot_id', available.id);",
-                                    "    }",
-                                    "});"
-                                ]
-                            }
                         }
-                    ],
+                    }
+                },
+                {
+                    "name": "Get Doctor by ID",
                     "request": {
                         "method": "GET",
                         "header": [],
+                        "auth": {
+                            "type": "noauth"
+                        },
                         "url": {
                             "raw": "{{base_url}}/doctors/{{doctor_id}}",
                             "host": [
@@ -2894,25 +2648,35 @@
                             "path": [
                                 "doctors",
                                 "{{doctor_id}}"
-                            ],
-                            "query": [
-                                {
-                                    "key": "date",
-                                    "value": "",
-                                    "disabled": true
-                                }
                             ]
-                        },
-                        "description": "Get full doctor details including today's available slots.\n\nOptional `date` query param (YYYY-MM-DD) to see slots for a specific date.\n\n**No auth required**"
+                        }
                     }
                 },
                 {
                     "name": "Get Doctor Slots",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "var res = pm.response.json();",
+                                    "if (res.data && res.data.length > 0) {",
+                                    "    pm.collectionVariables.set('slot_id', res.data[0].id);",
+                                    "    console.log('Slot ID saved:', res.data[0].id);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "GET",
                         "header": [],
+                        "auth": {
+                            "type": "noauth"
+                        },
                         "url": {
-                            "raw": "{{base_url}}/doctors/{{doctor_id}}/slots",
+                            "raw": "{{base_url}}/doctors/{{doctor_id}}/slots?date=2026-02-20",
                             "host": [
                                 "{{base_url}}"
                             ],
@@ -2924,32 +2688,26 @@
                             "query": [
                                 {
                                     "key": "date",
-                                    "value": "",
-                                    "disabled": true
+                                    "value": "2026-02-20"
                                 }
                             ]
-                        },
-                        "description": "Get all slots for a doctor on a given date.\n\nOptional `date` query param (YYYY-MM-DD). Defaults to today.\n\n**No auth required**"
+                        }
                     }
                 },
                 {
-                    "name": "Book a Slot",
+                    "name": "Book Appointment",
                     "event": [
                         {
                             "listen": "test",
                             "script": {
-                                "type": "text/javascript",
                                 "exec": [
-                                    "pm.test('Status 201', function () {",
-                                    "    pm.response.to.have.status(201);",
-                                    "});",
-                                    "pm.test('Returns booking', function () {",
-                                    "    const json = pm.response.json();",
-                                    "    pm.expect(json.success).to.be.true;",
-                                    "    pm.expect(json.data.booking).to.have.property('id');",
-                                    "    pm.collectionVariables.set('booking_id', json.data.booking.id);",
-                                    "});"
-                                ]
+                                    "var res = pm.response.json();",
+                                    "if (res.data && res.data.id) {",
+                                    "    pm.collectionVariables.set('booking_id', res.data.id);",
+                                    "    console.log('Booking ID saved:', res.data.id);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
                             }
                         }
                     ],
@@ -2959,15 +2717,11 @@
                             {
                                 "key": "Content-Type",
                                 "value": "application/json"
-                            },
-                            {
-                                "key": "Authorization",
-                                "value": "Bearer {{token}}"
                             }
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"slotId\": \"{{slot_id}}\",\n    \"notes\": \"Consultation for Vata imbalance and diet planning\"\n}"
+                            "raw": "{\n  \"slotId\": \"{{slot_id}}\",\n  \"notes\": \"First consultation for Vata dosha diet\"\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/doctors/{{doctor_id}}/book",
@@ -2979,20 +2733,14 @@
                                 "{{doctor_id}}",
                                 "book"
                             ]
-                        },
-                        "description": "Book an available slot with a doctor.\n\n**Requires auth** (Bearer token)\n\n**Body:**\n- `slotId` (required) — ID of the slot to book\n- `notes` (optional) — Reason for consultation\n\n**Rules:**\n- Cannot book already-booked slots\n- Cannot book past slots\n- Cannot book two slots on the same day with same doctor"
+                        }
                     }
                 },
                 {
                     "name": "My Bookings",
                     "request": {
                         "method": "GET",
-                        "header": [
-                            {
-                                "key": "Authorization",
-                                "value": "Bearer {{token}}"
-                            }
-                        ],
+                        "header": [],
                         "url": {
                             "raw": "{{base_url}}/doctors/bookings/my",
                             "host": [
@@ -3002,28 +2750,15 @@
                                 "doctors",
                                 "bookings",
                                 "my"
-                            ],
-                            "query": [
-                                {
-                                    "key": "status",
-                                    "value": "",
-                                    "disabled": true
-                                }
                             ]
-                        },
-                        "description": "Get current user's bookings.\n\n**Requires auth** (Bearer token)\n\nOptional `status` filter: CONFIRMED, CANCELLED, COMPLETED, NO_SHOW"
+                        }
                     }
                 },
                 {
                     "name": "Cancel Booking",
                     "request": {
                         "method": "PATCH",
-                        "header": [
-                            {
-                                "key": "Authorization",
-                                "value": "Bearer {{token}}"
-                            }
-                        ],
+                        "header": [],
                         "url": {
                             "raw": "{{base_url}}/doctors/bookings/{{booking_id}}/cancel",
                             "host": [
@@ -3035,8 +2770,85 @@
                                 "{{booking_id}}",
                                 "cancel"
                             ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Chatbot",
+            "item": [
+                {
+                    "name": "Chat (via Express Proxy)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"dosha\": \"vata\",\n  \"message\": \"What should I eat for breakfast?\"\n}"
                         },
-                        "description": "Cancel a booking. Frees the slot so others can book it.\n\n**Requires auth** (Bearer token)\n\nOnly the user who made the booking can cancel it."
+                        "url": {
+                            "raw": "{{base_url}}/chatbot/chat",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "chatbot",
+                                "chat"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Chat (Direct to FastAPI)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"user_id\": \"test-user-1\",\n  \"dosha\": \"vata\",\n  \"message\": \"What should I eat for breakfast?\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{chatbot_url}}/chat",
+                            "host": [
+                                "{{chatbot_url}}"
+                            ],
+                            "path": [
+                                "chat"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Chatbot Health (Direct)",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "url": {
+                            "raw": "{{chatbot_url}}/health",
+                            "host": [
+                                "{{chatbot_url}}"
+                            ],
+                            "path": [
+                                "health"
+                            ]
+                        }
                     }
                 }
             ]
