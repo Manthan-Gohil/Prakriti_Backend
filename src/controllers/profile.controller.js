@@ -57,6 +57,27 @@ class ProfileController {
             return successResponse(res, 'Dosha traits fetched.', { doshaTraits });
         } catch (error) { next(error); }
     }
+
+    async predictPrakriti(req, res, next) {
+        try {
+            const result = await profileService.runPrakritiPrediction(req.user.id, req.body);
+            return successResponse(res, 'Prakriti prediction completed.', result, null, 201);
+        } catch (error) { next(error); }
+    }
+
+    async predictDosha(req, res, next) {
+        try {
+            const result = await profileService.runDoshaPrediction(req.user.id, req.body);
+            return successResponse(res, 'Dosha imbalance prediction completed.', result, null, 201);
+        } catch (error) { next(error); }
+    }
+
+    async getPredictions(req, res, next) {
+        try {
+            const predictions = await profileService.getPredictions(req.user.id);
+            return successResponse(res, 'Predictions fetched.', predictions);
+        } catch (error) { next(error); }
+    }
 }
 
 module.exports = new ProfileController();

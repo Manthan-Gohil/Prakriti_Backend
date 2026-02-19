@@ -1,5 +1,6 @@
 const prisma = require('../config/database');
 const { calculateBmi } = require('../utils/helpers');
+const { predictPrakriti, predictDoshaImbalance } = require('./prediction.service');
 
 class ProfileService {
     async createOrUpdate(userId, data) {
@@ -273,6 +274,89 @@ class ProfileService {
                 : null,
             latestHealth,
         };
+    }
+
+    /**
+     * Run Prakriti ML prediction on saved traits and store result.
+     */
+    async runPrakritiPrediction(userId, inputData) {
+        const result = await predictPrakriti(inputData);
+
+        const prediction = await prisma.prakritiPrediction.create({
+            data: {
+                userId,
+                inputData,
+                prakritiType: result.prakritiType,
+            },
+        });
+
+        // Also update DoshaProfile with prakriti result
+        await prisma.doshaProfile.upsert({
+            where: { userId },
+            create: {
+                userId,
+                prakritiType: result.prakritiType,
+                lastAssessedAt: new Date(),
+            },
+            update: {
+                prakritiType: result.prakritiType,
+                lastAssessedAt: new Date(),
+            },
+        });
+
+        return { prediction, prakritiType: result.prakritiType };
+    }
+
+    /**
+     * Run Dosha Imbalance ML prediction on saved traits and store result.
+     */
+    async runDoshaPrediction(userId, inputData) {
+        const result = await predictDoshaImbalance(inputData);
+
+        const prediction = await prisma.doshaPrediction.create({
+            data: {
+                userId,
+                inputData,
+                imbalances: result.imbalances,
+                imbalanceType: result.imbalanceType,
+            },
+        });
+
+        // Also update DoshaProfile with vikriti (imbalance) result
+        await prisma.doshaProfile.upsert({
+            where: { userId },
+            create: {
+                userId,
+                vikritiType: result.imbalanceType,
+                isImbalanced: result.imbalances.length > 0,
+                lastAssessedAt: new Date(),
+            },
+            update: {
+                vikritiType: result.imbalanceType,
+                isImbalanced: result.imbalances.length > 0,
+                lastAssessedAt: new Date(),
+            },
+        });
+
+        return { prediction, imbalances: result.imbalances, imbalanceType: result.imbalanceType };
+    }
+
+    /**
+     * Get latest prediction results for a user.
+     */
+    async getPredictions(userId) {
+        const [latestPrakriti, latestDosha] = await Promise.all([
+            prisma.prakritiPrediction.findFirst({
+                where: { userId },
+                orderBy: { createdAt: 'desc' },
+            }),
+            prisma.doshaPrediction.findFirst({
+                where: { userId },
+                orderBy: { createdAt: 'desc' },
+            }),
+        ]);
+
+        return { prakritiPrediction: latestPrakriti, doshaPrediction: latestDosha };
     }
 }
 

@@ -50,4 +50,9 @@ router.get(
     profileController.getDoshaTraits
 );
 
+// ML Prediction endpoints
+router.post('/predict/prakriti', profileController.predictPrakriti);
+router.post('/predict/dosha', profileController.predictDosha);
+router.get('/predictions', profileController.getPredictions);
+
 module.exports = router;

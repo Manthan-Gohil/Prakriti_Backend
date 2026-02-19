@@ -54,6 +54,8 @@ model User {
   bookmarkedArticles    BookmarkedArticle[]
   n8nWebhookLogs        N8nWebhookLog[]
   doshaTraits           DoshaTraits?
+  prakritiPredictions    PrakritiPrediction[]
+  doshaPredictions       DoshaPrediction[]
 
   @@map("users")
 }
@@ -303,6 +305,47 @@ model DoshaTraits {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("dosha_traits")
+}
+
+// ──────────────────────────────────────────────
+// ML PREDICTION RESULTS
+// ──────────────────────────────────────────────
+
+model PrakritiPrediction {
+  id     String @id @default(uuid())
+  userId String
+
+  // Input snapshot (what was sent to the model)
+  inputData         Json
+
+  // Result
+  prakritiType      String          // e.g. "Vata", "Pitta-Kapha"
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("prakriti_predictions")
+}
+
+model DoshaPrediction {
+  id     String @id @default(uuid())
+  userId String
+
+  // Input snapshot
+  inputData         Json
+
+  // Result
+  imbalances        String[]   @default([])  // e.g. ["Vata", "Pitta"]
+  imbalanceType     String                    // e.g. "Vata-Pitta"
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("dosha_predictions")
 }
 
 enum Gender {
