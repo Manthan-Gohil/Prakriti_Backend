@@ -56,6 +56,7 @@ model User {
   doshaTraits           DoshaTraits?
   prakritiPredictions    PrakritiPrediction[]
   doshaPredictions       DoshaPrediction[]
+  bookings              Booking[]
 
   @@map("users")
 }
@@ -1632,6 +1633,185 @@ enum ArticleCategory {
   WOMENS_HEALTH
   MENS_HEALTH
   CHILD_HEALTH
+}
+
+// ──────────────────────────────────────────────
+// N8N WORKFLOW — DOCTOR & APPOINTMENT TABLES
+// ──────────────────────────────────────────────
+
+model Doctor {
+  id               String   @id @default(uuid())
+  name             String
+  specialty        String
+  description      String?  @db.Text
+  education        String?
+  qualification    String?
+  languages        String[] @default(["English", "Hindi"])
+  bio              String?  @db.Text
+  imageUrl         String?
+  phone            String?
+  email            String?  @unique
+  gender           String?
+  location         String?
+  consultationFee  Int      @default(500)
+  experienceYears  Int      @default(0)
+  rating           Decimal  @default(4.0) @db.Decimal(2, 1)
+  totalRatings     Int      @default(0)
+  isAvailable      Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // Relations
+  slots              DoctorSlot[]
+  bookings           Booking[]
+  appointments       Appointment[]
+  appointmentHistory AppointmentHistory[]
+
+  @@index([specialty])
+  @@index([consultationFee])
+  @@index([isAvailable])
+  @@map("doctors")
+}
+
+model DoctorSlot {
+  id        String   @id @default(uuid())
+  doctorId  String
+  slotDate  DateTime @db.Date
+  startTime DateTime @db.Timestamptz()
+  endTime   DateTime @db.Timestamptz()
+  duration  Int      @default(30)  // minutes
+  isBooked  Boolean  @default(false)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  doctor   Doctor    @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  booking  Booking?
+
+  @@index([doctorId])
+  @@index([slotDate])
+  @@index([doctorId, slotDate])
+  @@index([isBooked])
+  @@map("doctor_slots")
+}
+
+model Booking {
+  id        String        @id @default(uuid())
+  userId    String
+  doctorId  String
+  slotId    String        @unique
+  status    BookingStatus  @default(CONFIRMED)
+  notes     String?
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  user   User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  doctor Doctor     @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  slot   DoctorSlot @relation(fields: [slotId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([doctorId])
+  @@index([status])
+  @@map("bookings")
+}
+
+enum BookingStatus {
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+  NO_SHOW
+}
+
+model DoctorProfile {
+  id               String   @id @default(uuid())
+  fullName         String
+  specialty        String
+  experienceYears  Int?
+  rating           Decimal? @db.Decimal(3, 2)
+  createdAt        DateTime @default(now())
+
+  availability          DoctorAvailability[]
+  patientConsultHistory PatientConsultHistory[]
+
+  @@map("doctor_profiles")
+}
+
+model DoctorAvailability {
+  id        String   @id @default(uuid())
+  doctorId  String
+  slotStart DateTime @db.Timestamptz()
+  isBooked  Boolean  @default(false)
+
+  doctor DoctorProfile @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+
+  @@index([doctorId])
+  @@map("doctor_availability")
+}
+
+model Appointment {
+  id              String    @id @default(uuid())
+  patientId       String
+  doctorId        String?
+  appointmentDate DateTime? @db.Timestamptz()
+  symptomsSummary String?
+  createdAt       DateTime  @default(now())
+
+  doctor Doctor? @relation(fields: [doctorId], references: [id], onDelete: SetNull)
+
+  @@index([patientId])
+  @@index([doctorId])
+  @@map("appointments")
+}
+
+model AppointmentHistory {
+  id        String   @id @default(uuid())
+  patientId String
+  doctorId  String?
+  specialty String
+  visitDate DateTime @default(now()) @db.Timestamptz()
+
+  doctor Doctor? @relation(fields: [doctorId], references: [id], onDelete: SetNull)
+
+  @@index([patientId])
+  @@index([doctorId])
+  @@map("appointment_history")
+}
+
+model PatientConsultHistory {
+  id            String   @id @default(uuid())
+  patientId     String
+  doctorId      String?
+  specialty     String
+  lastVisitDate DateTime @default(now()) @db.Timestamptz()
+
+  doctor DoctorProfile? @relation(fields: [doctorId], references: [id], onDelete: SetNull)
+
+  @@index([patientId])
+  @@index([doctorId])
+  @@map("patient_consult_history")
+}
+
+model HospitalProfile {
+  id                 Int    @id @default(autoincrement())
+  doctorName         String @default("Dr. Devansh Shukla")
+  specialization     String @default("Senior Medical Officer")
+  registrationNumber String @default("MC-2026-X89")
+  hospitalName       String @default("SmartPredict AI Hospital")
+  address            String @default("123 Health Tech Lane, Gurugram, India")
+  contact            String @default("+91 99999 00000")
+
+  @@map("hospital_profile")
+}
+
+model MedicineVector {
+  id           Int     @id @default(autoincrement())
+  name         String?
+  category     String?
+  introduction String?
+  composition  String?
+  safety       String?
+  sideEffects  String?
+
+  @@map("medicines_vector")
 }
 
 // ──────────────────────────────────────────────

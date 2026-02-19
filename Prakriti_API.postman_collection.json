@@ -71,6 +71,18 @@
         {
             "key": "option_id",
             "value": ""
+        },
+        {
+            "key": "doctor_id",
+            "value": ""
+        },
+        {
+            "key": "slot_id",
+            "value": ""
+        },
+        {
+            "key": "booking_id",
+            "value": ""
         }
     ],
     "item": [
@@ -423,6 +435,146 @@
                             "path": [
                                 "profile",
                                 "summary"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Save Prakriti Traits",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"body_size\": \"Medium\",\n  \"body_weight_tendency\": \"Moderate - no difficulties in gaining or losing weight\",\n  \"height\": \"Average\",\n  \"bone_structure\": \"Medium bone structure\",\n  \"complexion\": \"Fair-skin sunburns easily\",\n  \"skin_type\": \"Smooth and warm, oily T-zone\",\n  \"skin_texture\": \"Freckles, many moles, redness and rashes\",\n  \"hair_color\": \"Red, light brown, yellow\",\n  \"hair_appearance\": \"Straight, oily\",\n  \"face_shape\": \"Heart-shaped, pointed chin\",\n  \"eyes\": \"Medium-sized, penetrating, light-sensitive eyes\",\n  \"eyelashes\": \"Moderate eyelashes\",\n  \"blinking_pattern\": \"Moderate Blinking\",\n  \"cheeks\": \"Smooth, Flat\",\n  \"nose_shape\": \"Pointed, Average\",\n  \"teeth_structure\": \"Medium-sized teeth, Reddish gums\",\n  \"lips\": \"Lips are soft, medium-sized\",\n  \"nails\": \"Sharp, Flexible, Pink, Lustrous\",\n  \"appetite\": \"Strong, Unbearable\",\n  \"taste_preference\": \"Pungent / Bitter / Astringent\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/profile/prakriti-traits",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "profile",
+                                "prakriti-traits"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Save Dosha Traits",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"current_symptoms\": \"Frequent headaches and digestive issues\",\n  \"medical_history\": \"No major surgeries\",\n  \"digestion_quality\": \"Irregular digestion with bloating\",\n  \"mental_state\": \"Anxious and restless at times\",\n  \"current_medications\": \"None\",\n  \"bowel_pattern\": \"Irregular bowel movements\",\n  \"gas_bloating\": \"Frequent gas after meals\",\n  \"sleep_quality\": \"Irregular Sleep\",\n  \"stress_level\": \"Moderate Stress\",\n  \"physical_activity_level\": \"Moderate\",\n  \"season\": \"Summer season\",\n  \"age_group\": \"20-40 years\",\n  \"gender\": \"Male\",\n  \"work_type\": \"Desk Job, High stress\",\n  \"cultural_diet_preference\": \"Avoids spicy foods\",\n  \"climate_exposure\": \"High-stress environments\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/profile/dosha-traits",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "profile",
+                                "dosha-traits"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Dosha Traits",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/profile/dosha-traits",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "profile",
+                                "dosha-traits"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Predict Prakriti",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"body_size\": \"Medium\",\n  \"body_weight_tendency\": \"Moderate - no difficulties in gaining or losing weight\",\n  \"height\": \"Average\",\n  \"bone_structure\": \"Medium bone structure\",\n  \"complexion\": \"Fair-skin sunburns easily\",\n  \"skin_type\": \"Smooth and warm, oily T-zone\",\n  \"skin_texture\": \"Freckles, many moles, redness and rashes\",\n  \"hair_color\": \"Red, light brown, yellow\",\n  \"hair_appearance\": \"Straight, oily\",\n  \"face_shape\": \"Heart-shaped, pointed chin\",\n  \"eyes\": \"Medium-sized, penetrating, light-sensitive eyes\",\n  \"eyelashes\": \"Moderate eyelashes\",\n  \"blinking_pattern\": \"Moderate Blinking\",\n  \"cheeks\": \"Smooth, Flat\",\n  \"nose_shape\": \"Pointed, Average\",\n  \"teeth_structure\": \"Medium-sized teeth, Reddish gums\",\n  \"lips\": \"Lips are soft, medium-sized\",\n  \"nails\": \"Sharp, Flexible, Pink, Lustrous\",\n  \"appetite\": \"Strong, Unbearable\",\n  \"taste_preference\": \"Pungent / Bitter / Astringent\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/profile/predict/prakriti",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "profile",
+                                "predict",
+                                "prakriti"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Predict Dosha Imbalance",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"current_symptoms\": \"Frequent headaches and digestive issues\",\n  \"medical_history\": \"No major surgeries\",\n  \"digestion_quality\": \"Irregular digestion with bloating\",\n  \"mental_state\": \"Anxious and restless at times\",\n  \"current_medications\": \"None\",\n  \"bowel_pattern\": \"Irregular bowel movements\",\n  \"gas_bloating\": \"Frequent gas after meals\",\n  \"sleep_quality\": \"Irregular Sleep\",\n  \"stress_level\": \"Moderate Stress\",\n  \"physical_activity_level\": \"Moderate\",\n  \"season\": \"Summer season\",\n  \"age_group\": \"20-40 years\",\n  \"gender\": \"Male\",\n  \"work_type\": \"Desk Job, High stress\",\n  \"cultural_diet_preference\": \"Avoids spicy foods\",\n  \"climate_exposure\": \"High-stress environments\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/profile/predict/dosha",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "profile",
+                                "predict",
+                                "dosha"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get All Predictions",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/profile/predictions",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "profile",
+                                "predictions"
                             ]
                         }
                     }
@@ -2551,6 +2703,340 @@
                                 }
                             ]
                         }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Doctors",
+            "item": [
+                {
+                    "name": "List All Doctors",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test('Status 200', function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "pm.test('Returns doctors array', function () {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.success).to.be.true;",
+                                    "    pm.expect(json.data.doctors).to.be.an('array');",
+                                    "    if (json.data.doctors.length > 0) {",
+                                    "        pm.collectionVariables.set('doctor_id', json.data.doctors[0].id);",
+                                    "    }",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/doctors?page=1&limit=10",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "doctors"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "10"
+                                },
+                                {
+                                    "key": "search",
+                                    "value": "",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "specialty",
+                                    "value": "",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "minFee",
+                                    "value": "",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "maxFee",
+                                    "value": "",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "sortBy",
+                                    "value": "rating",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "sortOrder",
+                                    "value": "desc",
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "description": "List all doctors with search, filter, sort, and pagination.\n\n**Query Parameters:**\n- `search` — Search by name, specialty, location, qualification\n- `specialty` — Filter by exact specialty (e.g., Ayurvedic Medicine)\n- `minFee` / `maxFee` — Filter by consultation fee range\n- `sortBy` — Sort by: rating, consultationFee, experienceYears, name (default: rating)\n- `sortOrder` — asc or desc (default: desc)\n- `page` / `limit` — Pagination (default: page=1, limit=10)\n\n**No auth required** (public endpoint)"
+                    }
+                },
+                {
+                    "name": "Search Doctors",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/doctors?search=yoga&sortBy=rating&sortOrder=desc",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "doctors"
+                            ],
+                            "query": [
+                                {
+                                    "key": "search",
+                                    "value": "yoga"
+                                },
+                                {
+                                    "key": "sortBy",
+                                    "value": "rating"
+                                },
+                                {
+                                    "key": "sortOrder",
+                                    "value": "desc"
+                                }
+                            ]
+                        },
+                        "description": "Search doctors by keyword (name, specialty, location, qualification). Try: yoga, panchakarma, mumbai, ayurvedic, herbal, diet"
+                    }
+                },
+                {
+                    "name": "Filter Doctors by Specialty & Fee",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/doctors?specialty=Ayurvedic Medicine&minFee=400&maxFee=1000&sortBy=consultationFee&sortOrder=asc",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "doctors"
+                            ],
+                            "query": [
+                                {
+                                    "key": "specialty",
+                                    "value": "Ayurvedic Medicine"
+                                },
+                                {
+                                    "key": "minFee",
+                                    "value": "400"
+                                },
+                                {
+                                    "key": "maxFee",
+                                    "value": "1000"
+                                },
+                                {
+                                    "key": "sortBy",
+                                    "value": "consultationFee"
+                                },
+                                {
+                                    "key": "sortOrder",
+                                    "value": "asc"
+                                }
+                            ]
+                        },
+                        "description": "Filter doctors by specialization and consultation fee range.\n\n**Available Specializations:** Ayurvedic Medicine, Panchakarma Therapy, Diet & Nutrition, Yoga & Meditation, Herbal Medicine"
+                    }
+                },
+                {
+                    "name": "Get Doctor Details",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test('Status 200', function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "pm.test('Returns doctor details', function () {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.success).to.be.true;",
+                                    "    pm.expect(json.data.doctor).to.have.property('name');",
+                                    "    pm.expect(json.data.doctor).to.have.property('slots');",
+                                    "    if (json.data.doctor.slots && json.data.doctor.slots.length > 0) {",
+                                    "        const available = json.data.doctor.slots.find(s => !s.isBooked);",
+                                    "        if (available) pm.collectionVariables.set('slot_id', available.id);",
+                                    "    }",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/doctors/{{doctor_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "doctors",
+                                "{{doctor_id}}"
+                            ],
+                            "query": [
+                                {
+                                    "key": "date",
+                                    "value": "",
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "description": "Get full doctor details including today's available slots.\n\nOptional `date` query param (YYYY-MM-DD) to see slots for a specific date.\n\n**No auth required**"
+                    }
+                },
+                {
+                    "name": "Get Doctor Slots",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/doctors/{{doctor_id}}/slots",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "doctors",
+                                "{{doctor_id}}",
+                                "slots"
+                            ],
+                            "query": [
+                                {
+                                    "key": "date",
+                                    "value": "",
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "description": "Get all slots for a doctor on a given date.\n\nOptional `date` query param (YYYY-MM-DD). Defaults to today.\n\n**No auth required**"
+                    }
+                },
+                {
+                    "name": "Book a Slot",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test('Status 201', function () {",
+                                    "    pm.response.to.have.status(201);",
+                                    "});",
+                                    "pm.test('Returns booking', function () {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.success).to.be.true;",
+                                    "    pm.expect(json.data.booking).to.have.property('id');",
+                                    "    pm.collectionVariables.set('booking_id', json.data.booking.id);",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"slotId\": \"{{slot_id}}\",\n    \"notes\": \"Consultation for Vata imbalance and diet planning\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/doctors/{{doctor_id}}/book",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "doctors",
+                                "{{doctor_id}}",
+                                "book"
+                            ]
+                        },
+                        "description": "Book an available slot with a doctor.\n\n**Requires auth** (Bearer token)\n\n**Body:**\n- `slotId` (required) — ID of the slot to book\n- `notes` (optional) — Reason for consultation\n\n**Rules:**\n- Cannot book already-booked slots\n- Cannot book past slots\n- Cannot book two slots on the same day with same doctor"
+                    }
+                },
+                {
+                    "name": "My Bookings",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/doctors/bookings/my",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "doctors",
+                                "bookings",
+                                "my"
+                            ],
+                            "query": [
+                                {
+                                    "key": "status",
+                                    "value": "",
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "description": "Get current user's bookings.\n\n**Requires auth** (Bearer token)\n\nOptional `status` filter: CONFIRMED, CANCELLED, COMPLETED, NO_SHOW"
+                    }
+                },
+                {
+                    "name": "Cancel Booking",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/doctors/bookings/{{booking_id}}/cancel",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "doctors",
+                                "bookings",
+                                "{{booking_id}}",
+                                "cancel"
+                            ]
+                        },
+                        "description": "Cancel a booking. Frees the slot so others can book it.\n\n**Requires auth** (Bearer token)\n\nOnly the user who made the booking can cancel it."
                     }
                 }
             ]

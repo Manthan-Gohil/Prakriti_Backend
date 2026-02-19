@@ -21,6 +21,7 @@ const trackingRoutes = require('./src/routes/tracking.routes');
 const dashboardRoutes = require('./src/routes/dashboard.routes');
 const wellnessRoutes = require('./src/routes/wellness.routes');
 const n8nRoutes = require('./src/routes/n8n.routes');
+const doctorRoutes = require('./src/routes/doctor.routes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -100,6 +101,7 @@ app.use('/api/tracking', trackingRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/wellness', wellnessRoutes);
 app.use('/api/n8n', n8nRoutes);
+app.use('/api/doctors', doctorRoutes);
 
 // ──────────────────────────────────────────────
 // ERROR HANDLING
