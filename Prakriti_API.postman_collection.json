@@ -525,6 +525,42 @@
                             ]
                         }
                     }
+                },
+                {
+                    "name": "Prakriti Prediction History",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/profile/predictions/prakriti-history",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "profile",
+                                "predictions",
+                                "prakriti-history"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Dosha Prediction History",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/profile/predictions/dosha-history",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "profile",
+                                "predictions",
+                                "dosha-history"
+                            ]
+                        }
+                    }
                 }
             ]
         },

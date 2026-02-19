@@ -78,6 +78,20 @@ class ProfileController {
             return successResponse(res, 'Predictions fetched.', predictions);
         } catch (error) { next(error); }
     }
+
+    async getPrakritiHistory(req, res, next) {
+        try {
+            const history = await profileService.getPrakritiHistory(req.user.id);
+            return successResponse(res, 'Prakriti prediction history fetched.', { history });
+        } catch (error) { next(error); }
+    }
+
+    async getDoshaHistory(req, res, next) {
+        try {
+            const history = await profileService.getDoshaHistory(req.user.id);
+            return successResponse(res, 'Dosha prediction history fetched.', { history });
+        } catch (error) { next(error); }
+    }
 }
 
 module.exports = new ProfileController();

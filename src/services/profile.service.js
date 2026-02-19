@@ -358,6 +358,28 @@ class ProfileService {
 
         return { prakritiPrediction: latestPrakriti, doshaPrediction: latestDosha };
     }
+
+    /**
+     * Get full history of Prakriti predictions for a user.
+     */
+    async getPrakritiHistory(userId) {
+        const history = await prisma.prakritiPrediction.findMany({
+            where: { userId },
+            orderBy: { createdAt: 'desc' },
+        });
+        return history;
+    }
+
+    /**
+     * Get full history of Dosha imbalance predictions for a user.
+     */
+    async getDoshaHistory(userId) {
+        const history = await prisma.doshaPrediction.findMany({
+            where: { userId },
+            orderBy: { createdAt: 'desc' },
+        });
+        return history;
+    }
 }
 
 module.exports = new ProfileService();
