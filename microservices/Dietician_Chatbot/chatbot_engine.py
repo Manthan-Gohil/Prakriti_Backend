@@ -1,9 +1,11 @@
 import json
+import os
 from rag_retriever import retrieve_context
 from llm_engine import ask_llm
 from chat_memory import get_history, save_message
 
-rules = json.load(open("ayurveda_rules.json"))
+_base = os.path.dirname(os.path.abspath(__file__))
+rules = json.load(open(os.path.join(_base, "ayurveda_rules.json")))
 
 SYSTEM_PROMPT = """
 You are an Ayurvedic dietician chatbot.
@@ -26,6 +28,7 @@ Rules:
 
 """
 
+
 def chat(user_id, dosha, message):
 
     history = get_history(user_id)
@@ -35,16 +38,17 @@ def chat(user_id, dosha, message):
     rule_data = rules.get(dosha, {})
 
     full_prompt = [
-        {"role":"system","content":SYSTEM_PROMPT},
+        {"role": "system", "content": SYSTEM_PROMPT},
     ]
 
     # add chat history
     full_prompt.extend(history)
 
     # add new user message
-    full_prompt.append({
-        "role":"user",
-        "content":f"""
+    full_prompt.append(
+        {
+            "role": "user",
+            "content": f"""
 User Dosha: {dosha}
 
 Ayurveda rules:
@@ -55,8 +59,9 @@ Knowledge context:
 
 User question:
 {message}
-"""
-    })
+""",
+        }
+    )
 
     response = ask_llm(full_prompt)
 
