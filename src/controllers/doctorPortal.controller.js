@@ -124,6 +124,20 @@ class DoctorPortalController {
         } catch (error) { next(error); }
     }
 
+    // ─── SAVE AI PRESCRIPTION ────────────────────
+    async savePrescription(req, res, next) {
+        try {
+            const { aiPrescription, transcriptFile } = req.body;
+            if (!aiPrescription) {
+                return errorResponse(res, 'aiPrescription is required.', 400);
+            }
+            const result = await doctorPortalService.savePrescription(
+                req.doctor.id, req.params.bookingId, aiPrescription, transcriptFile
+            );
+            return successResponse(res, 'Prescription saved to patient record.', result);
+        } catch (error) { next(error); }
+    }
+
     // ─── ANALYTICS ────────────────────────────────
     async getAnalytics(req, res, next) {
         try {

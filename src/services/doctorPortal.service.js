@@ -510,6 +510,43 @@ class DoctorPortalService {
         };
     }
 
+    // ─── SAVE AI PRESCRIPTION ────────────────────
+    async savePrescription(doctorId, bookingId, aiPrescription, transcriptFile) {
+        const booking = await prisma.booking.findUnique({ where: { id: bookingId } });
+        if (!booking || booking.doctorId !== doctorId) {
+            const err = new Error('Booking not found.');
+            err.statusCode = 404;
+            throw err;
+        }
+
+        // Upsert: create or update prescription for this booking
+        const prescription = await prisma.prescription.upsert({
+            where: { bookingId },
+            create: {
+                bookingId,
+                userId: booking.userId,
+                doctorId,
+                content: aiPrescription,
+                transcriptFile: transcriptFile || null,
+            },
+            update: {
+                content: aiPrescription,
+                transcriptFile: transcriptFile || null,
+            },
+            include: {
+                user: { select: { id: true, username: true, email: true } },
+                booking: {
+                    select: {
+                        id: true, status: true,
+                        slot: { select: { slotDate: true, startTime: true, endTime: true } },
+                    },
+                },
+            },
+        });
+
+        return { prescription };
+    }
+
     // ─── ANALYTICS ───────────────────────────────
     async getAnalytics(doctorId, range = '30d') {
         const now = new Date();

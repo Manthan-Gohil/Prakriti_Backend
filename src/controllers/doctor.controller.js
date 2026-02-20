@@ -91,6 +91,17 @@ class DoctorController {
             return successResponse(res, 'Booking cancelled.', { booking });
         } catch (error) { next(error); }
     }
+
+    /**
+     * GET /api/doctors/bookings/prescriptions
+     * Get all AI prescriptions for the authenticated patient.
+     */
+    async getMyPrescriptions(req, res, next) {
+        try {
+            const prescriptions = await doctorService.getPatientPrescriptions(req.user.id);
+            return successResponse(res, 'Prescriptions fetched.', { prescriptions });
+        } catch (error) { next(error); }
+    }
 }
 
 module.exports = new DoctorController();

@@ -11,6 +11,9 @@ router.get('/', doctorController.listDoctors);
 // Get full doctor details + schedule
 router.get('/bookings/my', authenticate, doctorController.getMyBookings);
 
+// Get patient's AI prescriptions
+router.get('/bookings/prescriptions', authenticate, doctorController.getMyPrescriptions);
+
 // Get doctor by ID (with slots for a date)
 router.get('/:id', doctorController.getDoctorById);
 

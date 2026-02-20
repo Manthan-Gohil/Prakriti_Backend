@@ -1,0 +1,1941 @@
+{
+    "_meta": {
+        "description": "Complete API context for Prakriti AI - Ayurvedic Diet Planning & Food Recognition App. Give this file to GitHub Copilot / AI assistant to build React Native frontend.",
+        "version": "1.0.0",
+        "baseUrl": "https://prakriti-api.onrender.com/api",
+        "generatedAt": "2026-02-20",
+        "techStack": {
+            "backend": "Express.js + Prisma ORM + PostgreSQL (Supabase)",
+            "auth": "JWT (Bearer token in Authorization header)",
+            "videoCall": "Jitsi Meet (free, no account needed)",
+            "chatbot": "FastAPI microservice with RAG (Ayurveda knowledge base)"
+        }
+    },
+    "systemPrompt": "You are building a React Native mobile app for 'Prakriti AI' - an Ayurvedic diet planning, food recognition, and health tracking app. The backend API is deployed at https://prakriti-api.onrender.com/api. All authenticated endpoints require a Bearer token in the Authorization header. The token is a JWT signed with { userId } payload. All API responses follow the format: { success: boolean, message: string, data?: object }. Error responses: { success: false, message: string }. The app has these main features: Auth (signup/login), Health Profile with Ayurvedic traits, Prakriti Assessment (questionnaire-based dosha determination), Meal Planning, Food Recognition (image upload), Health Tracking (food diary, water, sleep, exercise, yoga, mood, stress, vitals, dinacharya), Dashboard Analytics, Wellness (articles, recommendations, notifications, seasonal routines), Doctor Consultation (browse doctors, book slots, video call via Jitsi Meet), and AI Chatbot (Ayurvedic diet advice). For video calling: the patient books a slot, the doctor generates a Jitsi Meet link, the patient fetches their booking detail to get the meetLink and opens it in a WebView or external browser. Use the 'canJoinCall' boolean from the booking response to show/hide the Join Video Call button.",
+    "authentication": {
+        "method": "JWT Bearer Token",
+        "headerFormat": "Authorization: Bearer <token>",
+        "tokenPayload": {
+            "userId": "string (UUID)"
+        },
+        "tokenExpiry": "7 days",
+        "endpoints": {
+            "signup": {
+                "method": "POST",
+                "path": "/auth/signup",
+                "auth": false,
+                "requestBody": {
+                    "username": {
+                        "type": "string",
+                        "required": true,
+                        "validation": "3-30 chars"
+                    },
+                    "email": {
+                        "type": "string",
+                        "required": true,
+                        "validation": "valid email"
+                    },
+                    "password": {
+                        "type": "string",
+                        "required": true,
+                        "validation": "min 6 chars"
+                    }
+                },
+                "successResponse": {
+                    "success": true,
+                    "message": "Account created successfully!",
+                    "data": {
+                        "token": "eyJhbGciOiJ...",
+                        "user": {
+                            "id": "uuid",
+                            "username": "john_doe",
+                            "email": "john@example.com",
+                            "isEmailVerified": true,
+                            "isProfileComplete": false
+                        }
+                    }
+                },
+                "errorResponses": {
+                    "409": "An account with this email/username already exists.",
+                    "400": "Validation errors (username, email, password)"
+                }
+            },
+            "login": {
+                "method": "POST",
+                "path": "/auth/login",
+                "auth": false,
+                "requestBody": {
+                    "email": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "password": {
+                        "type": "string",
+                        "required": true
+                    }
+                },
+                "successResponse": {
+                    "success": true,
+                    "message": "Login successful!",
+                    "data": {
+                        "token": "eyJhbGciOiJ...",
+                        "user": {
+                            "id": "uuid",
+                            "username": "john_doe",
+                            "email": "john@example.com",
+                            "isEmailVerified": true,
+                            "isProfileComplete": true
+                        }
+                    }
+                },
+                "errorResponses": {
+                    "401": "Invalid email or password.",
+                    "403": "Account is deactivated."
+                }
+            },
+            "getMe": {
+                "method": "GET",
+                "path": "/auth/me",
+                "auth": true,
+                "successResponse": {
+                    "success": true,
+                    "message": "User profile fetched.",
+                    "data": {
+                        "id": "uuid",
+                        "username": "john_doe",
+                        "email": "john@example.com",
+                        "avatarUrl": "url or null",
+                        "isEmailVerified": true,
+                        "isProfileComplete": true,
+                        "lastLoginAt": "ISO datetime",
+                        "loginCount": 5,
+                        "createdAt": "ISO datetime"
+                    }
+                }
+            },
+            "changePassword": {
+                "method": "POST",
+                "path": "/auth/change-password",
+                "auth": true,
+                "requestBody": {
+                    "currentPassword": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "newPassword": {
+                        "type": "string",
+                        "required": true,
+                        "validation": "min 6 chars"
+                    }
+                },
+                "successResponse": {
+                    "success": true,
+                    "message": "Password changed successfully."
+                },
+                "errorResponses": {
+                    "400": "Current password is incorrect."
+                }
+            }
+        }
+    },
+    "profile": {
+        "description": "Health profile with Ayurvedic physical traits. All endpoints require auth + email verified.",
+        "basePath": "/profile",
+        "endpoints": {
+            "createOrUpdate": {
+                "method": "POST",
+                "path": "/profile",
+                "auth": true,
+                "requiresVerified": true,
+                "requestBody": {
+                    "firstName": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "lastName": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "dateOfBirth": {
+                        "type": "ISO8601 date",
+                        "required": true
+                    },
+                    "gender": {
+                        "type": "enum",
+                        "required": true,
+                        "values": [
+                            "MALE",
+                            "FEMALE",
+                            "NON_BINARY",
+                            "PREFER_NOT_TO_SAY"
+                        ]
+                    },
+                    "heightCm": {
+                        "type": "float",
+                        "required": true,
+                        "range": "50-300"
+                    },
+                    "weightKg": {
+                        "type": "float",
+                        "required": true,
+                        "range": "10-500"
+                    },
+                    "phoneNumber": {
+                        "type": "string",
+                        "optional": true
+                    },
+                    "address": {
+                        "type": "string",
+                        "optional": true
+                    },
+                    "city": {
+                        "type": "string",
+                        "optional": true
+                    },
+                    "state": {
+                        "type": "string",
+                        "optional": true
+                    },
+                    "country": {
+                        "type": "string",
+                        "optional": true
+                    },
+                    "pincode": {
+                        "type": "string",
+                        "optional": true
+                    },
+                    "bloodGroup": {
+                        "type": "enum",
+                        "optional": true,
+                        "values": [
+                            "A_POSITIVE",
+                            "A_NEGATIVE",
+                            "B_POSITIVE",
+                            "B_NEGATIVE",
+                            "AB_POSITIVE",
+                            "AB_NEGATIVE",
+                            "O_POSITIVE",
+                            "O_NEGATIVE"
+                        ]
+                    },
+                    "allergies": {
+                        "type": "string[]",
+                        "optional": true
+                    },
+                    "medications": {
+                        "type": "string[]",
+                        "optional": true
+                    },
+                    "chronicConditions": {
+                        "type": "string[]",
+                        "optional": true
+                    },
+                    "activityLevel": {
+                        "type": "enum",
+                        "optional": true,
+                        "values": [
+                            "SEDENTARY",
+                            "LIGHTLY_ACTIVE",
+                            "MODERATELY_ACTIVE",
+                            "VERY_ACTIVE",
+                            "EXTREMELY_ACTIVE"
+                        ]
+                    },
+                    "dietType": {
+                        "type": "enum",
+                        "optional": true,
+                        "values": [
+                            "VEGETARIAN",
+                            "VEGAN",
+                            "EGGETARIAN",
+                            "NON_VEGETARIAN",
+                            "PESCATARIAN",
+                            "SATTVIC",
+                            "LACTO_VEGETARIAN",
+                            "RAW_FOOD",
+                            "AYURVEDIC"
+                        ]
+                    },
+                    "smokingStatus": {
+                        "type": "enum",
+                        "optional": true,
+                        "values": [
+                            "NEVER",
+                            "FORMER",
+                            "CURRENT",
+                            "OCCASIONAL"
+                        ]
+                    },
+                    "alcoholConsumption": {
+                        "type": "enum",
+                        "optional": true,
+                        "values": [
+                            "NONE",
+                            "OCCASIONAL",
+                            "MODERATE",
+                            "HEAVY"
+                        ]
+                    },
+                    "healthGoals": {
+                        "type": "string[]",
+                        "optional": true
+                    }
+                },
+                "successResponse": {
+                    "success": true,
+                    "message": "Profile saved.",
+                    "data": {
+                        "_comment": "Returns the full HealthProfile object with all fields"
+                    }
+                }
+            },
+            "getProfile": {
+                "method": "GET",
+                "path": "/profile",
+                "auth": true,
+                "successResponse": {
+                    "success": true,
+                    "message": "Profile fetched.",
+                    "data": {
+                        "_comment": "Full HealthProfile object or null if not created"
+                    }
+                }
+            },
+            "updateProfile": {
+                "method": "PATCH",
+                "path": "/profile",
+                "auth": true,
+                "requestBody": {
+                    "_comment": "Any subset of profile fields to update"
+                }
+            },
+            "uploadImage": {
+                "method": "POST",
+                "path": "/profile/image",
+                "auth": true,
+                "requestBody": "multipart/form-data with field 'image'",
+                "successResponse": {
+                    "success": true,
+                    "message": "Image uploaded.",
+                    "data": {
+                        "imageUrl": "/uploads/profile/filename.jpg"
+                    }
+                }
+            },
+            "getSummary": {
+                "method": "GET",
+                "path": "/profile/summary",
+                "auth": true,
+                "successResponse": {
+                    "success": true,
+                    "data": {
+                        "_comment": "Condensed profile summary with BMI, dosha info, etc."
+                    }
+                }
+            },
+            "savePrakritiTraits": {
+                "method": "POST",
+                "path": "/profile/prakriti-traits",
+                "auth": true,
+                "requestBody": {
+                    "_comment": "Ayurvedic physical trait observations",
+                    "bodySize": "string",
+                    "bodyWeightTendency": "string",
+                    "boneStructure": "string",
+                    "complexion": "string",
+                    "skinTypeTrait": "string",
+                    "hairColor": "string",
+                    "hairTexture": "string",
+                    "faceShape": "string",
+                    "eyes": "string",
+                    "noseShape": "string",
+                    "teethStructure": "string",
+                    "nails": "string",
+                    "appetiteTrait": "string",
+                    "digestionSpeed": "string",
+                    "tastePreference": "string",
+                    "weatherPreference": "string",
+                    "_note": "All fields are optional strings. See HealthProfile model for complete list."
+                }
+            },
+            "saveDoshaTraits": {
+                "method": "POST",
+                "path": "/profile/dosha-traits",
+                "auth": true,
+                "requestBody": {
+                    "_comment": "Vikriti (current imbalance) observations",
+                    "currentSymptoms": "string",
+                    "symptomDuration": "string",
+                    "symptomSeverity": "string",
+                    "appetiteLevel": "string",
+                    "digestionQuality": "string",
+                    "bowelPattern": "string",
+                    "sleepQuality": "string",
+                    "mentalState": "string",
+                    "stressLevel": "string",
+                    "dietType": "string",
+                    "_note": "All fields optional. See DoshaTraits model for complete list."
+                }
+            },
+            "getDoshaTraits": {
+                "method": "GET",
+                "path": "/profile/dosha-traits",
+                "auth": true
+            },
+            "predictPrakriti": {
+                "method": "POST",
+                "path": "/profile/predict/prakriti",
+                "auth": true,
+                "description": "Runs ML model to predict Prakriti (constitution) from saved traits",
+                "successResponse": {
+                    "success": true,
+                    "data": {
+                        "prakritiType": "Vata-Pitta",
+                        "inputData": {}
+                    }
+                }
+            },
+            "predictDosha": {
+                "method": "POST",
+                "path": "/profile/predict/dosha",
+                "auth": true,
+                "description": "Runs ML model to predict current dosha imbalance from saved traits",
+                "successResponse": {
+                    "success": true,
+                    "data": {
+                        "imbalanceType": "Vata-Pitta",
+                        "imbalances": [
+                            "Vata",
+                            "Pitta"
+                        ],
+                        "inputData": {}
+                    }
+                }
+            },
+            "getPredictions": {
+                "method": "GET",
+                "path": "/profile/predictions",
+                "auth": true,
+                "description": "Get latest prakriti and dosha predictions"
+            },
+            "getPrakritiHistory": {
+                "method": "GET",
+                "path": "/profile/predictions/prakriti-history",
+                "auth": true
+            },
+            "getDoshaHistory": {
+                "method": "GET",
+                "path": "/profile/predictions/dosha-history",
+                "auth": true
+            }
+        }
+    },
+    "assessment": {
+        "description": "Prakriti assessment via questionnaire with dosha scoring. All endpoints require auth + verified.",
+        "basePath": "/assessment",
+        "endpoints": {
+            "getQuestions": {
+                "method": "GET",
+                "path": "/assessment/questions",
+                "auth": true,
+                "successResponse": {
+                    "success": true,
+                    "data": {
+                        "questions": [
+                            {
+                                "id": "uuid",
+                                "category": "PHYSICAL|MENTAL|EMOTIONAL|DIGESTIVE|LIFESTYLE|BEHAVIORAL",
+                                "subcategory": "string or null",
+                                "questionText": "What is your body frame?",
+                                "questionHindi": "Hindi text or null",
+                                "description": "optional description",
+                                "sortOrder": 1,
+                                "options": [
+                                    {
+                                        "id": "uuid",
+                                        "optionText": "Thin, light frame",
+                                        "optionHindi": "Hindi text or null",
+                                        "doshaType": "VATA|PITTA|KAPHA",
+                                        "weightage": 1.0,
+                                        "sortOrder": 1
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            },
+            "startAssessment": {
+                "method": "POST",
+                "path": "/assessment/start",
+                "auth": true,
+                "requestBody": {
+                    "assessmentType": {
+                        "type": "enum",
+                        "optional": true,
+                        "values": [
+                            "INITIAL",
+                            "PERIODIC",
+                            "SEASONAL",
+                            "FOLLOW_UP"
+                        ],
+                        "default": "INITIAL"
+                    },
+                    "assessmentMethod": {
+                        "type": "enum",
+                        "optional": true,
+                        "values": [
+                            "QUESTIONNAIRE",
+                            "IMAGE_BASED",
+                            "COMBINED",
+                            "AI_ASSISTED"
+                        ],
+                        "default": "QUESTIONNAIRE"
+                    }
+                },
+                "successResponse": {
+                    "success": true,
+                    "data": {
+                        "assessment": {
+                            "id": "uuid",
+                            "assessmentType": "INITIAL",
+                            "status": "IN_PROGRESS"
+                        }
+                    }
+                }
+            },
+            "submitResponse": {
+                "method": "POST",
+                "path": "/assessment/:id/response",
+                "auth": true,
+                "requestBody": {
+                    "questionId": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "optionId": {
+                        "type": "string",
+                        "required": true
+                    }
+                }
+            },
+            "submitBulkResponses": {
+                "method": "POST",
+                "path": "/assessment/:id/responses",
+                "auth": true,
+                "requestBody": {
+                    "responses": {
+                        "type": "array",
+                        "required": true,
+                        "items": {
+                            "questionId": "string",
+                            "optionId": "string"
+                        }
+                    }
+                }
+            },
+            "uploadImages": {
+                "method": "POST",
+                "path": "/assessment/:id/images",
+                "auth": true,
+                "requestBody": "multipart/form-data with field 'images' (up to 5 files)"
+            },
+            "completeAssessment": {
+                "method": "POST",
+                "path": "/assessment/:id/complete",
+                "auth": true,
+                "description": "Calculates dosha scores and determines prakriti type",
+                "successResponse": {
+                    "success": true,
+                    "data": {
+                        "assessment": {
+                            "id": "uuid",
+                            "status": "COMPLETED",
+                            "vataScore": 45.5,
+                            "pittaScore": 30.2,
+                            "kaphaScore": 24.3,
+                            "primaryDosha": "VATA",
+                            "secondaryDosha": "PITTA",
+                            "prakritiType": "Vata-Pitta"
+                        }
+                    }
+                }
+            },
+            "getAssessment": {
+                "method": "GET",
+                "path": "/assessment/:id",
+                "auth": true
+            },
+            "listAssessments": {
+                "method": "GET",
+                "path": "/assessment",
+                "auth": true
+            },
+            "getDoshaProfile": {
+                "method": "GET",
+                "path": "/assessment/dosha/profile",
+                "auth": true,
+                "description": "Get the user's current dosha profile (latest completed assessment result)",
+                "successResponse": {
+                    "success": true,
+                    "data": {
+                        "doshaProfile": {
+                            "id": "uuid",
+                            "userId": "uuid",
+                            "primaryDosha": "VATA",
+                            "secondaryDosha": "PITTA",
+                            "prakritiType": "Vata-Pitta",
+                            "vataScore": 45.5,
+                            "pittaScore": 30.2,
+                            "kaphaScore": 24.3,
+                            "characteristics": {},
+                            "recommendations": {}
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "mealPlan": {
+        "description": "Create and manage Ayurvedic meal plans. All endpoints require auth + verified.",
+        "basePath": "/meal-plans",
+        "endpoints": {
+            "create": {
+                "method": "POST",
+                "path": "/meal-plans",
+                "auth": true,
+                "requestBody": {
+                    "name": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "startDate": {
+                        "type": "ISO8601",
+                        "required": true
+                    },
+                    "endDate": {
+                        "type": "ISO8601",
+                        "required": true
+                    }
+                }
+            },
+            "list": {
+                "method": "GET",
+                "path": "/meal-plans",
+                "auth": true
+            },
+            "getById": {
+                "method": "GET",
+                "path": "/meal-plans/:id",
+                "auth": true
+            },
+            "update": {
+                "method": "PUT",
+                "path": "/meal-plans/:id",
+                "auth": true
+            },
+            "delete": {
+                "method": "DELETE",
+                "path": "/meal-plans/:id",
+                "auth": true
+            },
+            "addMeal": {
+                "method": "POST",
+                "path": "/meal-plans/:id/meals",
+                "auth": true,
+                "requestBody": {
+                    "mealType": {
+                        "type": "enum",
+                        "required": true,
+                        "values": [
+                            "EARLY_MORNING",
+                            "BREAKFAST",
+                            "MID_MORNING_SNACK",
+                            "LUNCH",
+                            "AFTERNOON_SNACK",
+                            "EVENING_SNACK",
+                            "DINNER",
+                            "BEDTIME"
+                        ]
+                    },
+                    "date": {
+                        "type": "ISO8601",
+                        "required": true
+                    }
+                }
+            },
+            "addFoodToMeal": {
+                "method": "POST",
+                "path": "/meal-plans/meals/:mealId/foods",
+                "auth": true,
+                "requestBody": {
+                    "foodItemId": {
+                        "type": "string",
+                        "required": true
+                    }
+                }
+            },
+            "markConsumed": {
+                "method": "PATCH",
+                "path": "/meal-plans/meals/foods/:itemId/consumed",
+                "auth": true
+            },
+            "removeFoodFromMeal": {
+                "method": "DELETE",
+                "path": "/meal-plans/meals/foods/:itemId",
+                "auth": true
+            }
+        }
+    },
+    "food": {
+        "description": "Food database with Ayurvedic dosha suitability. Auth required, no email verification needed for browsing.",
+        "basePath": "/foods",
+        "endpoints": {
+            "list": {
+                "method": "GET",
+                "path": "/foods",
+                "auth": true
+            },
+            "search": {
+                "method": "GET",
+                "path": "/foods/search",
+                "auth": true,
+                "queryParams": {
+                    "q": "search term"
+                }
+            },
+            "getByCategory": {
+                "method": "GET",
+                "path": "/foods/category/:category",
+                "auth": true
+            },
+            "getByDosha": {
+                "method": "GET",
+                "path": "/foods/dosha/:dosha",
+                "auth": true,
+                "description": "Get foods suitable for a specific dosha (VATA, PITTA, KAPHA)"
+            },
+            "getById": {
+                "method": "GET",
+                "path": "/foods/:id",
+                "auth": true
+            },
+            "create": {
+                "method": "POST",
+                "path": "/foods",
+                "auth": true,
+                "requiresVerified": true,
+                "requestBody": {
+                    "name": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "_comment": "Additional food fields like calories, protein, etc."
+                }
+            },
+            "update": {
+                "method": "PUT",
+                "path": "/foods/:id",
+                "auth": true,
+                "requiresVerified": true
+            }
+        }
+    },
+    "foodRecognition": {
+        "description": "Upload food images for AI recognition. Results can be added to food diary.",
+        "basePath": "/food-recognition",
+        "endpoints": {
+            "upload": {
+                "method": "POST",
+                "path": "/food-recognition/upload",
+                "auth": true,
+                "requiresVerified": true,
+                "requestBody": "multipart/form-data with field 'image'",
+                "successResponse": {
+                    "success": true,
+                    "data": {
+                        "id": "uuid",
+                        "imageUrl": "/uploads/food/filename.jpg",
+                        "status": "PENDING"
+                    }
+                }
+            },
+            "updateResult": {
+                "method": "PATCH",
+                "path": "/food-recognition/:id/result",
+                "auth": true,
+                "requestBody": {
+                    "recognizedFood": {
+                        "type": "string",
+                        "required": true
+                    }
+                }
+            },
+            "verify": {
+                "method": "PATCH",
+                "path": "/food-recognition/:id/verify",
+                "auth": true,
+                "requestBody": {
+                    "isCorrect": {
+                        "type": "boolean",
+                        "required": true
+                    }
+                }
+            },
+            "list": {
+                "method": "GET",
+                "path": "/food-recognition",
+                "auth": true
+            },
+            "getById": {
+                "method": "GET",
+                "path": "/food-recognition/:id",
+                "auth": true
+            },
+            "addToDiary": {
+                "method": "POST",
+                "path": "/food-recognition/:id/add-to-diary",
+                "auth": true,
+                "requestBody": {
+                    "mealType": {
+                        "type": "enum",
+                        "required": true,
+                        "values": [
+                            "EARLY_MORNING",
+                            "BREAKFAST",
+                            "MID_MORNING_SNACK",
+                            "LUNCH",
+                            "AFTERNOON_SNACK",
+                            "EVENING_SNACK",
+                            "DINNER",
+                            "BEDTIME"
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    "tracking": {
+        "description": "Comprehensive health tracking - food diary, water, sleep, exercise, yoga, mood, stress, vitals, dinacharya.",
+        "basePath": "/tracking",
+        "endpoints": {
+            "addDiaryEntry": {
+                "method": "POST",
+                "path": "/tracking/diary",
+                "auth": true,
+                "requestBody": {
+                    "foodName": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "mealType": {
+                        "type": "enum",
+                        "required": true,
+                        "values": [
+                            "EARLY_MORNING",
+                            "BREAKFAST",
+                            "MID_MORNING_SNACK",
+                            "LUNCH",
+                            "AFTERNOON_SNACK",
+                            "EVENING_SNACK",
+                            "DINNER",
+                            "BEDTIME"
+                        ]
+                    },
+                    "calories": {
+                        "type": "number",
+                        "optional": true
+                    },
+                    "proteinG": {
+                        "type": "number",
+                        "optional": true
+                    },
+                    "carbsG": {
+                        "type": "number",
+                        "optional": true
+                    },
+                    "fatG": {
+                        "type": "number",
+                        "optional": true
+                    },
+                    "fiberG": {
+                        "type": "number",
+                        "optional": true
+                    },
+                    "servingSize": {
+                        "type": "string",
+                        "optional": true
+                    },
+                    "quantity": {
+                        "type": "number",
+                        "optional": true
+                    }
+                }
+            },
+            "getDiary": {
+                "method": "GET",
+                "path": "/tracking/diary",
+                "auth": true,
+                "queryParams": {
+                    "date": "ISO8601 date (optional, defaults to today)"
+                }
+            },
+            "deleteDiaryEntry": {
+                "method": "DELETE",
+                "path": "/tracking/diary/:id",
+                "auth": true
+            },
+            "getDailyNutrients": {
+                "method": "GET",
+                "path": "/tracking/nutrients/daily",
+                "auth": true,
+                "queryParams": {
+                    "date": "optional"
+                }
+            },
+            "addWater": {
+                "method": "POST",
+                "path": "/tracking/water",
+                "auth": true,
+                "requestBody": {
+                    "amountMl": {
+                        "type": "integer",
+                        "required": true,
+                        "min": 1
+                    },
+                    "waterType": {
+                        "type": "string",
+                        "optional": true
+                    },
+                    "time": {
+                        "type": "string",
+                        "optional": true,
+                        "format": "HH:MM"
+                    }
+                }
+            },
+            "getWater": {
+                "method": "GET",
+                "path": "/tracking/water",
+                "auth": true,
+                "queryParams": {
+                    "date": "optional"
+                }
+            },
+            "addSleep": {
+                "method": "POST",
+                "path": "/tracking/sleep",
+                "auth": true,
+                "requestBody": {
+                    "bedtime": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "wakeTime": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "durationHours": {
+                        "type": "float",
+                        "required": true
+                    },
+                    "quality": {
+                        "type": "integer",
+                        "required": true,
+                        "range": "1-10"
+                    }
+                }
+            },
+            "getSleep": {
+                "method": "GET",
+                "path": "/tracking/sleep",
+                "auth": true,
+                "queryParams": {
+                    "days": "number of days (optional)"
+                }
+            },
+            "addExercise": {
+                "method": "POST",
+                "path": "/tracking/exercise",
+                "auth": true,
+                "requestBody": {
+                    "exerciseType": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "durationMinutes": {
+                        "type": "integer",
+                        "required": true,
+                        "min": 1
+                    },
+                    "caloriesBurned": {
+                        "type": "number",
+                        "optional": true
+                    },
+                    "intensity": {
+                        "type": "string",
+                        "optional": true
+                    }
+                }
+            },
+            "getExercise": {
+                "method": "GET",
+                "path": "/tracking/exercise",
+                "auth": true
+            },
+            "addYoga": {
+                "method": "POST",
+                "path": "/tracking/yoga",
+                "auth": true,
+                "requestBody": {
+                    "yogaType": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "durationMinutes": {
+                        "type": "integer",
+                        "required": true,
+                        "min": 1
+                    },
+                    "poses": {
+                        "type": "string[]",
+                        "optional": true
+                    }
+                }
+            },
+            "getYoga": {
+                "method": "GET",
+                "path": "/tracking/yoga",
+                "auth": true
+            },
+            "addMood": {
+                "method": "POST",
+                "path": "/tracking/mood",
+                "auth": true,
+                "requestBody": {
+                    "mood": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "notes": {
+                        "type": "string",
+                        "optional": true
+                    }
+                }
+            },
+            "getMood": {
+                "method": "GET",
+                "path": "/tracking/mood",
+                "auth": true
+            },
+            "addStress": {
+                "method": "POST",
+                "path": "/tracking/stress",
+                "auth": true,
+                "requestBody": {
+                    "level": {
+                        "type": "integer",
+                        "required": true,
+                        "range": "1-10"
+                    },
+                    "triggers": {
+                        "type": "string[]",
+                        "optional": true
+                    },
+                    "notes": {
+                        "type": "string",
+                        "optional": true
+                    }
+                }
+            },
+            "getStress": {
+                "method": "GET",
+                "path": "/tracking/stress",
+                "auth": true
+            },
+            "addHealth": {
+                "method": "POST",
+                "path": "/tracking/health",
+                "auth": true,
+                "requestBody": {
+                    "_comment": "Health vitals - blood pressure, heart rate, temperature, etc."
+                }
+            },
+            "getHealth": {
+                "method": "GET",
+                "path": "/tracking/health",
+                "auth": true
+            },
+            "addDinacharya": {
+                "method": "POST",
+                "path": "/tracking/dinacharya",
+                "auth": true,
+                "requestBody": {
+                    "_comment": "Ayurvedic daily routine tracking"
+                }
+            },
+            "getDinacharya": {
+                "method": "GET",
+                "path": "/tracking/dinacharya",
+                "auth": true
+            }
+        }
+    },
+    "dashboard": {
+        "description": "Analytics dashboard with various health metrics. All require auth + verified.",
+        "basePath": "/dashboard",
+        "endpoints": {
+            "getOverview": {
+                "method": "GET",
+                "path": "/dashboard/overview",
+                "auth": true,
+                "description": "Main dashboard with today's summary, recent food diary, active meal plan, notification counts"
+            },
+            "getNutritionAnalytics": {
+                "method": "GET",
+                "path": "/dashboard/nutrition-analytics",
+                "auth": true,
+                "queryParams": {
+                    "days": "number (default 7)"
+                }
+            },
+            "getHealthAnalytics": {
+                "method": "GET",
+                "path": "/dashboard/health-analytics",
+                "auth": true,
+                "queryParams": {
+                    "days": "number (default 7)"
+                }
+            },
+            "getSleepAnalytics": {
+                "method": "GET",
+                "path": "/dashboard/sleep-analytics",
+                "auth": true
+            },
+            "getActivityAnalytics": {
+                "method": "GET",
+                "path": "/dashboard/activity-analytics",
+                "auth": true
+            },
+            "getMoodAnalytics": {
+                "method": "GET",
+                "path": "/dashboard/mood-analytics",
+                "auth": true
+            },
+            "getDoshaAnalytics": {
+                "method": "GET",
+                "path": "/dashboard/dosha-analytics",
+                "auth": true
+            },
+            "getDinacharyaAnalytics": {
+                "method": "GET",
+                "path": "/dashboard/dinacharya-analytics",
+                "auth": true
+            },
+            "getWellnessProgress": {
+                "method": "GET",
+                "path": "/dashboard/wellness-progress",
+                "auth": true
+            },
+            "getRecognitionStats": {
+                "method": "GET",
+                "path": "/dashboard/recognition-stats",
+                "auth": true
+            },
+            "getStatsSummary": {
+                "method": "GET",
+                "path": "/dashboard/stats-summary",
+                "auth": true
+            }
+        }
+    },
+    "wellness": {
+        "description": "Wellness features - recommendations, notifications, preferences, seasonal routines, articles.",
+        "basePath": "/wellness",
+        "endpoints": {
+            "getRecommendations": {
+                "method": "GET",
+                "path": "/wellness/recommendations",
+                "auth": true,
+                "requiresVerified": true
+            },
+            "updateRecommendation": {
+                "method": "PATCH",
+                "path": "/wellness/recommendations/:id",
+                "auth": true
+            },
+            "getNotifications": {
+                "method": "GET",
+                "path": "/wellness/notifications",
+                "auth": true
+            },
+            "markNotificationRead": {
+                "method": "PATCH",
+                "path": "/wellness/notifications/:id/read",
+                "auth": true
+            },
+            "markAllNotificationsRead": {
+                "method": "PATCH",
+                "path": "/wellness/notifications/read-all",
+                "auth": true
+            },
+            "getPreferences": {
+                "method": "GET",
+                "path": "/wellness/preferences",
+                "auth": true
+            },
+            "updatePreferences": {
+                "method": "PUT",
+                "path": "/wellness/preferences",
+                "auth": true
+            },
+            "saveSeasonalRoutine": {
+                "method": "POST",
+                "path": "/wellness/seasonal-routine",
+                "auth": true,
+                "requiresVerified": true
+            },
+            "getSeasonalRoutines": {
+                "method": "GET",
+                "path": "/wellness/seasonal-routine",
+                "auth": true,
+                "requiresVerified": true
+            },
+            "getArticles": {
+                "method": "GET",
+                "path": "/wellness/articles",
+                "auth": "optional",
+                "queryParams": {
+                    "category": "ArticleCategory enum (optional)",
+                    "search": "search term (optional)"
+                },
+                "description": "Public - works without auth, but auth adds bookmark status"
+            },
+            "getArticleBySlug": {
+                "method": "GET",
+                "path": "/wellness/articles/:slug",
+                "auth": "optional"
+            },
+            "bookmarkArticle": {
+                "method": "POST",
+                "path": "/wellness/articles/:articleId/bookmark",
+                "auth": true
+            },
+            "removeBookmark": {
+                "method": "DELETE",
+                "path": "/wellness/articles/:articleId/bookmark",
+                "auth": true
+            },
+            "getBookmarks": {
+                "method": "GET",
+                "path": "/wellness/bookmarks",
+                "auth": true
+            }
+        },
+        "articleCategories": [
+            "AYURVEDA_BASICS",
+            "DOSHA_GUIDE",
+            "SEASONAL_WELLNESS",
+            "RECIPES",
+            "YOGA_MEDITATION",
+            "HERBAL_REMEDIES",
+            "DETOX_CLEANSE",
+            "LIFESTYLE_TIPS",
+            "DINACHARYA",
+            "RITUCHARYA",
+            "MENTAL_HEALTH",
+            "WOMENS_HEALTH",
+            "MENS_HEALTH",
+            "CHILD_HEALTH"
+        ]
+    },
+    "doctorConsultation": {
+        "description": "Browse doctors, view available slots, book appointments, video call via Jitsi Meet. This is the CORE feature for the React Native app's doctor booking and video calling flow.",
+        "basePath": "/doctors",
+        "videoCallFlow": {
+            "step1_browse": "Patient browses doctors → GET /doctors (public, no auth)",
+            "step2_viewSlots": "Patient picks a doctor, views slots for a date → GET /doctors/:id/slots?date=2026-02-25 (public)",
+            "step3_book": "Patient books an available slot → POST /doctors/:id/book (auth required)",
+            "step4_doctorGeneratesMeet": "Doctor generates Jitsi meet link from doctor portal → POST /doctor-portal/bookings/:id/meet (doctor auth)",
+            "step5_patientFetchesBooking": "Patient fetches bookings to see meet link → GET /doctors/bookings/my (auth required)",
+            "step6_patientJoinsCall": "Patient opens meetLink in WebView or Linking.openURL() when canJoinCall === true",
+            "jitsiMeetFormat": "https://meet.jit.si/prakriti-{bookingId-first8chars}-{timestamp}",
+            "implementationNotes": {
+                "reactNative": "Use react-native-webview to open Jitsi Meet link, or use Linking.openURL(meetLink) to open in browser. For better UX, use @jitsi/react-native-sdk for native Jitsi integration.",
+                "polling": "Poll GET /doctors/bookings/:bookingId every 10-15 seconds to check when canJoinCall becomes true after doctor generates the meet link.",
+                "noAccountNeeded": "Jitsi Meet is free and requires no account for either party."
+            }
+        },
+        "endpoints": {
+            "listDoctors": {
+                "method": "GET",
+                "path": "/doctors",
+                "auth": false,
+                "queryParams": {
+                    "search": "Search by name, specialty, location, qualification",
+                    "specialty": "Filter by exact specialty (case-insensitive)",
+                    "minFee": "Minimum consultation fee",
+                    "maxFee": "Maximum consultation fee",
+                    "sortBy": "rating|consultationFee|experienceYears|name|createdAt (default: rating)",
+                    "order": "asc|desc (default: desc)",
+                    "page": "Page number (default: 1)",
+                    "limit": "Results per page (default: 10)"
+                },
+                "successResponse": {
+                    "success": true,
+                    "message": "Doctors fetched.",
+                    "data": {
+                        "doctors": [
+                            {
+                                "id": "uuid",
+                                "name": "Dr. Priya Sharma",
+                                "specialty": "Ayurvedic Medicine",
+                                "education": "BAMS, MD Ayurveda",
+                                "imageUrl": "url or null",
+                                "consultationFee": 600,
+                                "experienceYears": 12,
+                                "rating": "4.5",
+                                "totalRatings": 120,
+                                "location": "Mumbai, India",
+                                "languages": [
+                                    "English",
+                                    "Hindi"
+                                ],
+                                "gender": "Female",
+                                "isAvailable": true
+                            }
+                        ],
+                        "specialties": [
+                            "Ayurvedic Medicine",
+                            "Panchakarma",
+                            "Yoga Therapy"
+                        ],
+                        "pagination": {
+                            "total": 25,
+                            "page": 1,
+                            "limit": 10,
+                            "totalPages": 3
+                        }
+                    }
+                },
+                "notes": "rating is returned as a Decimal string from Prisma. Convert to Number in the app: Number(doctor.rating).toFixed(1)"
+            },
+            "getDoctorById": {
+                "method": "GET",
+                "path": "/doctors/:id",
+                "auth": false,
+                "queryParams": {
+                    "date": "ISO date string (optional, defaults to today)"
+                },
+                "successResponse": {
+                    "success": true,
+                    "message": "Doctor details fetched.",
+                    "data": {
+                        "doctor": {
+                            "id": "uuid",
+                            "name": "Dr. Priya Sharma",
+                            "specialty": "Ayurvedic Medicine",
+                            "description": "Experienced Ayurvedic practitioner...",
+                            "education": "BAMS, MD Ayurveda",
+                            "qualification": "Gold Medalist",
+                            "languages": [
+                                "English",
+                                "Hindi"
+                            ],
+                            "bio": "Detailed bio...",
+                            "imageUrl": "url or null",
+                            "phone": "+91...",
+                            "email": "dr.priya@prakriti.ai",
+                            "gender": "Female",
+                            "location": "Mumbai, India",
+                            "consultationFee": 600,
+                            "experienceYears": 12,
+                            "rating": "4.5",
+                            "totalRatings": 120,
+                            "isAvailable": true,
+                            "_count": {
+                                "bookings": 45
+                            }
+                        },
+                        "slots": [
+                            {
+                                "id": "uuid",
+                                "slotDate": "2026-02-25T00:00:00.000Z",
+                                "startTime": "2026-02-25T10:00:00.000Z",
+                                "endTime": "2026-02-25T10:30:00.000Z",
+                                "duration": 30,
+                                "isBooked": false
+                            }
+                        ],
+                        "availableDates": [
+                            "2026-02-25T00:00:00.000Z",
+                            "2026-02-26T00:00:00.000Z"
+                        ]
+                    }
+                }
+            },
+            "getDoctorSlots": {
+                "method": "GET",
+                "path": "/doctors/:id/slots",
+                "auth": false,
+                "queryParams": {
+                    "date": "ISO date string (optional, defaults to today)"
+                },
+                "successResponse": {
+                    "success": true,
+                    "message": "Slots fetched.",
+                    "data": {
+                        "doctorId": "uuid",
+                        "date": "2026-02-25T00:00:00.000Z",
+                        "slots": [
+                            {
+                                "id": "slot-uuid",
+                                "slotDate": "2026-02-25T00:00:00.000Z",
+                                "startTime": "2026-02-25T10:00:00.000Z",
+                                "endTime": "2026-02-25T10:30:00.000Z",
+                                "duration": 30,
+                                "isBooked": false
+                            },
+                            {
+                                "id": "slot-uuid-2",
+                                "slotDate": "2026-02-25T00:00:00.000Z",
+                                "startTime": "2026-02-25T10:30:00.000Z",
+                                "endTime": "2026-02-25T11:00:00.000Z",
+                                "duration": 30,
+                                "isBooked": true
+                            }
+                        ]
+                    }
+                },
+                "notes": "Only shows active (isActive=true) slots. isBooked=true means already taken."
+            },
+            "bookSlot": {
+                "method": "POST",
+                "path": "/doctors/:id/book",
+                "auth": true,
+                "requestBody": {
+                    "slotId": {
+                        "type": "string (UUID)",
+                        "required": true,
+                        "description": "The slot ID from getDoctorSlots response"
+                    },
+                    "notes": {
+                        "type": "string",
+                        "optional": true,
+                        "description": "Patient notes for the doctor"
+                    }
+                },
+                "successResponse": {
+                    "success": true,
+                    "message": "Slot booked successfully!",
+                    "data": {
+                        "booking": {
+                            "id": "booking-uuid",
+                            "userId": "user-uuid",
+                            "doctorId": "doctor-uuid",
+                            "slotId": "slot-uuid",
+                            "status": "CONFIRMED",
+                            "notes": "First consultation for Vata dosha diet",
+                            "meetLink": null,
+                            "patientEmail": null,
+                            "createdAt": "2026-02-20T10:00:00.000Z",
+                            "updatedAt": "2026-02-20T10:00:00.000Z",
+                            "doctor": {
+                                "name": "Dr. Priya Sharma",
+                                "specialty": "Ayurvedic Medicine",
+                                "consultationFee": 600,
+                                "email": "dr.priya@prakriti.ai"
+                            },
+                            "slot": {
+                                "slotDate": "2026-02-25T00:00:00.000Z",
+                                "startTime": "2026-02-25T10:00:00.000Z",
+                                "endTime": "2026-02-25T10:30:00.000Z"
+                            }
+                        }
+                    }
+                },
+                "errorResponses": {
+                    "400": "slotId is required / Invalid slotId format / Slot does not belong to this doctor / Cannot book a slot in the past",
+                    "404": "Slot not found",
+                    "409": "This slot is already booked / You already have a booking with this doctor on this date"
+                }
+            },
+            "getMyBookings": {
+                "method": "GET",
+                "path": "/doctors/bookings/my",
+                "auth": true,
+                "queryParams": {
+                    "status": "CONFIRMED|CANCELLED|COMPLETED|NO_SHOW (optional)"
+                },
+                "successResponse": {
+                    "success": true,
+                    "message": "Bookings fetched.",
+                    "data": {
+                        "bookings": [
+                            {
+                                "id": "booking-uuid",
+                                "userId": "user-uuid",
+                                "doctorId": "doctor-uuid",
+                                "slotId": "slot-uuid",
+                                "status": "CONFIRMED",
+                                "notes": "First consultation",
+                                "meetLink": "https://meet.jit.si/prakriti-a033aaf9-1708400000",
+                                "patientEmail": "patient@example.com",
+                                "hasMeetLink": true,
+                                "canJoinCall": true,
+                                "createdAt": "2026-02-20T10:00:00.000Z",
+                                "updatedAt": "2026-02-20T10:00:00.000Z",
+                                "doctor": {
+                                    "id": "doctor-uuid",
+                                    "name": "Dr. Priya Sharma",
+                                    "specialty": "Ayurvedic Medicine",
+                                    "imageUrl": "url or null",
+                                    "consultationFee": 600,
+                                    "location": "Mumbai, India",
+                                    "email": "dr.priya@prakriti.ai",
+                                    "phone": "+91..."
+                                },
+                                "slot": {
+                                    "slotDate": "2026-02-25T00:00:00.000Z",
+                                    "startTime": "2026-02-25T10:00:00.000Z",
+                                    "endTime": "2026-02-25T10:30:00.000Z",
+                                    "duration": 30
+                                }
+                            }
+                        ]
+                    }
+                },
+                "importantFields": {
+                    "meetLink": "The Jitsi Meet URL. null until doctor generates it.",
+                    "hasMeetLink": "boolean - true if doctor has generated the meet link",
+                    "canJoinCall": "boolean - true ONLY if status=CONFIRMED AND meetLink exists. Use this to show/hide the Join Video Call button.",
+                    "status": "CONFIRMED = active booking, CANCELLED = cancelled, COMPLETED = done, NO_SHOW = patient didn't show up"
+                }
+            },
+            "getBookingDetail": {
+                "method": "GET",
+                "path": "/doctors/bookings/:bookingId",
+                "auth": true,
+                "successResponse": {
+                    "success": true,
+                    "message": "Booking details fetched.",
+                    "data": {
+                        "booking": {
+                            "id": "booking-uuid",
+                            "userId": "user-uuid",
+                            "doctorId": "doctor-uuid",
+                            "slotId": "slot-uuid",
+                            "status": "CONFIRMED",
+                            "notes": "First consultation",
+                            "meetLink": "https://meet.jit.si/prakriti-a033aaf9-1708400000",
+                            "patientEmail": "patient@example.com",
+                            "hasMeetLink": true,
+                            "canJoinCall": true,
+                            "createdAt": "2026-02-20T10:00:00.000Z",
+                            "updatedAt": "2026-02-20T10:00:00.000Z",
+                            "doctor": {
+                                "id": "doctor-uuid",
+                                "name": "Dr. Priya Sharma",
+                                "specialty": "Ayurvedic Medicine",
+                                "imageUrl": "url or null",
+                                "consultationFee": 600,
+                                "location": "Mumbai, India",
+                                "email": "dr.priya@prakriti.ai",
+                                "phone": "+91...",
+                                "education": "BAMS, MD Ayurveda",
+                                "qualification": "Gold Medalist",
+                                "experienceYears": 12,
+                                "languages": [
+                                    "English",
+                                    "Hindi"
+                                ],
+                                "bio": "Detailed bio..."
+                            },
+                            "slot": {
+                                "slotDate": "2026-02-25T00:00:00.000Z",
+                                "startTime": "2026-02-25T10:00:00.000Z",
+                                "endTime": "2026-02-25T10:30:00.000Z",
+                                "duration": 30
+                            }
+                        }
+                    }
+                },
+                "description": "Use this to poll for meet link availability. Poll every 10-15 seconds after booking is confirmed."
+            },
+            "cancelBooking": {
+                "method": "PATCH",
+                "path": "/doctors/bookings/:bookingId/cancel",
+                "auth": true,
+                "successResponse": {
+                    "success": true,
+                    "message": "Booking cancelled.",
+                    "data": {
+                        "booking": {
+                            "id": "booking-uuid",
+                            "status": "CANCELLED",
+                            "doctor": {
+                                "name": "Dr. Priya Sharma",
+                                "specialty": "Ayurvedic Medicine"
+                            },
+                            "slot": {
+                                "slotDate": "...",
+                                "startTime": "...",
+                                "endTime": "..."
+                            }
+                        }
+                    }
+                },
+                "errorResponses": {
+                    "403": "You can only cancel your own bookings.",
+                    "400": "Cannot cancel a booking with status: COMPLETED",
+                    "404": "Booking not found"
+                }
+            }
+        },
+        "bookingStatuses": [
+            "CONFIRMED",
+            "CANCELLED",
+            "COMPLETED",
+            "NO_SHOW"
+        ]
+    },
+    "chatbot": {
+        "description": "Ayurvedic dietician chatbot powered by RAG (retrieval-augmented generation). Requires auth.",
+        "basePath": "/chatbot",
+        "endpoints": {
+            "chat": {
+                "method": "POST",
+                "path": "/chatbot/chat",
+                "auth": true,
+                "requestBody": {
+                    "dosha": {
+                        "type": "string",
+                        "required": true,
+                        "description": "User's dosha type (e.g., 'Vata', 'Pitta-Kapha')"
+                    },
+                    "message": {
+                        "type": "string",
+                        "required": true,
+                        "description": "User's message to the chatbot"
+                    }
+                },
+                "successResponse": {
+                    "success": true,
+                    "data": {
+                        "response": "Based on your Vata constitution, I recommend warm, cooked foods..."
+                    }
+                },
+                "errorResponses": {
+                    "400": "dosha and message are required",
+                    "502": "Chatbot service unavailable",
+                    "503": "Chatbot service is not running"
+                }
+            },
+            "health": {
+                "method": "GET",
+                "path": "/chatbot/health",
+                "auth": false,
+                "description": "Check if chatbot microservice is alive"
+            }
+        }
+    },
+    "healthCheck": {
+        "method": "GET",
+        "path": "/health",
+        "auth": false,
+        "successResponse": {
+            "success": true,
+            "message": "🌿 Prakriti AI API is running",
+            "timestamp": "2026-02-20T10:00:00.000Z",
+            "version": "1.0.0",
+            "environment": "development"
+        }
+    },
+    "videoCallIntegration": {
+        "description": "COMPLETE GUIDE for implementing video calling in React Native",
+        "provider": "Jitsi Meet (Free, no account required)",
+        "meetLinkFormat": "https://meet.jit.si/prakriti-{bookingId-first8chars}-{timestamp}",
+        "reactNativeImplementation": {
+            "option1_webview": {
+                "description": "Simple - open Jitsi in a WebView",
+                "package": "react-native-webview",
+                "install": "npm install react-native-webview",
+                "usage": "When canJoinCall is true, navigate to a VideoCallScreen that renders <WebView source={{ uri: meetLink }} /> with camera/mic permissions"
+            },
+            "option2_linkingUrl": {
+                "description": "Simplest - open in device browser",
+                "usage": "import { Linking } from 'react-native'; Linking.openURL(meetLink);",
+                "note": "Opens in Safari/Chrome. Less integrated but zero setup."
+            },
+            "option3_jitsiSdk": {
+                "description": "Best UX - native Jitsi SDK",
+                "package": "@jitsi/react-native-sdk",
+                "install": "npm install @jitsi/react-native-sdk",
+                "note": "Provides native UI for video calling with chat, screen share, etc."
+            }
+        },
+        "completeFlow": [
+            {
+                "step": 1,
+                "screen": "DoctorListScreen",
+                "action": "Fetch doctors",
+                "api": "GET /doctors",
+                "auth": false
+            },
+            {
+                "step": 2,
+                "screen": "DoctorDetailScreen",
+                "action": "View doctor profile + available slots",
+                "api": "GET /doctors/:id?date=2026-02-25",
+                "auth": false
+            },
+            {
+                "step": 3,
+                "screen": "DoctorDetailScreen / SlotPicker",
+                "action": "Fetch slots for a specific date",
+                "api": "GET /doctors/:id/slots?date=2026-02-25",
+                "auth": false,
+                "uiLogic": "Show available slots (isBooked=false). Grey out booked slots."
+            },
+            {
+                "step": 4,
+                "screen": "BookingConfirmation",
+                "action": "Book the selected slot",
+                "api": "POST /doctors/:id/book",
+                "auth": true,
+                "body": {
+                    "slotId": "slot-uuid",
+                    "notes": "optional patient notes"
+                },
+                "uiLogic": "Show confirmation dialog before booking. On success, navigate to BookingsScreen."
+            },
+            {
+                "step": 5,
+                "screen": "MyBookingsScreen",
+                "action": "View all bookings",
+                "api": "GET /doctors/bookings/my",
+                "auth": true,
+                "uiLogic": "List bookings sorted by date. Show status badge (Confirmed/Cancelled/Completed). Show 'Join Video Call' button only when canJoinCall === true."
+            },
+            {
+                "step": 6,
+                "screen": "BookingDetailScreen",
+                "action": "View single booking detail + poll for meet link",
+                "api": "GET /doctors/bookings/:bookingId",
+                "auth": true,
+                "uiLogic": "Show full booking details with doctor info. If canJoinCall is false, show 'Waiting for doctor to start the call...' with a loading indicator. Poll this endpoint every 10-15 seconds. When canJoinCall becomes true, show 'Join Video Call' button."
+            },
+            {
+                "step": 7,
+                "screen": "VideoCallScreen",
+                "action": "Open Jitsi Meet link",
+                "uiLogic": "Open meetLink in WebView or via Linking.openURL(). Request camera + microphone permissions before opening."
+            },
+            {
+                "step": 8,
+                "screen": "BookingDetailScreen",
+                "action": "Cancel booking (optional)",
+                "api": "PATCH /doctors/bookings/:bookingId/cancel",
+                "auth": true,
+                "uiLogic": "Only show cancel button for CONFIRMED bookings. Show confirmation dialog."
+            }
+        ],
+        "permissions": {
+            "android": {
+                "AndroidManifest.xml": [
+                    "<uses-permission android:name=\"android.permission.CAMERA\" />",
+                    "<uses-permission android:name=\"android.permission.RECORD_AUDIO\" />",
+                    "<uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\" />"
+                ]
+            },
+            "ios": {
+                "Info.plist": [
+                    "<key>NSCameraUsageDescription</key><string>Required for video consultations</string>",
+                    "<key>NSMicrophoneUsageDescription</key><string>Required for video consultations</string>"
+                ]
+            }
+        }
+    },
+    "dataModels": {
+        "description": "Key database models relevant to the React Native app",
+        "User": {
+            "id": "UUID",
+            "username": "string (unique)",
+            "email": "string (unique)",
+            "isEmailVerified": "boolean",
+            "isProfileComplete": "boolean",
+            "avatarUrl": "string or null",
+            "lastLoginAt": "datetime or null",
+            "createdAt": "datetime"
+        },
+        "HealthProfile": {
+            "id": "UUID",
+            "userId": "UUID (unique)",
+            "firstName": "string",
+            "lastName": "string",
+            "dateOfBirth": "datetime",
+            "gender": "MALE|FEMALE|NON_BINARY|PREFER_NOT_TO_SAY",
+            "heightCm": "float",
+            "weightKg": "float",
+            "bmi": "float (calculated)",
+            "bloodGroup": "optional enum",
+            "allergies": "string[]",
+            "medications": "string[]",
+            "chronicConditions": "string[]",
+            "activityLevel": "SEDENTARY|LIGHTLY_ACTIVE|MODERATELY_ACTIVE|VERY_ACTIVE|EXTREMELY_ACTIVE",
+            "dietType": "VEGETARIAN|VEGAN|NON_VEGETARIAN|...",
+            "healthGoals": "string[]",
+            "_ayurvedicTraits": "bodySize, complexion, skinType, hairColor, faceShape, eyes, nails, appetiteTrait, digestionSpeed, tastePreference, weatherPreference, etc.",
+            "_note": "See full HealthProfile model in schema for all 80+ optional Ayurvedic trait fields"
+        },
+        "Doctor": {
+            "id": "UUID",
+            "name": "string",
+            "specialty": "string",
+            "description": "text or null",
+            "education": "string or null",
+            "qualification": "string or null",
+            "languages": "string[] (default: [English, Hindi])",
+            "bio": "text or null",
+            "imageUrl": "string or null",
+            "phone": "string or null",
+            "email": "string (unique)",
+            "gender": "string or null",
+            "location": "string or null",
+            "consultationFee": "int (default: 500, in INR)",
+            "experienceYears": "int (default: 0)",
+            "rating": "Decimal (e.g., 4.5) — NOTE: Prisma returns this as a Decimal object, convert with Number(rating)",
+            "totalRatings": "int",
+            "isAvailable": "boolean"
+        },
+        "DoctorSlot": {
+            "id": "UUID",
+            "doctorId": "UUID",
+            "slotDate": "Date (ISO, midnight UTC, e.g., 2026-02-25T00:00:00.000Z)",
+            "startTime": "DateTime with timezone (e.g., 2026-02-25T10:00:00.000Z)",
+            "endTime": "DateTime with timezone",
+            "duration": "int (minutes, default: 30)",
+            "isBooked": "boolean",
+            "isActive": "boolean"
+        },
+        "Booking": {
+            "id": "UUID",
+            "userId": "UUID",
+            "doctorId": "UUID",
+            "slotId": "UUID (unique — one booking per slot)",
+            "status": "CONFIRMED|CANCELLED|COMPLETED|NO_SHOW",
+            "notes": "string or null",
+            "meetLink": "string or null (Jitsi Meet URL, set by doctor)",
+            "patientEmail": "string or null",
+            "createdAt": "datetime",
+            "updatedAt": "datetime",
+            "_computed": {
+                "hasMeetLink": "boolean (true if meetLink is not null)",
+                "canJoinCall": "boolean (true if status=CONFIRMED AND meetLink exists)"
+            }
+        },
+        "DoshaProfile": {
+            "id": "UUID",
+            "userId": "UUID (unique)",
+            "primaryDosha": "VATA|PITTA|KAPHA",
+            "secondaryDosha": "VATA|PITTA|KAPHA or null",
+            "prakritiType": "string (e.g., 'Vata-Pitta')",
+            "vataScore": "float (0-100)",
+            "pittaScore": "float (0-100)",
+            "kaphaScore": "float (0-100)"
+        },
+        "ChatMessage": {
+            "id": "UUID",
+            "userId": "UUID",
+            "role": "user|assistant",
+            "message": "text",
+            "dosha": "string or null",
+            "createdAt": "datetime"
+        }
+    },
+    "mealTypes": [
+        "EARLY_MORNING",
+        "BREAKFAST",
+        "MID_MORNING_SNACK",
+        "LUNCH",
+        "AFTERNOON_SNACK",
+        "EVENING_SNACK",
+        "DINNER",
+        "BEDTIME"
+    ],
+    "doshaTypes": [
+        "VATA",
+        "PITTA",
+        "KAPHA"
+    ],
+    "commonErrorResponses": {
+        "401_noToken": {
+            "success": false,
+            "message": "Access denied. No token provided."
+        },
+        "401_invalidToken": {
+            "success": false,
+            "message": "Invalid token."
+        },
+        "401_userNotFound": {
+            "success": false,
+            "message": "User not found."
+        },
+        "403_notVerified": {
+            "success": false,
+            "message": "Please verify your email first."
+        },
+        "403_deactivated": {
+            "success": false,
+            "message": "Account is deactivated."
+        },
+        "404_notFound": {
+            "success": false,
+            "message": "Record not found."
+        },
+        "409_duplicate": {
+            "success": false,
+            "message": "A record with this field already exists."
+        },
+        "429_rateLimited": {
+            "success": false,
+            "message": "Too many requests. Please try again later."
+        },
+        "500_serverError": {
+            "success": false,
+            "message": "Internal server error."
+        }
+    },
+    "apiResponseFormat": {
+        "success": {
+            "structure": "{ success: true, message: string, data: object }",
+            "example": {
+                "success": true,
+                "message": "Data fetched.",
+                "data": {
+                    "key": "value"
+                }
+            }
+        },
+        "error": {
+            "structure": "{ success: false, message: string }",
+            "example": {
+                "success": false,
+                "message": "Validation error message."
+            }
+        }
+    },
+    "rateLimits": {
+        "general": "100 requests per 15 minutes per IP",
+        "auth": "20 requests per 15 minutes per IP (signup/login)"
+    },
+    "reactNativeSetupNotes": {
+        "apiClient": "Use axios or fetch. Set baseURL to https://prakriti-api.onrender.com/api. Store JWT token in AsyncStorage or SecureStore.",
+        "authInterceptor": "Add axios interceptor to attach Authorization: Bearer <token> to all requests.",
+        "imageUploads": "Use FormData for multipart/form-data uploads (profile image, food recognition, assessment images).",
+        "dateHandling": "All dates from API are in UTC ISO format. Convert to local time for display using new Date(isoString).toLocaleString().",
+        "decimalFields": "doctor.rating is a Prisma Decimal — always convert with Number(rating) before using .toFixed() or math operations.",
+        "navigation": "Suggested stack: AuthStack (Login/Signup) → MainTabs (Home/Dashboard, Doctors, Tracking, Profile) → Modal screens (Booking, VideoCall, etc.)",
+        "stateManagement": "Use React Context or Zustand for auth state, React Query/TanStack Query for server state caching."
+    }
+}

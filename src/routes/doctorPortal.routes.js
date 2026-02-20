@@ -29,6 +29,9 @@ router.delete('/slots/:slotId', authenticateDoctor, controller.deleteSlot);
 // Video / Meet link
 router.post('/bookings/:bookingId/meet', authenticateDoctor, controller.generateMeetLink);
 
+// AI Prescription
+router.post('/bookings/:bookingId/prescription', authenticateDoctor, controller.savePrescription);
+
 // Analytics
 router.get('/analytics', authenticateDoctor, controller.getAnalytics);
 

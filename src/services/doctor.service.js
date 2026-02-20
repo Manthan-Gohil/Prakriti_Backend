@@ -317,6 +317,9 @@ class DoctorService {
                         duration: true,
                     },
                 },
+                prescription: {
+                    select: { id: true, createdAt: true },
+                },
             },
             orderBy: { createdAt: 'desc' },
         });
@@ -326,6 +329,7 @@ class DoctorService {
             meetLink: b.meetLink || null,
             hasMeetLink: !!b.meetLink,
             canJoinCall: b.status === 'CONFIRMED' && !!b.meetLink,
+            hasPrescription: !!b.prescription,
         }));
     }
 
@@ -361,6 +365,9 @@ class DoctorService {
                         duration: true,
                     },
                 },
+                prescription: {
+                    select: { id: true, content: true, createdAt: true, transcriptFile: true },
+                },
             },
         });
 
@@ -381,6 +388,7 @@ class DoctorService {
             meetLink: booking.meetLink || null,
             hasMeetLink: !!booking.meetLink,
             canJoinCall: booking.status === 'CONFIRMED' && !!booking.meetLink,
+            hasPrescription: !!booking.prescription,
         };
     }
 
@@ -429,6 +437,44 @@ class DoctorService {
 
             return updated;
         });
+    }
+
+    /**
+     * Get all prescriptions for the authenticated user (patient).
+     * Queries the dedicated Prescription table.
+     */
+    async getPatientPrescriptions(userId) {
+        const prescriptions = await prisma.prescription.findMany({
+            where: { userId },
+            select: {
+                id: true,
+                content: true,
+                transcriptFile: true,
+                createdAt: true,
+                updatedAt: true,
+                booking: {
+                    select: {
+                        id: true,
+                        status: true,
+                        notes: true,
+                        createdAt: true,
+                    },
+                },
+                doctor: {
+                    select: {
+                        id: true,
+                        name: true,
+                        specialty: true,
+                        imageUrl: true,
+                        education: true,
+                        qualification: true,
+                    },
+                },
+            },
+            orderBy: { createdAt: 'desc' },
+        });
+
+        return prescriptions;
     }
 }
 
