@@ -37,7 +37,7 @@ class DashboardService {
                 take: 7,
             }),
             prisma.userFoodDiary.findMany({
-                where: { userId, date: { gte: new Date(new Date().setHours(0, 0, 0, 0)) } },
+                where: { userId, date: { gte: new Date(new Date().setUTCHours(0, 0, 0, 0)) } },
                 orderBy: { date: 'desc' },
                 include: { foodItem: true },
             }),

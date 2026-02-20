@@ -22,6 +22,7 @@ const dashboardRoutes = require('./src/routes/dashboard.routes');
 const wellnessRoutes = require('./src/routes/wellness.routes');
 const n8nRoutes = require('./src/routes/n8n.routes');
 const doctorRoutes = require('./src/routes/doctor.routes');
+const doctorPortalRoutes = require('./src/routes/doctorPortal.routes');
 const chatbotRoutes = require('./src/routes/chatbot.routes');
 
 const app = express();
@@ -103,7 +104,11 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/wellness', wellnessRoutes);
 app.use('/api/n8n', n8nRoutes);
 app.use('/api/doctors', doctorRoutes);
+app.use('/api/doctor-portal', doctorPortalRoutes);
 app.use('/api/chatbot', chatbotRoutes);
+
+// Doctor Portal static files
+app.use('/doctor-portal', express.static(path.join(__dirname, 'doctor-portal')));
 
 // ──────────────────────────────────────────────
 // ERROR HANDLING

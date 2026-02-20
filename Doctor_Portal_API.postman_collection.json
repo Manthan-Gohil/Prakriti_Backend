@@ -1,0 +1,1676 @@
+{
+    "info": {
+        "_postman_id": "doctor-portal-api-collection",
+        "name": "Doctor Portal API - Prakriti",
+        "description": "Complete API testing collection for Doctor Portal.\n\n## Setup Flow:\n1. Run **Seed Doctor** (optional - only if no doctors exist)\n2. Run **Register Doctor** (sets password for existing doctor)\n3. Run **Login Doctor** (gets JWT token, auto-saved)\n4. All other endpoints will use the saved token automatically\n\n## Pre-seeded Doctor Emails (from seed.js):\n- dr.devansh@prakriti.ai (Ayurvedic Medicine, ₹500)\n- dr.priya@prakriti.ai (Ayurvedic Medicine, ₹600)\n- dr.rohan@prakriti.ai (Panchakarma, ₹800)\n- dr.ananya@prakriti.ai (Panchakarma, ₹700)\n- dr.vikram@prakriti.ai (Diet & Nutrition, ₹400)\n- dr.meera@prakriti.ai\n- dr.arjun@prakriti.ai\n- dr.kavitha@prakriti.ai\n- dr.siddharth@prakriti.ai\n- dr.lakshmi@prakriti.ai",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:3000",
+            "type": "string"
+        },
+        {
+            "key": "doctorToken",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "doctorId",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "doctorEmail",
+            "value": "dr.devansh@prakriti.ai",
+            "type": "string"
+        },
+        {
+            "key": "doctorPassword",
+            "value": "Doctor@123",
+            "type": "string"
+        },
+        {
+            "key": "slotId",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "bookingId",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "userToken",
+            "value": "",
+            "type": "string"
+        }
+    ],
+    "item": [
+        {
+            "name": "🔐 Auth",
+            "description": "Doctor authentication - Register & Login.\n\n**Important:** The doctor must already exist in the DB (added via seed or admin). Register just sets a password for portal access.",
+            "item": [
+                {
+                    "name": "1. Register Doctor (First Time Setup)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "if (res.success && res.data) {",
+                                    "    pm.collectionVariables.set('doctorToken', res.data.token);",
+                                    "    pm.collectionVariables.set('doctorId', res.data.doctor.id);",
+                                    "    pm.test('✅ Registration successful', () => {",
+                                    "        pm.expect(res.success).to.be.true;",
+                                    "        pm.expect(res.data.token).to.be.a('string');",
+                                    "        pm.expect(res.data.doctor.id).to.be.a('string');",
+                                    "    });",
+                                    "    pm.test('✅ Token saved to collection', () => {",
+                                    "        pm.expect(pm.collectionVariables.get('doctorToken')).to.not.be.empty;",
+                                    "    });",
+                                    "} else {",
+                                    "    pm.test('⚠️ Registration response', () => {",
+                                    "        console.log('Response:', JSON.stringify(res));",
+                                    "    });",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"{{doctorEmail}}\",\n    \"password\": \"{{doctorPassword}}\",\n    \"name\": \"Dr. Devansh Shukla\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctor-portal/auth/register",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctor-portal",
+                                "auth",
+                                "register"
+                            ]
+                        },
+                        "description": "Register a doctor for portal access. The doctor must already exist in the database (created via seed or admin).\n\n**Note:** If you get 'Portal account already exists', use Login instead.\nIf you get 'No doctor found with this email', run the database seed first:\n```\nnpx prisma db seed\n```"
+                    }
+                },
+                {
+                    "name": "2. Login Doctor ⭐",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "if (res.success && res.data) {",
+                                    "    pm.collectionVariables.set('doctorToken', res.data.token);",
+                                    "    pm.collectionVariables.set('doctorId', res.data.doctor.id);",
+                                    "    pm.test('✅ Login successful', () => {",
+                                    "        pm.expect(res.success).to.be.true;",
+                                    "        pm.expect(res.data.token).to.be.a('string');",
+                                    "    });",
+                                    "    pm.test('✅ Doctor info returned', () => {",
+                                    "        pm.expect(res.data.doctor).to.have.property('id');",
+                                    "        pm.expect(res.data.doctor).to.have.property('name');",
+                                    "        pm.expect(res.data.doctor).to.have.property('email');",
+                                    "    });",
+                                    "    pm.test('✅ Token auto-saved', () => {",
+                                    "        pm.expect(pm.collectionVariables.get('doctorToken')).to.not.be.empty;",
+                                    "    });",
+                                    "} else {",
+                                    "    pm.test('❌ Login failed', () => {",
+                                    "        pm.expect.fail('Login failed: ' + JSON.stringify(res));",
+                                    "    });",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"{{doctorEmail}}\",\n    \"password\": \"{{doctorPassword}}\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctor-portal/auth/login",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctor-portal",
+                                "auth",
+                                "login"
+                            ]
+                        },
+                        "description": "Login with registered doctor credentials.\nToken is automatically saved to `doctorToken` variable for all subsequent requests."
+                    }
+                },
+                {
+                    "name": "3. Get My Profile (Verify Token)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "pm.test('✅ Profile fetched', () => {",
+                                    "    pm.expect(res.success).to.be.true;",
+                                    "    pm.expect(res.data.doctor).to.have.property('id');",
+                                    "    pm.expect(res.data.doctor).to.have.property('name');",
+                                    "    pm.expect(res.data.doctor).to.have.property('email');",
+                                    "});",
+                                    "pm.test('✅ Token is working', () => {",
+                                    "    pm.expect(pm.response.code).to.equal(200);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{doctorToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctor-portal/me",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctor-portal",
+                                "me"
+                            ]
+                        },
+                        "description": "Verify the JWT token works and get current doctor profile."
+                    }
+                }
+            ]
+        },
+        {
+            "name": "📊 Dashboard",
+            "description": "Dashboard with stats, recent bookings, and overview.",
+            "item": [
+                {
+                    "name": "Get Dashboard",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "pm.test('✅ Dashboard loaded', () => {",
+                                    "    pm.expect(res.success).to.be.true;",
+                                    "    pm.expect(res.data).to.have.property('doctor');",
+                                    "    pm.expect(res.data).to.have.property('stats');",
+                                    "    pm.expect(res.data).to.have.property('upcomingBookings');",
+                                    "});",
+                                    "pm.test('✅ Stats present', () => {",
+                                    "    const s = res.data.stats;",
+                                    "    pm.expect(s).to.have.property('todayBookings');",
+                                    "    pm.expect(s).to.have.property('totalBookings');",
+                                    "    pm.expect(s).to.have.property('monthRevenue');",
+                                    "    pm.expect(s).to.have.property('completedBookings');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{doctorToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctor-portal/dashboard",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctor-portal",
+                                "dashboard"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "⏰ Slot Management",
+            "description": "Create, view, toggle, and delete appointment slots.",
+            "item": [
+                {
+                    "name": "Create Slots (Single Day)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "pm.test('✅ Slots created', () => {",
+                                    "    pm.expect(res.success).to.be.true;",
+                                    "    pm.expect(res.data.created).to.be.above(0);",
+                                    "});",
+                                    "pm.test('✅ Slots count logged', () => {",
+                                    "    console.log('Created ' + res.data.created + ' slots');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        },
+                        {
+                            "listen": "prerequest",
+                            "script": {
+                                "exec": [
+                                    "// Set tomorrow's date automatically",
+                                    "const tomorrow = new Date();",
+                                    "tomorrow.setDate(tomorrow.getDate() + 1);",
+                                    "const dateStr = tomorrow.toISOString().split('T')[0];",
+                                    "pm.collectionVariables.set('slotDate', dateStr);",
+                                    "console.log('Creating slots for:', dateStr);"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{doctorToken}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"date\": \"{{slotDate}}\",\n    \"startHour\": 9,\n    \"endHour\": 17,\n    \"duration\": 30\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctor-portal/slots",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctor-portal",
+                                "slots"
+                            ]
+                        },
+                        "description": "Creates 30-minute slots from 9 AM to 5 PM for tomorrow.\nAdjust startHour, endHour, and duration as needed.\n\nDuration options: 15, 30, 45, 60 minutes."
+                    }
+                },
+                {
+                    "name": "Create Bulk Slots (Multiple Days)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "pm.test('✅ Bulk slots created', () => {",
+                                    "    pm.expect(res.success).to.be.true;",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        },
+                        {
+                            "listen": "prerequest",
+                            "script": {
+                                "exec": [
+                                    "// Generate next 3 days",
+                                    "const dates = [];",
+                                    "for (let i = 2; i <= 4; i++) {",
+                                    "    const d = new Date();",
+                                    "    d.setDate(d.getDate() + i);",
+                                    "    dates.push(d.toISOString().split('T')[0]);",
+                                    "}",
+                                    "pm.collectionVariables.set('bulkDates', JSON.stringify(dates));",
+                                    "console.log('Bulk dates:', dates);"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{doctorToken}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"dates\": {{bulkDates}},\n    \"startHour\": 10,\n    \"endHour\": 16,\n    \"duration\": 30\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctor-portal/slots",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctor-portal",
+                                "slots"
+                            ]
+                        },
+                        "description": "Creates slots for multiple days at once (next 3 days)."
+                    }
+                },
+                {
+                    "name": "Get Slots (Today)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "pm.test('✅ Slots fetched', () => {",
+                                    "    pm.expect(res.success).to.be.true;",
+                                    "    pm.expect(res.data).to.have.property('slots');",
+                                    "});",
+                                    "if (res.data.slots.length > 0) {",
+                                    "    pm.collectionVariables.set('slotId', res.data.slots[0].id);",
+                                    "    pm.test('✅ First slot ID saved: ' + res.data.slots[0].id, () => {",
+                                    "        pm.expect(res.data.slots[0].id).to.be.a('string');",
+                                    "    });",
+                                    "} else {",
+                                    "    pm.test('ℹ️ No slots for today', () => { pm.expect(true).to.be.true; });",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{doctorToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctor-portal/slots",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctor-portal",
+                                "slots"
+                            ]
+                        },
+                        "description": "Get today's slots. Add ?date=2026-02-21 to filter by specific date."
+                    }
+                },
+                {
+                    "name": "Get Slots (By Date)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "pm.test('✅ Slots fetched for date', () => {",
+                                    "    pm.expect(res.success).to.be.true;",
+                                    "    pm.expect(res.data).to.have.property('slots');",
+                                    "});",
+                                    "if (res.data.slots.length > 0) {",
+                                    "    pm.collectionVariables.set('slotId', res.data.slots[0].id);",
+                                    "    console.log('Found ' + res.data.slots.length + ' slots. First ID: ' + res.data.slots[0].id);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        },
+                        {
+                            "listen": "prerequest",
+                            "script": {
+                                "exec": [
+                                    "const tomorrow = new Date();",
+                                    "tomorrow.setDate(tomorrow.getDate() + 1);",
+                                    "pm.collectionVariables.set('slotDate', tomorrow.toISOString().split('T')[0]);"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{doctorToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctor-portal/slots?date={{slotDate}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctor-portal",
+                                "slots"
+                            ],
+                            "query": [
+                                {
+                                    "key": "date",
+                                    "value": "{{slotDate}}"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Toggle Slot (Disable/Enable)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "pm.test('✅ Slot toggled', () => {",
+                                    "    pm.expect(res.success).to.be.true;",
+                                    "    pm.expect(res.data.slot).to.have.property('id');",
+                                    "});",
+                                    "pm.test('✅ isActive updated', () => {",
+                                    "    console.log('Slot isActive:', res.data.slot.isActive);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{doctorToken}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"isActive\": false\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctor-portal/slots/{{slotId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctor-portal",
+                                "slots",
+                                "{{slotId}}"
+                            ]
+                        },
+                        "description": "Toggle a slot active/inactive. Set `isActive: false` to disable, `true` to re-enable.\nCannot toggle booked slots."
+                    }
+                },
+                {
+                    "name": "Delete Slot",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "pm.test('✅ Slot deleted', () => {",
+                                    "    pm.expect(res.success).to.be.true;",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{doctorToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctor-portal/slots/{{slotId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctor-portal",
+                                "slots",
+                                "{{slotId}}"
+                            ]
+                        },
+                        "description": "Delete an unbooked slot. Cannot delete slots that have active bookings."
+                    }
+                }
+            ]
+        },
+        {
+            "name": "📋 Bookings",
+            "description": "View and manage patient bookings.",
+            "item": [
+                {
+                    "name": "Get All Bookings",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "pm.test('✅ Bookings fetched', () => {",
+                                    "    pm.expect(res.success).to.be.true;",
+                                    "    pm.expect(res.data).to.have.property('bookings');",
+                                    "    pm.expect(res.data).to.have.property('pagination');",
+                                    "});",
+                                    "pm.test('✅ Pagination info', () => {",
+                                    "    const p = res.data.pagination;",
+                                    "    console.log(`Total: ${p.total}, Page: ${p.page}/${p.totalPages}`);",
+                                    "});",
+                                    "if (res.data.bookings.length > 0) {",
+                                    "    const b = res.data.bookings[0];",
+                                    "    pm.collectionVariables.set('bookingId', b.id);",
+                                    "    console.log('First booking ID saved:', b.id, 'Status:', b.status);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{doctorToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctor-portal/bookings",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctor-portal",
+                                "bookings"
+                            ]
+                        },
+                        "description": "Get all bookings for this doctor. Paginated (default 20/page)."
+                    }
+                },
+                {
+                    "name": "Get Bookings (Filtered by Status)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "pm.test('✅ Filtered bookings', () => {",
+                                    "    pm.expect(res.success).to.be.true;",
+                                    "});",
+                                    "if (res.data.bookings.length > 0) {",
+                                    "    pm.collectionVariables.set('bookingId', res.data.bookings[0].id);",
+                                    "    pm.test('✅ All are CONFIRMED', () => {",
+                                    "        res.data.bookings.forEach(b => pm.expect(b.status).to.equal('CONFIRMED'));",
+                                    "    });",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{doctorToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctor-portal/bookings?status=CONFIRMED&page=1&limit=10",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctor-portal",
+                                "bookings"
+                            ],
+                            "query": [
+                                {
+                                    "key": "status",
+                                    "value": "CONFIRMED"
+                                },
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "10"
+                                }
+                            ]
+                        },
+                        "description": "Filter bookings by status.\n\nAvailable statuses: CONFIRMED, COMPLETED, CANCELLED, NO_SHOW"
+                    }
+                },
+                {
+                    "name": "Get Bookings (Search Patient)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{doctorToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctor-portal/bookings?search=test",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctor-portal",
+                                "bookings"
+                            ],
+                            "query": [
+                                {
+                                    "key": "search",
+                                    "value": "test"
+                                }
+                            ]
+                        },
+                        "description": "Search bookings by patient name or email."
+                    }
+                },
+                {
+                    "name": "Update Booking → COMPLETED",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "pm.test('✅ Booking completed', () => {",
+                                    "    pm.expect(res.success).to.be.true;",
+                                    "    pm.expect(res.data.booking.status).to.equal('COMPLETED');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{doctorToken}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"status\": \"COMPLETED\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctor-portal/bookings/{{bookingId}}/status",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctor-portal",
+                                "bookings",
+                                "{{bookingId}}",
+                                "status"
+                            ]
+                        },
+                        "description": "Mark a CONFIRMED booking as COMPLETED.\n\nValid transitions:\n- CONFIRMED → COMPLETED\n- CONFIRMED → CANCELLED\n- CONFIRMED → NO_SHOW"
+                    }
+                },
+                {
+                    "name": "Update Booking → CANCELLED",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "if (res.success) {",
+                                    "    pm.test('✅ Booking cancelled', () => {",
+                                    "        pm.expect(res.data.booking.status).to.equal('CANCELLED');",
+                                    "    });",
+                                    "} else {",
+                                    "    pm.test('⚠️ Cannot cancel (check status)', () => {",
+                                    "        console.log(res.message);",
+                                    "    });",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{doctorToken}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"status\": \"CANCELLED\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctor-portal/bookings/{{bookingId}}/status",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctor-portal",
+                                "bookings",
+                                "{{bookingId}}",
+                                "status"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Booking → NO_SHOW",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "if (res.success) {",
+                                    "    pm.test('✅ Marked as no-show', () => {",
+                                    "        pm.expect(res.data.booking.status).to.equal('NO_SHOW');",
+                                    "    });",
+                                    "} else {",
+                                    "    pm.test('⚠️ Cannot change status', () => {",
+                                    "        console.log(res.message);",
+                                    "    });",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{doctorToken}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"status\": \"NO_SHOW\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctor-portal/bookings/{{bookingId}}/status",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctor-portal",
+                                "bookings",
+                                "{{bookingId}}",
+                                "status"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "👥 Patients",
+            "description": "View patients who have booked with this doctor.",
+            "item": [
+                {
+                    "name": "Get All Patients",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "pm.test('✅ Patients fetched', () => {",
+                                    "    pm.expect(res.success).to.be.true;",
+                                    "    pm.expect(res.data).to.have.property('patients');",
+                                    "    pm.expect(res.data).to.have.property('pagination');",
+                                    "});",
+                                    "pm.test('✅ Patient count', () => {",
+                                    "    console.log('Total patients:', res.data.pagination.total);",
+                                    "});",
+                                    "if (res.data.patients.length > 0) {",
+                                    "    const p = res.data.patients[0];",
+                                    "    console.log('First patient:', p.username, p.email);",
+                                    "    if (p.doshaProfile) console.log('Dosha:', p.doshaProfile.primaryDosha);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{doctorToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctor-portal/patients",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctor-portal",
+                                "patients"
+                            ]
+                        },
+                        "description": "Lists all unique patients who have booked with this doctor. Includes health profiles, dosha info, and recent bookings."
+                    }
+                },
+                {
+                    "name": "Search Patients",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{doctorToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctor-portal/patients?search=test&page=1&limit=10",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctor-portal",
+                                "patients"
+                            ],
+                            "query": [
+                                {
+                                    "key": "search",
+                                    "value": "test"
+                                },
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "10"
+                                }
+                            ]
+                        },
+                        "description": "Search patients by name or email."
+                    }
+                }
+            ]
+        },
+        {
+            "name": "📹 Video Call (Jitsi Meet)",
+            "description": "Generate Jitsi Meet links for video consultations.",
+            "item": [
+                {
+                    "name": "Generate Meet Link",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "if (res.success) {",
+                                    "    pm.test('✅ Meet link generated', () => {",
+                                    "        pm.expect(res.data.meetLink).to.include('meet.jit.si');",
+                                    "    });",
+                                    "    pm.test('✅ Meet details', () => {",
+                                    "        console.log('Meet Link:', res.data.meetLink);",
+                                    "        console.log('Room:', res.data.meetDetails.roomId);",
+                                    "        console.log('Doctor:', res.data.meetDetails.doctorEmail);",
+                                    "        console.log('Patient:', res.data.meetDetails.patientEmail);",
+                                    "    });",
+                                    "} else {",
+                                    "    pm.test('⚠️ Meet generation', () => {",
+                                    "        console.log(res.message);",
+                                    "    });",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{doctorToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctor-portal/bookings/{{bookingId}}/meet",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctor-portal",
+                                "bookings",
+                                "{{bookingId}}",
+                                "meet"
+                            ]
+                        },
+                        "description": "Generate a Jitsi Meet video call link for a CONFIRMED booking.\nThe link is saved to the booking and both doctor & patient can use it."
+                    }
+                }
+            ]
+        },
+        {
+            "name": "📈 Analytics",
+            "description": "Practice performance analytics with revenue and booking trends.",
+            "item": [
+                {
+                    "name": "Analytics (Last 30 Days)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "pm.test('✅ Analytics loaded', () => {",
+                                    "    pm.expect(res.success).to.be.true;",
+                                    "    pm.expect(res.data).to.have.property('summary');",
+                                    "    pm.expect(res.data).to.have.property('dailyData');",
+                                    "    pm.expect(res.data).to.have.property('rating');",
+                                    "});",
+                                    "pm.test('✅ Summary stats', () => {",
+                                    "    const s = res.data.summary;",
+                                    "    console.log('Total Bookings:', s.totalBookings);",
+                                    "    console.log('Completed:', s.completedBookings);",
+                                    "    console.log('Revenue:', s.totalRevenue);",
+                                    "    console.log('Completion Rate:', s.completionRate + '%');",
+                                    "    console.log('Cancellation Rate:', s.cancellationRate + '%');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{doctorToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctor-portal/analytics?range=30d",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctor-portal",
+                                "analytics"
+                            ],
+                            "query": [
+                                {
+                                    "key": "range",
+                                    "value": "30d"
+                                }
+                            ]
+                        },
+                        "description": "Get practice analytics.\n\nRange options: 7d, 30d, 90d, 6m, 1y"
+                    }
+                },
+                {
+                    "name": "Analytics (Last 7 Days)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{doctorToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctor-portal/analytics?range=7d",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctor-portal",
+                                "analytics"
+                            ],
+                            "query": [
+                                {
+                                    "key": "range",
+                                    "value": "7d"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Analytics (Last 90 Days)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{doctorToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctor-portal/analytics?range=90d",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctor-portal",
+                                "analytics"
+                            ],
+                            "query": [
+                                {
+                                    "key": "range",
+                                    "value": "90d"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "👤 Profile",
+            "description": "Update doctor profile information.",
+            "item": [
+                {
+                    "name": "Update Profile",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "pm.test('✅ Profile updated', () => {",
+                                    "    pm.expect(res.success).to.be.true;",
+                                    "    pm.expect(res.data.doctor).to.have.property('name');",
+                                    "});",
+                                    "pm.test('✅ Changes applied', () => {",
+                                    "    const d = res.data.doctor;",
+                                    "    console.log('Name:', d.name);",
+                                    "    console.log('Fee:', d.consultationFee);",
+                                    "    console.log('Bio:', d.bio);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{doctorToken}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Dr. Devansh Shukla\",\n    \"specialty\": \"Ayurvedic Medicine\",\n    \"bio\": \"Expert Ayurvedic physician with 12+ years of experience in holistic healing.\",\n    \"consultationFee\": 600,\n    \"experienceYears\": 12,\n    \"languages\": [\"English\", \"Hindi\", \"Sanskrit\"],\n    \"location\": \"Gurugram, India\",\n    \"phone\": \"+91 98765 43210\",\n    \"education\": \"BAMS, MD (Ayurveda) - BHU Varanasi\",\n    \"isAvailable\": true\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctor-portal/profile",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctor-portal",
+                                "profile"
+                            ]
+                        },
+                        "description": "Update doctor profile. All fields are optional - send only what you want to change.\n\nAllowed fields: name, specialty, description, education, qualification, languages, bio, imageUrl, phone, gender, location, consultationFee, experienceYears, isAvailable"
+                    }
+                },
+                {
+                    "name": "Update Consultation Fee",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{doctorToken}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"consultationFee\": 750\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctor-portal/profile",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctor-portal",
+                                "profile"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Toggle Availability",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{doctorToken}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"isAvailable\": false\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctor-portal/profile",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctor-portal",
+                                "profile"
+                            ]
+                        },
+                        "description": "Quickly toggle doctor availability on/off."
+                    }
+                }
+            ]
+        },
+        {
+            "name": "🧪 Patient-Side (Book a Slot)",
+            "description": "These APIs simulate a PATIENT booking a slot with the doctor — needed to create test bookings you can then manage in the doctor portal.\n\nUses the regular patient auth routes.",
+            "item": [
+                {
+                    "name": "Patient Login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "if (res.success && res.data) {",
+                                    "    pm.collectionVariables.set('userToken', res.data.token);",
+                                    "    pm.test('✅ Patient login OK', () => {",
+                                    "        pm.expect(res.data.token).to.be.a('string');",
+                                    "    });",
+                                    "} else {",
+                                    "    pm.test('⚠️ Patient login', () => { console.log(res); });",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"test@prakriti.ai\",\n    \"password\": \"Test@123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/auth/login",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "auth",
+                                "login"
+                            ]
+                        },
+                        "description": "Login as the seeded test patient (test@prakriti.ai / Test@123)"
+                    }
+                },
+                {
+                    "name": "List Doctors",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "pm.test('✅ Doctors listed', () => {",
+                                    "    pm.expect(res.success).to.be.true;",
+                                    "});",
+                                    "if (res.data && res.data.length > 0) {",
+                                    "    pm.collectionVariables.set('doctorId', res.data[0].id);",
+                                    "    console.log('Doctors:', res.data.map(d => d.name + ' (' + d.email + ')').join(', '));",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{userToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctors",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctors"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Doctor Slots (Available)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "pm.test('✅ Slots fetched', () => {",
+                                    "    pm.expect(res.success).to.be.true;",
+                                    "});",
+                                    "const available = (res.data || []).filter(s => !s.isBooked && s.isActive);",
+                                    "if (available.length > 0) {",
+                                    "    pm.collectionVariables.set('slotId', available[0].id);",
+                                    "    console.log('Available slot saved:', available[0].id);",
+                                    "    console.log('Time:', new Date(available[0].startTime).toLocaleString());",
+                                    "} else {",
+                                    "    console.log('No available slots. Create some via doctor portal first.');",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{userToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctors/{{doctorId}}/slots",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctors",
+                                "{{doctorId}}",
+                                "slots"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Book a Slot ⭐",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "if (res.success && res.data) {",
+                                    "    pm.collectionVariables.set('bookingId', res.data.id);",
+                                    "    pm.test('✅ Booking created', () => {",
+                                    "        pm.expect(res.data).to.have.property('id');",
+                                    "        pm.expect(res.data.status).to.equal('CONFIRMED');",
+                                    "    });",
+                                    "    console.log('Booking ID:', res.data.id);",
+                                    "} else {",
+                                    "    pm.test('⚠️ Booking result', () => { console.log(res); });",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{userToken}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"slotId\": \"{{slotId}}\",\n    \"notes\": \"I have recurring headaches and difficulty sleeping. Looking for Ayurvedic remedies.\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctors/{{doctorId}}/book",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctors",
+                                "{{doctorId}}",
+                                "book"
+                            ]
+                        },
+                        "description": "Book an available slot as a patient. This creates a CONFIRMED booking that the doctor can then manage."
+                    }
+                },
+                {
+                    "name": "Get My Bookings (Patient) ⭐",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "pm.test('✅ Patient bookings fetched', () => {",
+                                    "    pm.expect(res.success).to.be.true;",
+                                    "    pm.expect(res.data.bookings).to.be.an('array');",
+                                    "});",
+                                    "if (res.data.bookings.length > 0) {",
+                                    "    const b = res.data.bookings[0];",
+                                    "    pm.collectionVariables.set('bookingId', b.id);",
+                                    "    pm.test('✅ Booking has meetLink fields', () => {",
+                                    "        pm.expect(b).to.have.property('meetLink');",
+                                    "        pm.expect(b).to.have.property('hasMeetLink');",
+                                    "        pm.expect(b).to.have.property('canJoinCall');",
+                                    "    });",
+                                    "    console.log('Booking:', b.id);",
+                                    "    console.log('Status:', b.status);",
+                                    "    console.log('Has Meet Link:', b.hasMeetLink);",
+                                    "    console.log('Can Join Call:', b.canJoinCall);",
+                                    "    if (b.meetLink) console.log('Meet Link:', b.meetLink);",
+                                    "    console.log('Doctor:', b.doctor.name);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{userToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctors/bookings/my",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctors",
+                                "bookings",
+                                "my"
+                            ]
+                        },
+                        "description": "Get all bookings for the logged-in patient.\nEach booking includes:\n- meetLink: the Jitsi URL (null if not yet generated)\n- hasMeetLink: boolean\n- canJoinCall: true only if CONFIRMED + meetLink exists\n\nFilter by status: ?status=CONFIRMED"
+                    }
+                },
+                {
+                    "name": "Get My Bookings (Confirmed Only)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{userToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctors/bookings/my?status=CONFIRMED",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctors",
+                                "bookings",
+                                "my"
+                            ],
+                            "query": [
+                                {
+                                    "key": "status",
+                                    "value": "CONFIRMED"
+                                }
+                            ]
+                        },
+                        "description": "Get only CONFIRMED bookings — these are the ones that can have meet links."
+                    }
+                },
+                {
+                    "name": "Get Booking Detail (with Meet Link) ⭐",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "pm.test('✅ Booking detail fetched', () => {",
+                                    "    pm.expect(res.success).to.be.true;",
+                                    "    pm.expect(res.data.booking).to.have.property('id');",
+                                    "});",
+                                    "const b = res.data.booking;",
+                                    "pm.test('✅ Meet link status', () => {",
+                                    "    pm.expect(b).to.have.property('meetLink');",
+                                    "    pm.expect(b).to.have.property('hasMeetLink');",
+                                    "    pm.expect(b).to.have.property('canJoinCall');",
+                                    "});",
+                                    "console.log('=== BOOKING DETAIL ===');",
+                                    "console.log('Status:', b.status);",
+                                    "console.log('Doctor:', b.doctor.name, '-', b.doctor.specialty);",
+                                    "console.log('Date:', b.slot.slotDate);",
+                                    "console.log('Time:', b.slot.startTime, '-', b.slot.endTime);",
+                                    "console.log('Has Meet Link:', b.hasMeetLink);",
+                                    "console.log('Can Join Call:', b.canJoinCall);",
+                                    "if (b.meetLink) {",
+                                    "    console.log('🔗 MEET LINK:', b.meetLink);",
+                                    "    console.log('👆 Patient can click this to join video call!');",
+                                    "} else {",
+                                    "    console.log('⏳ Waiting for doctor to generate meet link...');",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{userToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctors/bookings/{{bookingId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctors",
+                                "bookings",
+                                "{{bookingId}}"
+                            ]
+                        },
+                        "description": "Get full detail of a single booking.\nThis is what the patient app should call to check if a meet link is ready.\n\nResponse includes:\n- Full doctor info (name, specialty, education, experience, etc.)\n- Slot timing\n- meetLink (null or Jitsi URL)\n- hasMeetLink (boolean)\n- canJoinCall (true when CONFIRMED + link exists)"
+                    }
+                },
+                {
+                    "name": "Cancel Booking (Patient)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "if (res.success) {",
+                                    "    pm.test('✅ Booking cancelled by patient', () => {",
+                                    "        pm.expect(res.data.booking.status).to.equal('CANCELLED');",
+                                    "    });",
+                                    "} else {",
+                                    "    pm.test('⚠️ Cancel result', () => { console.log(res.message); });",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{userToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctors/bookings/{{bookingId}}/cancel",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "doctors",
+                                "bookings",
+                                "{{bookingId}}",
+                                "cancel"
+                            ]
+                        },
+                        "description": "Cancel a CONFIRMED booking as a patient. Frees up the slot."
+                    }
+                }
+            ]
+        },
+        {
+            "name": "🔄 Full Workflow Test",
+            "description": "Run these in order to test the complete doctor-patient video call flow:\n\n**Patient Side (App):**\n1. Patient Login (test@prakriti.ai / Test@123)\n2. List Doctors\n3. Get Doctor Slots\n4. Book a Slot → bookingId saved\n5. Get Booking Detail → meetLink is null, canJoinCall is false\n\n**Doctor Side (Portal):**\n6. Doctor Login\n7. View Dashboard (see the new booking)\n8. Generate Meet Link → Jitsi URL created\n\n**Patient Side Again (App):**\n9. Get Booking Detail → meetLink is NOW set, canJoinCall is TRUE ✅\n10. Patient opens meetLink in browser/WebView → Video call!\n\n**After Consultation:**\n11. Doctor marks booking COMPLETED\n12. Check Analytics",
+            "item": []
+        }
+    ]
+}

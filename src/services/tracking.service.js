@@ -106,9 +106,9 @@ class TrackingService {
         });
 
         const todayStart = new Date();
-        todayStart.setHours(0, 0, 0, 0);
+        todayStart.setUTCHours(0, 0, 0, 0);
         const todayEnd = new Date();
-        todayEnd.setHours(23, 59, 59, 999);
+        todayEnd.setUTCHours(23, 59, 59, 999);
 
         const todayTotal = await prisma.waterIntakeLog.aggregate({
             where: { userId, date: { gte: todayStart, lte: todayEnd } },
@@ -331,9 +331,9 @@ class TrackingService {
     // ── HELPER ──────────────────────────────────────
     async _updateDailyNutrientLog(userId, date) {
         const dayStart = new Date(date);
-        dayStart.setHours(0, 0, 0, 0);
+        dayStart.setUTCHours(0, 0, 0, 0);
         const dayEnd = new Date(date);
-        dayEnd.setHours(23, 59, 59, 999);
+        dayEnd.setUTCHours(23, 59, 59, 999);
 
         const entries = await prisma.userFoodDiary.findMany({
             where: { userId, date: { gte: dayStart, lte: dayEnd } },

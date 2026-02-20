@@ -1652,6 +1652,7 @@ model Doctor {
   imageUrl         String?
   phone            String?
   email            String?  @unique
+  passwordHash     String?
   gender           String?
   location         String?
   consultationFee  Int      @default(500)
@@ -1659,6 +1660,8 @@ model Doctor {
   rating           Decimal  @default(4.0) @db.Decimal(2, 1)
   totalRatings     Int      @default(0)
   isAvailable      Boolean  @default(true)
+  isPortalActive   Boolean  @default(false)
+  lastLoginAt      DateTime?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
@@ -1702,6 +1705,8 @@ model Booking {
   slotId    String        @unique
   status    BookingStatus  @default(CONFIRMED)
   notes     String?
+  meetLink  String?
+  patientEmail String?
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
 

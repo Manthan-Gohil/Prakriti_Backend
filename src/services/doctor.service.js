@@ -114,7 +114,7 @@ class DoctorService {
 
         // Default to today if no date provided
         const targetDate = dateStr ? new Date(dateStr) : new Date();
-        targetDate.setHours(0, 0, 0, 0);
+        targetDate.setUTCHours(0, 0, 0, 0);
 
         const nextDay = new Date(targetDate);
         nextDay.setDate(nextDay.getDate() + 1);
@@ -141,7 +141,7 @@ class DoctorService {
 
         // Get available dates (next 7 days with slots)
         const today = new Date();
-        today.setHours(0, 0, 0, 0);
+        today.setUTCHours(0, 0, 0, 0);
         const weekLater = new Date(today);
         weekLater.setDate(weekLater.getDate() + 7);
 
@@ -176,7 +176,7 @@ class DoctorService {
         }
 
         const targetDate = dateStr ? new Date(dateStr) : new Date();
-        targetDate.setHours(0, 0, 0, 0);
+        targetDate.setUTCHours(0, 0, 0, 0);
 
         const nextDay = new Date(targetDate);
         nextDay.setDate(nextDay.getDate() + 1);
@@ -269,10 +269,11 @@ class DoctorService {
                     slotId,
                     notes: notes || null,
                     status: 'CONFIRMED',
+                    patientEmail: null, // Will be populated when meet link is generated
                 },
                 include: {
                     doctor: {
-                        select: { name: true, specialty: true, consultationFee: true },
+                        select: { name: true, specialty: true, consultationFee: true, email: true },
                     },
                     slot: {
                         select: { slotDate: true, startTime: true, endTime: true },
@@ -304,6 +305,8 @@ class DoctorService {
                         imageUrl: true,
                         consultationFee: true,
                         location: true,
+                        email: true,
+                        phone: true,
                     },
                 },
                 slot: {
@@ -318,7 +321,67 @@ class DoctorService {
             orderBy: { createdAt: 'desc' },
         });
 
-        return bookings;
+        return bookings.map(b => ({
+            ...b,
+            meetLink: b.meetLink || null,
+            hasMeetLink: !!b.meetLink,
+            canJoinCall: b.status === 'CONFIRMED' && !!b.meetLink,
+        }));
+    }
+
+    /**
+     * Get single booking detail for the authenticated user (patient).
+     */
+    async getBookingDetail(userId, bookingId) {
+        const booking = await prisma.booking.findUnique({
+            where: { id: bookingId },
+            include: {
+                doctor: {
+                    select: {
+                        id: true,
+                        name: true,
+                        specialty: true,
+                        imageUrl: true,
+                        consultationFee: true,
+                        location: true,
+                        email: true,
+                        phone: true,
+                        education: true,
+                        qualification: true,
+                        experienceYears: true,
+                        languages: true,
+                        bio: true,
+                    },
+                },
+                slot: {
+                    select: {
+                        slotDate: true,
+                        startTime: true,
+                        endTime: true,
+                        duration: true,
+                    },
+                },
+            },
+        });
+
+        if (!booking) {
+            const err = new Error('Booking not found.');
+            err.statusCode = 404;
+            throw err;
+        }
+
+        if (booking.userId !== userId) {
+            const err = new Error('You can only view your own bookings.');
+            err.statusCode = 403;
+            throw err;
+        }
+
+        return {
+            ...booking,
+            meetLink: booking.meetLink || null,
+            hasMeetLink: !!booking.meetLink,
+            canJoinCall: booking.status === 'CONFIRMED' && !!booking.meetLink,
+        };
     }
 
     /**

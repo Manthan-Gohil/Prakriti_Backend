@@ -48,6 +48,11 @@ class DoctorController {
             if (!slotId) {
                 return res.status(400).json({ success: false, message: 'slotId is required.' });
             }
+            // Validate UUID format
+            const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+            if (!uuidRegex.test(slotId)) {
+                return res.status(400).json({ success: false, message: 'Invalid slotId format.' });
+            }
             const booking = await doctorService.bookSlot(req.user.id, req.params.id, slotId, notes);
             return successResponse(res, 'Slot booked successfully!', { booking }, null, 201);
         } catch (error) { next(error); }
@@ -62,6 +67,17 @@ class DoctorController {
         try {
             const bookings = await doctorService.getUserBookings(req.user.id, req.query.status);
             return successResponse(res, 'Bookings fetched.', { bookings });
+        } catch (error) { next(error); }
+    }
+
+    /**
+     * GET /api/doctors/bookings/:bookingId
+     * Get single booking detail with meet link.
+     */
+    async getBookingDetail(req, res, next) {
+        try {
+            const booking = await doctorService.getBookingDetail(req.user.id, req.params.bookingId);
+            return successResponse(res, 'Booking details fetched.', { booking });
         } catch (error) { next(error); }
     }
 

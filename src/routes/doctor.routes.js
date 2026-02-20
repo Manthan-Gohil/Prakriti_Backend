@@ -21,6 +21,9 @@ router.get('/:id/slots', doctorController.getDoctorSlots);
 // Book a slot
 router.post('/:id/book', authenticate, doctorController.bookSlot);
 
+// Get single booking detail (with meet link)
+router.get('/bookings/:bookingId', authenticate, doctorController.getBookingDetail);
+
 // Cancel a booking
 router.patch('/bookings/:bookingId/cancel', authenticate, doctorController.cancelBooking);
 
